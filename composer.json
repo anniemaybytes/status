@@ -1,0 +1,20 @@
+{
+    "name": "animebytes/status",
+    "description": "Simple status page",
+    "authors": [
+        {
+            "name": "AnimeBytes",
+            "email": "staff@animebytes.tv"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.0",
+        "slim/twig-view": "^2.1",
+        "guzzlehttp/psr7": "^1.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "myApp": "src/"
+        }
+    }
+}

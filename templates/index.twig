@@ -1,0 +1,37 @@
+{% extends "layout.twig" %}
+{% block the_page %}
+    <div id="logo"></div>
+    <h1>server status</h1>
+    <ul id="status">
+        <li>
+            <h2>
+                <span>site </span>
+                <span class="status {% if site_status == 1 %}normal{% elseif site_status == 2 %}issues{% else %}down{% endif %}">{% if site_status == 1 %}normal{% elseif site_status == 2 %}maintenance{% else %}down{% endif %}</span>
+            </h2>
+        </li>
+        <li>
+            <h2>
+                <span>tracker<a href="#" class="details" data-jq-dropdown="#tracker-details">↓</a> </span>
+                <span class="status {% if tracker_status == 1 %}normal{% elseif tracker_status == 2 %}issues{% else %}down{% endif %}">{% if tracker_status == 1 %}normal{% elseif tracker_status == 2 %}issues{% else %}down{% endif %}</span>
+            </h2>
+        </li>
+        <li>
+            <h2>
+                <span>irc </span>
+                <span class="status {% if irc_status == 1 %}normal{% elseif irc_status == 2 %}issues{% else %}down{% endif %}">{% if irc_status == 1 %}normal{% elseif irc_status == 2 %}issues{% else %}down{% endif %}</span>
+            </h2>
+        </li>
+    </ul>
+    <hr>
+    <div id="feed">
+        <div class="content"></div>
+        <a class="twitter-timeline" data-lang="en" data-dnt="true" data-theme="dark" href="https://twitter.com/animebyt_es">Tweets by animebyt_es</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+    <div id="tracker-details" class="jq-dropdown jq-dropdown-tip">
+        <ul class="jq-dropdown-menu">
+            {% for server in tracker_details %}
+                <li>{{ server.ip }} - {% if server.status == 1 %}normal{% else %}down{% endif %}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

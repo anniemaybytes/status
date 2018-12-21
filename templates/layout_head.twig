@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block full_title %}{{ config("site.site_name") }}{% endblock %}</title>
+      {% block meta %}
+          {% include "meta.twig" %}
+      {% endblock %}
+
+      {% block styles %}
+          {% include "styles.twig" %}
+      {% endblock %}
+
+      {% block scripts %}
+          {% include "scripts.twig" %}
+      {% endblock %}
+    </head>
+    <body{% if document is defined %} id="{{ document }}"{% endif %}>

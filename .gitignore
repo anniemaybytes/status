@@ -1,0 +1,11 @@
+# dev stuff (IDE configs etc)
+.idea/
+nbproject/*
+.vagrant/*
+.buildpath/*
+.project/*
+.settings/*
+desktop.ini
+
+# dynamic vendor stuff
+/vendor/*
