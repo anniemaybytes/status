@@ -1,18 +1,19 @@
 <?php
+
 namespace myApp\Route;
 
 abstract class Base
 {
-  /**
-   * @var \Slim\App
-   */
-  protected $app;
+    /**
+     * @var \Slim\App
+     */
+    protected $app;
 
-  public function __construct(\Slim\App $app)
-  {
-    $this->app = $app;
-    $this->addRoutes();
-  }
+    public function __construct(\Slim\App $app)
+    {
+        $this->app = $app;
+        $this->addRoutes();
+    }
 
-  abstract protected function addRoutes();
+    abstract protected function addRoutes();
 }

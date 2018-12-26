@@ -3,25 +3,25 @@ namespace myApp;
 
 class Singleton
 {
-  private static $instances = array();
+    private static $instances = array();
 
-  protected function __construct($args)
-  {}
+    protected function __construct($args)
+    {}
 
-  protected function __clone()
-  {}
+    protected function __clone()
+    {}
 
-  public function __wakeup()
-  {
-    throw new \Exception("Cannot unserialize singleton");
-  }
-
-  public static function getInstance()
-  {
-    $cls = get_called_class(); // late-static-bound class name
-    if (! isset(self::$instances[$cls])) {
-      self::$instances[$cls] = new static(func_get_args());
+    public function __wakeup()
+    {
+        throw new \Exception("Cannot unserialize singleton");
     }
-    return self::$instances[$cls];
-  }
+
+    public static function getInstance()
+    {
+        $cls = get_called_class(); // late-static-bound class name
+        if (! isset(self::$instances[$cls])) {
+            self::$instances[$cls] = new static(func_get_args());
+        }
+        return self::$instances[$cls];
+    }
 }
