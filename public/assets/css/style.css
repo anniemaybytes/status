@@ -2,7 +2,7 @@ body {
   font: 14px "Noto Sans", "Lucida Grande", Helvetica, Arial, sans-serif;
   margin: 0;
   padding-top: 30px;
-  background: #27313d;
+  background: #323442;
   color: #aeaeae;
   text-align: center;
   font-size: 100%;
@@ -36,7 +36,7 @@ h2 span.status {
 }
 
 a {
-  color: #219cd1;
+  color: #ed106a;
 }
 
 ul {
