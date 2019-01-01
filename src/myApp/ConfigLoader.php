@@ -1,6 +1,7 @@
 <?php
-
 namespace myApp;
+
+use Exception;
 
 class ConfigLoader
 {
@@ -25,7 +26,7 @@ class ConfigLoader
     private static function loadFile($path)
     {
         // load it as an ini
-        if (!file_exists($path)) throw new \Exception("Couldn't find config file $path");
+        if (!file_exists($path)) throw new Exception("Couldn't find config file $path");
         $parsedFile = parse_ini_file($path, true);
 
         return self::parseArray($parsedFile, '');

@@ -1,7 +1,8 @@
 <?php
-
 namespace myApp\Controller;
 
+use Exception;
+use myApp\Exception\NotFound;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -19,7 +20,7 @@ class ErrorCtrl extends BaseCtrl
         // make sure we don't throw an exception
         try {
             $statusCode = 500;
-            if ($exception instanceof \myApp\Exception\NotFound) {
+            if ($exception instanceof NotFound) {
                 $statusCode = 404;
             }
 
@@ -42,14 +43,14 @@ class ErrorCtrl extends BaseCtrl
                     return $this->view->render($response, 'error.twig', $data)->withStatus($statusCode);
             }
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             error_log('Caught exception in exception handler - ' . $e->getFile() . '(' . $e->getLine() . ') ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             $response->getBody()->write('Something broke. Sorry.');
             return $response->withStatus(500);
         }
     }
 
-    private function logError(Request $request, \Exception $exception, $data)
+    private function logError(Request $request, Exception $exception, $data)
     {
         $uri = $request->getUri();
         $path = $uri->getPath();

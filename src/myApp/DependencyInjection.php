@@ -1,12 +1,15 @@
 <?php
 namespace myApp;
 
+use Slim\Container;
+use Slim\Views\Twig;
+
 class DependencyInjection
 {
     /**
      * @param $config
      * @param array $args
-     * @return mixed|\Slim\Container
+     * @return mixed|Container
      */
     public static function get($config, $args = array())
     {
@@ -20,7 +23,7 @@ class DependencyInjection
             );
         }
 
-        $di = new \Slim\Container($args);
+        $di = new Container($args);
 
         $di['config'] = $config;
 
@@ -39,9 +42,9 @@ class DependencyInjection
                 $config['strict_variables'] = true;
             }
 
-            $view = new \Slim\Views\Twig($dir, $config);
+            $view = new Twig($dir, $config);
 
-            $view->addExtension(new \myApp\TwigExtension($di['utility.view']));
+            $view->addExtension(new TwigExtension($di['utility.view']));
 
             $view->getEnvironment()->addGlobal('di', $di);
 
@@ -53,16 +56,16 @@ class DependencyInjection
             return $view;
         };
 
-        $di['cache'] = new \myApp\Cache\Apc();
+        $di['cache'] = new Cache\Apc();
 
         $di['notFoundHandler'] = function () {
             // delegate to the error handler
-            throw new \myApp\Exception\NotFound();
+            throw new Exception\NotFound();
         };
 
         if ($config['mode'] != 'development') {
             $di['errorHandler'] = function ($di) {
-                $ctrl = new \myApp\Controller\ErrorCtrl($di);
+                $ctrl = new Controller\ErrorCtrl($di);
                 return array($ctrl, 'handleException');
             };
         }
@@ -73,11 +76,11 @@ class DependencyInjection
     private static function setUtilities($di)
     {
         $di['utility.assets'] = function ($di) {
-            return new \myApp\Utilities\Assets($di);
+            return new Utilities\Assets($di);
         };
 
         $di['utility.view'] = function ($di) {
-            return new \myApp\Utilities\View($di);
+            return new Utilities\View($di);
         };
 
         return $di;

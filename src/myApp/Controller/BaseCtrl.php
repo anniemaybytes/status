@@ -1,5 +1,4 @@
 <?php
-
 namespace myApp\Controller;
 
 abstract class BaseCtrl

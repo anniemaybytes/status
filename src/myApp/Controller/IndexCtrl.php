@@ -1,8 +1,11 @@
 <?php
-
 namespace myApp\Controller;
 
-class IndexCtrl extends \myApp\Controller\BaseCtrl
+use DOMDocument;
+use Slim\Http\Request;
+use Slim\Http\Response;
+
+class IndexCtrl extends BaseCtrl
 {
     private $siteTimeout = 3;
     private $trackerTimeout = 3;
@@ -28,7 +31,7 @@ class IndexCtrl extends \myApp\Controller\BaseCtrl
 
         if($content)
         {
-            $doc = new \DOMDocument();
+            $doc = new DOMDocument();
             @$doc->loadHTML($content);
             $nodes = $doc->getElementsByTagName('title');
             $title = $nodes->item(0)->nodeValue;
@@ -118,7 +121,7 @@ class IndexCtrl extends \myApp\Controller\BaseCtrl
         return $status;
     }
 
-    public function index(\Slim\Http\Request $request, \Slim\Http\Response $response)
+    public function index(Request $request, Response $response)
     {
         $data = array();
         $data['site_status'] = $this->cache->exists('site_status')?$this->cache->fetch('site_status'):$this->checkSite();
@@ -135,7 +138,7 @@ class IndexCtrl extends \myApp\Controller\BaseCtrl
         return $this->view->render($response, 'index.twig', $data);
     }
 
-    public function indexJson(\Slim\Http\Request $request, \Slim\Http\Response $response)
+    public function indexJson(Request $request, Response $response)
     {
         $data = array();
         $data['site_status'] = $this->cache->exists('site_status')?$this->cache->fetch('site_status'):$this->checkSite();

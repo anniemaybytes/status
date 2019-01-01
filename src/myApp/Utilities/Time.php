@@ -1,5 +1,4 @@
 <?php
-
 namespace myApp\Utilities;
 
 use \DateTime;
@@ -26,6 +25,7 @@ class Time
      * Returns the current time.
      *
      * @return \DateTime
+     * @throws \Exception
      */
     public static function now()
     {

@@ -1,6 +1,8 @@
 <?php
 namespace myApp;
 
+use Exception;
+
 class Singleton
 {
     private static $instances = array();
@@ -13,7 +15,7 @@ class Singleton
 
     public function __wakeup()
     {
-        throw new \Exception("Cannot unserialize singleton");
+        throw new Exception("Cannot unserialize singleton");
     }
 
     public static function getInstance()

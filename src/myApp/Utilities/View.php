@@ -1,12 +1,13 @@
 <?php
-
 namespace myApp\Utilities;
+
+use Slim\Container;
 
 class View
 {
     private $di;
 
-    public function __construct(\Slim\Container $di)
+    public function __construct(Container $di)
     {
         $this->di = $di;
     }

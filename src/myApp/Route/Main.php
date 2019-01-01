@@ -1,6 +1,7 @@
 <?php
-
 namespace myApp\Route;
+
+use myApp\Controller\IndexCtrl;
 
 class Main extends Base
 {
@@ -10,8 +11,8 @@ class Main extends Base
 
         $app->group('', function () {
             /** @var \Slim\App $this */
-            $this->get('/', \myApp\Controller\IndexCtrl::class . ':index')->setName('index');
-            $this->get('/json', \myApp\Controller\IndexCtrl::class . ':indexJson')->setName('index:json');
+            $this->get('/', IndexCtrl::class . ':index')->setName('index');
+            $this->get('/json', IndexCtrl::class . ':indexJson')->setName('index:json');
         });
     }
 }

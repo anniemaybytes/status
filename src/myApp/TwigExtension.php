@@ -1,15 +1,18 @@
 <?php
-
 namespace myApp;
 
-class TwigExtension extends \Twig_Extension
+use Exception;
+use Twig_Extension;
+use Twig_SimpleFunction;
+
+class TwigExtension extends Twig_Extension
 {
     /**
-     * @var \myApp\Utilities\View
+     * @var Utilities\View
      */
     private $view_functions;
 
-    public function __construct(\myApp\Utilities\View $view_functions)
+    public function __construct(Utilities\View $view_functions)
     {
         $this->view_functions = $view_functions;
     }
@@ -42,8 +45,8 @@ class TwigExtension extends \Twig_Extension
         foreach ($functionMappings as $nameFrom => $nameTo)
         {
             $callable = array($fn, $nameTo);
-            if (!is_callable($callable)) throw new \Exception("Function $nameTo does not exist in view functions");
-            $functions[] = new \Twig_SimpleFunction($nameFrom, $callable);
+            if (!is_callable($callable)) throw new Exception("Function $nameTo does not exist in view functions");
+            $functions[] = new Twig_SimpleFunction($nameFrom, $callable);
         }
 
         return $functions;
