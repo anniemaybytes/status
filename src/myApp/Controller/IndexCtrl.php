@@ -10,6 +10,7 @@ class IndexCtrl extends BaseCtrl
     private $siteTimeout = 3;
     private $trackerTimeout = 3;
     private $ircTimeout = 2;
+    private $meiTimeout = 2;
 
     private $cacheFor = 15;
 
@@ -49,6 +50,33 @@ class IndexCtrl extends BaseCtrl
 
         if($this->trackerTimeout > 1) $this->trackerTimeout--; // site is down so reduce trackerTimeout
         $this->cache->add('site_status', (int)0, $this->cacheFor);
+        return (int)0;
+    }
+
+    private function checkMei()
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://mei.animebytes.tv");
+        curl_setopt($ch, CURLOPT_USERAGENT, "status.animebytes.tv");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: mei.animebytes.tv', 'Connection: Close'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_VERBOSE, false);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $this->meiTimeout);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        $content = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if($httpCode === 404 && $content) {
+            if($content === '404 - Route Not Found') {
+                $this->cache->add('mei_status', (int)1, $this->cacheFor);
+                return (int)1;
+            }
+        }
+
+        $this->cache->add('mei_status', (int)0, $this->cacheFor);
         return (int)0;
     }
 
@@ -109,7 +137,7 @@ class IndexCtrl extends BaseCtrl
     private function checkIrc()
     {
         $nsRecord = dns_get_record("irc.animebytes.tv", DNS_A)[0]['ip'];
-        $file = @fsockopen($nsRecord, 80, $errno, $errstr, $this->ircTimeout); // there's webirc on port 80
+        $file = @fsockopen($nsRecord, 80, $errno, $errstr, $this->ircTimeout);
         if (!$file) {
             $status = (int)0;
         } else {
@@ -134,6 +162,7 @@ class IndexCtrl extends BaseCtrl
             $data['tracker_details'] = $this->cache->fetch('tracker_details');
         }
         $data['irc_status'] = $this->cache->exists('irc_status')?$this->cache->fetch('irc_status'):$this->checkIrc();
+        $data['mei_status'] = $this->cache->exists('mei_status')?$this->cache->fetch('mei_status'):$this->checkMei();
 
         return $this->view->render($response, 'index.twig', $data);
     }
@@ -151,6 +180,7 @@ class IndexCtrl extends BaseCtrl
             $data['tracker_details'] = $this->cache->fetch('tracker_details');
         }
         $data['irc_status'] = $this->cache->exists('irc_status')?$this->cache->fetch('irc_status'):$this->checkIrc();
+        $data['mei_status'] = $this->cache->exists('mei_status')?$this->cache->fetch('mei_status'):$this->checkMei();
 
         return $response->withJson($data, 200, JSON_NUMERIC_CHECK);
     }
