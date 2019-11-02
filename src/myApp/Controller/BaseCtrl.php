@@ -1,22 +1,28 @@
 <?php
+
 namespace myApp\Controller;
+
+use myApp\Cache\Apc;
+use myApp\Utilities\View;
+use Slim\Http\Environment;
+use Slim\Views\Twig;
 
 abstract class BaseCtrl
 {
     protected $di;
 
     /**
-     * @var \Cache
+     * @var Apc
      */
     protected $cache;
 
     /**
-     * @var \Slim\Views\Twig
+     * @var Twig
      */
     protected $view;
 
     /**
-     * @var \myApp\Utilities\View
+     * @var View
      */
     protected $view_functions;
 
@@ -26,7 +32,7 @@ abstract class BaseCtrl
     protected $config;
 
     /**
-     * @var \Slim\Http\Environment
+     * @var Environment
      */
     protected $environment;
 

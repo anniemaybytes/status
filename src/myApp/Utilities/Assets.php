@@ -1,4 +1,5 @@
 <?php
+
 namespace myApp\Utilities;
 
 use Slim\Container;

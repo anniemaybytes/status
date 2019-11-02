@@ -1,4 +1,5 @@
 <?php
+
 namespace myApp;
 
 use Slim\Container;
@@ -11,16 +12,16 @@ class DependencyInjection
      * @param array $args
      * @return mixed|Container
      */
-    public static function get($config, $args = array())
+    public static function get($config, $args = [])
     {
         if (!$args) {
-            $args = array(
-                'settings' => array(
+            $args = [
+                'settings' => [
                     'displayErrorDetails' => ($config['mode'] == 'development'),
                     'determineRouteBeforeAppMiddleware' => true,
                     'addContentLengthHeader' => false,
-                )
-            );
+                ]
+            ];
         }
 
         $di = new Container($args);
@@ -32,9 +33,9 @@ class DependencyInjection
         $di['view'] = function ($di) {
             $dir = $di['config']['templates.path'];
 
-            $config = array(
+            $config = [
                 'cache' => $di['config']['templates.cache_path'],
-            );
+            ];
 
             if ($di['config']['mode'] == 'development') {
                 $config['debug'] = true;
@@ -66,7 +67,7 @@ class DependencyInjection
         if ($config['mode'] != 'development') {
             $di['errorHandler'] = function ($di) {
                 $ctrl = new Controller\ErrorCtrl($di);
-                return array($ctrl, 'handleException');
+                return [$ctrl, 'handleException'];
             };
         }
 

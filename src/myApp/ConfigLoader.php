@@ -1,4 +1,5 @@
 <?php
+
 namespace myApp;
 
 use Exception;
@@ -7,7 +8,7 @@ class ConfigLoader
 {
     private static function parseArray($array, $prefix, $deep = false)
     {
-        $output = array();
+        $output = [];
 
         if ($prefix !== '')
             $prefix .= '.';
@@ -15,7 +16,7 @@ class ConfigLoader
         foreach ($array as $k => $v) {
             if (is_array($v) && !isset($v[0]) && !$deep) {
                 // if it's a subarray, and it *looks* associative and is not deep
-                $output = array_merge($output, self::parseArray($v, $prefix.$k, true));
+                $output = array_merge($output, self::parseArray($v, $prefix . $k, true));
             } else {
                 $output[$prefix . $k] = $v;
             }
@@ -32,7 +33,7 @@ class ConfigLoader
         return self::parseArray($parsedFile, '');
     }
 
-    public static function load($configPath='config/')
+    public static function load($configPath = 'config/')
     {
         if ($configPath[0] !== '/' && strpos($configPath, '://') === false) {
             $configPath = BASE_ROOT . '/' . $configPath;

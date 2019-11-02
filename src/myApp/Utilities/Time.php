@@ -1,8 +1,10 @@
 <?php
+
 namespace myApp\Utilities;
 
-use \DateTime;
-use \DateInterval;
+use DateInterval;
+use DateTime;
+use Exception;
 
 class Time
 {
@@ -24,8 +26,8 @@ class Time
     /**
      * Returns the current time.
      *
-     * @return \DateTime
-     * @throws \Exception
+     * @return DateTime
+     * @throws Exception
      */
     public static function now()
     {

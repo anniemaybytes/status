@@ -9,3 +9,6 @@ desktop.ini
 
 # dynamic vendor stuff
 /vendor/*
+/cache/*
+
+config/config.ini

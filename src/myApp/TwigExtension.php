@@ -1,11 +1,12 @@
 <?php
+
 namespace myApp;
 
 use Exception;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class TwigExtension extends Twig_Extension
+class TwigExtension extends AbstractExtension
 {
     /**
      * @var Utilities\View
@@ -28,7 +29,7 @@ class TwigExtension extends Twig_Extension
 
         // map function names in twig to function names implemented in
         // the view functions utility
-        $functionMappings = array(
+        $functionMappings = [
             'baseurl' => 'baseUrl',
             'currenturl' => 'currentUrl',
             'config' => 'config',
@@ -39,14 +40,13 @@ class TwigExtension extends Twig_Extension
             'jsurl' => 'jsUrl',
             'imgurl' => 'imgUrl',
             'qs' => 'getQueryString',
-        );
+        ];
 
-        $functions = array();
-        foreach ($functionMappings as $nameFrom => $nameTo)
-        {
-            $callable = array($fn, $nameTo);
+        $functions = [];
+        foreach ($functionMappings as $nameFrom => $nameTo) {
+            $callable = [$fn, $nameTo];
             if (!is_callable($callable)) throw new Exception("Function $nameTo does not exist in view functions");
-            $functions[] = new Twig_SimpleFunction($nameFrom, $callable);
+            $functions[] = new TwigFunction($nameFrom, $callable);
         }
 
         return $functions;

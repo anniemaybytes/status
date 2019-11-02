@@ -1,4 +1,5 @@
 <?php
+
 namespace myApp\Exception;
 
 class FileNotFoundException extends NotFound

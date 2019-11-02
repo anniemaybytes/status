@@ -1,8 +1,10 @@
 <?php
+
 namespace myApp;
 
 use myApp\Route as R;
 use Slim\App;
+use Slim\Container;
 
 class Dispatcher extends Singleton
 {
@@ -36,7 +38,7 @@ class Dispatcher extends Singleton
     /**
      * Returns the container object
      *
-     * @return \Slim\Container
+     * @return Container
      */
     public static function di()
     {
@@ -48,7 +50,7 @@ class Dispatcher extends Singleton
         $config = ConfigLoader::load();
         $config['templates.path'] = BASE_ROOT . '/' . $config['templates.path'];
         $config['templates.cache_path'] = BASE_ROOT . '/' . $config['templates.cache_path'];
-        if(!isset($config['site_root'])) $config['site_root'] = '';
+        if (!isset($config['site_root'])) $config['site_root'] = '';
         $this->config = $config;
     }
 
@@ -62,9 +64,9 @@ class Dispatcher extends Singleton
     {
         $app = new App($this->di);
 
-        $routes = array(
+        $routes = [
             new R\Main($app),
-        );
+        ];
 
         $this->di['routes'] = $routes;
 

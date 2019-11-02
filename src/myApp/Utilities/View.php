@@ -1,7 +1,9 @@
 <?php
+
 namespace myApp\Utilities;
 
 use Slim\Container;
+use Slim\Http\Uri;
 
 class View
 {
@@ -40,7 +42,7 @@ class View
     public function baseUrl()
     {
         /**
-         * @var \Slim\Http\Uri $uri
+         * @var Uri $uri
          */
         $uri = $this->di['request']->getUri();
         $uri = $uri->withUserInfo('');
@@ -66,13 +68,15 @@ class View
         return $this->di;
     }
 
-    public function getQueryString($params = array(), $formParams = array())
+    public function getQueryString($params = [], $formParams = [])
     {
         $request = $this->di['request'];
         $getParams = $request->getQueryParams();
         $getParams = array_merge($getParams, $formParams);
         $getParams = array_merge($getParams, $params);
-        $getParams = array_filter($getParams, function($e) { return $e !== ''; });
+        $getParams = array_filter($getParams, function ($e) {
+            return $e !== '';
+        });
         $qs = http_build_query($getParams);
         return $qs;
     }

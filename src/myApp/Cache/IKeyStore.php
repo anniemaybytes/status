@@ -1,4 +1,5 @@
 <?php
+
 namespace myApp\Cache;
 
 /**
@@ -21,7 +22,6 @@ interface IKeyStore
      * @param $key
      * @param $value
      * @param int|number $time
-     * @return
      */
     public function add($key, $value, $time = 3600);
 

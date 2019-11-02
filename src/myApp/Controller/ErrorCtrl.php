@@ -1,4 +1,5 @@
 <?php
+
 namespace myApp\Controller;
 
 use Exception;
@@ -8,8 +9,9 @@ use Slim\Http\Response;
 
 class ErrorCtrl extends BaseCtrl
 {
-    private function getData($statusCode) {
-        $data = array();
+    private function getData($statusCode)
+    {
+        $data = [];
         $data['status_code'] = $statusCode;
 
         return $data;
@@ -33,8 +35,7 @@ class ErrorCtrl extends BaseCtrl
             $body->rewind();
             $response = $response->withBody($body);
 
-            switch($statusCode)
-            {
+            switch ($statusCode) {
                 case 404:
                     return $this->view->render($response, 'not_found.twig', $data)->withStatus($statusCode);
                 case 403:
@@ -42,8 +43,7 @@ class ErrorCtrl extends BaseCtrl
                 default:
                     return $this->view->render($response, 'error.twig', $data)->withStatus($statusCode);
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             error_log('Caught exception in exception handler - ' . $e->getFile() . '(' . $e->getLine() . ') ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             $response->getBody()->write('Something broke. Sorry.');
             return $response->withStatus(500);
@@ -56,13 +56,13 @@ class ErrorCtrl extends BaseCtrl
         $path = $uri->getPath();
         $query = $uri->getQuery();
         $fragment = $uri->getFragment();
-        $path =  $path . ($query ? '?' . $query : '') . ($fragment ? '#' . $fragment : '');
+        $path = $path . ($query ? '?' . $query : '') . ($fragment ? '#' . $fragment : '');
         $method = $request->getMethod();
         $referrer = $request->getHeaderLine('HTTP_REFERER');
         $ua = $request->getHeaderLine('HTTP_USER_AGENT');
         $bt = '';
 
-        $prefix =  "Error: {$data['status_code']} Method: $method $path ";
+        $prefix = "Error: {$data['status_code']} Method: $method $path ";
         if ($referrer) {
             $prefix .= '(referrer: ' . $referrer . ') ';
         }

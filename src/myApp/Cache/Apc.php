@@ -1,4 +1,5 @@
 <?php
+
 namespace myApp\Cache;
 
 class Apc implements IKeyStore
