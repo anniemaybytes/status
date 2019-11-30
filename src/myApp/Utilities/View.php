@@ -77,7 +77,6 @@ class View
         $getParams = array_filter($getParams, function ($e) {
             return $e !== '';
         });
-        $qs = http_build_query($getParams);
-        return $qs;
+        return http_build_query($getParams);
     }
 }
