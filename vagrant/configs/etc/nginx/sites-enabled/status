@@ -1,17 +1,20 @@
 server {
-    listen 80;
-    server_name_in_redirect on;
+    listen 443 ssl http2;
     charset utf-8;
     server_name status.animebytes.local;
-    access_log off;
+
+    ssl_certificate /etc/nginx/status.pem;
+    ssl_certificate_key /etc/nginx/status.key;
 
     client_max_body_size 25m;
 
-    root   /code/public;
-    index  index.php;
+    root /code/public;
+
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Content-Type-Options "nosniff" always;
 
     location / {
-        try_files $uri $uri/ /index.php?$args;
+        try_files $uri /index.php$is_args$args;
     }
 
     location /index.php {
@@ -19,6 +22,7 @@ server {
         include fastcgi_params;
         fastcgi_param HTTPS on;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass unix:/var/run/php7.3-fpm.www.sock;
         fastcgi_index index.php;
         fastcgi_read_timeout 300;
     }

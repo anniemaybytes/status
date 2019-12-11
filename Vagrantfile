@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
   config.vm.graceful_halt_timeout = 30
 
   # network
-  config.vm.network "forwarded_port", guest: 80, host_ip: "127.0.0.1", host: 6080
+  config.vm.network "forwarded_port", guest: 443, host_ip: "127.0.0.1", host: 6443
 
   # synced folders
   config.vm.synced_folder "./", "/code",
