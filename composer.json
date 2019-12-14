@@ -12,6 +12,7 @@
         "slim/slim": "^3.0",
         "slim/twig-view": "^2.1",
         "guzzlehttp/psr7": "^1.6.1",
+        "tracy/tracy": "^2.7",
         "ext-curl": "*",
         "ext-json": "*",
         "ext-apcu": "*",
@@ -20,7 +21,8 @@
     },
     "autoload": {
         "psr-0": {
-            "myApp": "src/"
+            "Status": "src/",
+            "RunTracy": "src/"
         }
     }
 }
