@@ -7,6 +7,11 @@ use Slim\Views\Twig;
 use Status\Cache\Apc;
 use Status\Utilities\View;
 
+/**
+ * Class BaseCtrl
+ *
+ * @package Status\Controller
+ */
 abstract class BaseCtrl
 {
     protected $di;
@@ -36,6 +41,9 @@ abstract class BaseCtrl
      */
     protected $environment;
 
+    /**
+     * @param $di
+     */
     public function setDependencies($di)
     {
         $this->config = $di['config'];
@@ -45,6 +53,11 @@ abstract class BaseCtrl
         $this->cache = $di['cache'];
     }
 
+    /**
+     * BaseCtrl constructor.
+     *
+     * @param $di
+     */
     public function __construct($di)
     {
         $this->di = $di;

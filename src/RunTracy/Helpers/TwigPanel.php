@@ -5,18 +5,31 @@ namespace RunTracy\Helpers;
 use Tracy\IBarPanel;
 use Twig\Profiler\Dumper\HtmlDumper;
 
+/**
+ * Class TwigPanel
+ *
+ * @package RunTracy\Helpers
+ */
 class TwigPanel implements IBarPanel
 {
     private $data;
     private $dumper;
     private $icon;
 
+    /**
+     * TwigPanel constructor.
+     *
+     * @param null $data
+     */
     public function __construct($data = null)
     {
         $this->data = $data;
         $this->dumper = new HtmlDumper();
     }
 
+    /**
+     * @return string
+     */
     public function getTab()
     {
         $this->icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 532 178" style="width: 35px"><path ' .
@@ -72,6 +85,9 @@ class TwigPanel implements IBarPanel
         </span>';
     }
 
+    /**
+     * @return string
+     */
     public function getPanel()
     {
         return '<h1>' . $this->icon . ' Slim 3 / Twig </h1>

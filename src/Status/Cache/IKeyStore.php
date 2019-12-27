@@ -25,6 +25,11 @@ interface IKeyStore
      */
     public function add($key, $value, $time = 3600);
 
+    /**
+     * @param $key
+     *
+     * @return mixed
+     */
     public function exists($key);
 
     /**

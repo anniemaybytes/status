@@ -6,9 +6,14 @@ use DateInterval;
 use DateTime;
 use Exception;
 
+/**
+ * Class Time
+ *
+ * @package Status\Utilities
+ */
 class Time
 {
-    const ZERO_SQLTIME = '0000-00-00 00:00:00';
+    public const ZERO_SQLTIME = '0000-00-00 00:00:00';
 
     /**
      * Constructs a DateTime object from a UNIX timestamp.
@@ -16,6 +21,7 @@ class Time
      * Unix timestamp format is 'U'
      *
      * @param $str
+     *
      * @return DateTime
      */
     public static function fromEpoch($str)
@@ -40,6 +46,7 @@ class Time
      *  interval('+1 year');
      *
      * @param $s
+     *
      * @return DateInterval
      */
     public static function interval($s)

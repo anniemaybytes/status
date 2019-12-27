@@ -8,11 +8,17 @@ use Twig\Extension\DebugExtension;
 use Twig\Extension\ProfilerExtension;
 use Twig\Profiler\Profile;
 
+/**
+ * Class DependencyInjection
+ *
+ * @package Status
+ */
 class DependencyInjection
 {
     /**
      * @param $config
      * @param array $args
+     *
      * @return mixed|Container
      */
     public static function get($config, $args = [])
@@ -85,12 +91,19 @@ class DependencyInjection
                 $ctrl = new Controller\ErrorCtrl($di);
                 return [$ctrl, 'handleException'];
             };
-        } else unset($di['errorHandler']);
+        } else {
+            unset($di['errorHandler']);
+        }
 
         return $di;
     }
 
-    private static function setUtilities($di)
+    /**
+     * @param $di
+     *
+     * @return mixed
+     */
+    private static function setUtilities($di) /** @formatter:off */
     {
         $di['utility.assets'] = function ($di) {
             return new Utilities\Assets($di);
@@ -102,4 +115,5 @@ class DependencyInjection
 
         return $di;
     }
+    /** @formatter:on */
 }

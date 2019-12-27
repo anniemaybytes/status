@@ -3,9 +3,15 @@
 namespace Status\Controller;
 
 use DOMDocument;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
+/**
+ * Class IndexCtrl
+ *
+ * @package Status\Controller
+ */
 class IndexCtrl extends BaseCtrl
 {
     private $siteTimeout = 3;
@@ -15,6 +21,9 @@ class IndexCtrl extends BaseCtrl
 
     private $cacheFor = 15;
 
+    /**
+     * @return int
+     */
     private function checkSite()
     {
         $ch = curl_init();
@@ -38,7 +47,9 @@ class IndexCtrl extends BaseCtrl
             $title = $nodes->item(0)->nodeValue;
             if ($title === 'Down for Maintenance') {
                 $this->cache->add('site_status', (int)2, $this->cacheFor);
-                if ($this->trackerTimeout > 1) $this->trackerTimeout--; // reduce trackerTimeout
+                if ($this->trackerTimeout > 1) {
+                    $this->trackerTimeout--;
+                } // reduce trackerTimeout
                 return (int)2;
             }
         }
@@ -48,11 +59,16 @@ class IndexCtrl extends BaseCtrl
             return (int)1;
         }
 
-        if ($this->trackerTimeout > 1) $this->trackerTimeout--; // site is down so reduce trackerTimeout
+        if ($this->trackerTimeout > 1) {
+            $this->trackerTimeout--;
+        } // site is down so reduce trackerTimeout
         $this->cache->add('site_status', (int)0, $this->cacheFor);
         return (int)0;
     }
 
+    /**
+     * @return int
+     */
     private function checkMei()
     {
         $ch = curl_init();
@@ -80,6 +96,11 @@ class IndexCtrl extends BaseCtrl
         return (int)0;
     }
 
+    /**
+     * @param $ip
+     *
+     * @return int
+     */
     private function checkTrackerSingular($ip)
     {
         $ch = curl_init();
@@ -102,6 +123,9 @@ class IndexCtrl extends BaseCtrl
         return (int)0;
     }
 
+    /**
+     * @return array
+     */
     private function checkTracker()
     {
         $nsRecords = $this->di['config']['tracker.ns'];
@@ -115,7 +139,9 @@ class IndexCtrl extends BaseCtrl
                 $working = true;
             } else {
                 $error = true;
-                if ($this->trackerTimeout > 1) $this->trackerTimeout--; // at least one tracker proxy is down so reduce timeout for others
+                if ($this->trackerTimeout > 1) {
+                    $this->trackerTimeout--;
+                } // at least one tracker proxy is down so reduce timeout for others
             }
             $details[] = ['status' => (int)$status, 'ip' => $nsName];
         }
@@ -124,10 +150,10 @@ class IndexCtrl extends BaseCtrl
         if ($working && $error) {
             $this->cache->add('tracker_status', (int)2, $this->cacheFor);
             return ['status' => (int)2, 'details' => $details];
-        } else if ($working && !$error) {
+        } elseif ($working && !$error) {
             $this->cache->add('tracker_status', (int)1, $this->cacheFor);
             return ['status' => (int)1, 'details' => $details];
-        } else if (!$working && $error) {
+        } elseif (!$working && $error) {
             $this->cache->add('tracker_status', (int)0, $this->cacheFor);
             return ['status' => (int)0, 'details' => $details];
         } else { // assume error
@@ -136,6 +162,9 @@ class IndexCtrl extends BaseCtrl
         }
     }
 
+    /**
+     * @return int
+     */
     private function checkIrc()
     {
         $nsRecord = dns_get_record("irc.animebytes.tv", DNS_A)[0]['ip'];
@@ -151,10 +180,18 @@ class IndexCtrl extends BaseCtrl
         return $status;
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     *
+     * @return ResponseInterface
+     */
     public function index(Request $request, Response $response)
     {
         $data = [];
-        $data['site_status'] = $this->cache->exists('site_status') ? $this->cache->fetch('site_status') : $this->checkSite();
+        $data['site_status'] = $this->cache->exists('site_status') ? $this->cache->fetch(
+            'site_status'
+        ) : $this->checkSite();
         if (!$this->cache->exists('tracker_status') || !$this->cache->exists('tracker_details')) {
             $tr = $this->checkTracker();
             $data['tracker_status'] = $tr['status'];
@@ -163,16 +200,26 @@ class IndexCtrl extends BaseCtrl
             $data['tracker_status'] = $this->cache->fetch('tracker_status');
             $data['tracker_details'] = $this->cache->fetch('tracker_details');
         }
-        $data['irc_status'] = $this->cache->exists('irc_status') ? $this->cache->fetch('irc_status') : $this->checkIrc();
-        $data['mei_status'] = $this->cache->exists('mei_status') ? $this->cache->fetch('mei_status') : $this->checkMei();
+        $data['irc_status'] = $this->cache->exists('irc_status') ? $this->cache->fetch('irc_status') : $this->checkIrc(
+        );
+        $data['mei_status'] = $this->cache->exists('mei_status') ? $this->cache->fetch('mei_status') : $this->checkMei(
+        );
 
         return $this->view->render($response, 'index.twig', $data);
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     *
+     * @return Response
+     */
     public function indexJson(Request $request, Response $response)
     {
         $data = [];
-        $data['site_status'] = $this->cache->exists('site_status') ? $this->cache->fetch('site_status') : $this->checkSite();
+        $data['site_status'] = $this->cache->exists('site_status') ? $this->cache->fetch(
+            'site_status'
+        ) : $this->checkSite();
         if (!$this->cache->exists('tracker_status') || !$this->cache->exists('tracker_details')) {
             $tr = $this->checkTracker();
             $data['tracker_status'] = $tr['status'];
@@ -181,8 +228,10 @@ class IndexCtrl extends BaseCtrl
             $data['tracker_status'] = $this->cache->fetch('tracker_status');
             $data['tracker_details'] = $this->cache->fetch('tracker_details');
         }
-        $data['irc_status'] = $this->cache->exists('irc_status') ? $this->cache->fetch('irc_status') : $this->checkIrc();
-        $data['mei_status'] = $this->cache->exists('mei_status') ? $this->cache->fetch('mei_status') : $this->checkMei();
+        $data['irc_status'] = $this->cache->exists('irc_status') ? $this->cache->fetch('irc_status') : $this->checkIrc(
+        );
+        $data['mei_status'] = $this->cache->exists('mei_status') ? $this->cache->fetch('mei_status') : $this->checkMei(
+        );
 
         return $response->withJson($data, 200, JSON_NUMERIC_CHECK);
     }

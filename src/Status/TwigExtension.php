@@ -2,10 +2,15 @@
 
 namespace Status;
 
-use Exception;
+use BadFunctionCallException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * Class TwigExtension
+ *
+ * @package Status
+ */
 class TwigExtension extends AbstractExtension
 {
     /**
@@ -13,16 +18,29 @@ class TwigExtension extends AbstractExtension
      */
     private $view_functions;
 
+    /**
+     * TwigExtension constructor.
+     *
+     * @param Utilities\View $view_functions
+     */
     public function __construct(Utilities\View $view_functions)
     {
         $this->view_functions = $view_functions;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'slim';
     }
 
+    /**
+     * Returns a list of functions to add to the existing list.
+     *
+     * @return TwigFunction[]
+     */
     public function getFunctions()
     {
         $fn = $this->view_functions;
@@ -45,7 +63,9 @@ class TwigExtension extends AbstractExtension
         $functions = [];
         foreach ($functionMappings as $nameFrom => $nameTo) {
             $callable = [$fn, $nameTo];
-            if (!is_callable($callable)) throw new Exception("Function $nameTo does not exist in view functions");
+            if (!is_callable($callable)) {
+                throw new BadFunctionCallException("Function $nameTo does not exist in view functions");
+            }
             $functions[] = new TwigFunction($nameFrom, $callable);
         }
 

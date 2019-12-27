@@ -2,12 +2,22 @@
 
 namespace Status;
 
-use Exception;
+use BadFunctionCallException;
 
+/**
+ * Class Singleton
+ *
+ * @package Status
+ */
 class Singleton
 {
     private static $instances = [];
 
+    /**
+     * Singleton constructor.
+     *
+     * @param $args
+     */
     protected function __construct($args)
     {
     }
@@ -18,9 +28,12 @@ class Singleton
 
     public function __wakeup()
     {
-        throw new Exception("Cannot unserialize singleton");
+        throw new BadFunctionCallException("Cannot unserialize singleton");
     }
 
+    /**
+     * @return mixed
+     */
     public static function getInstance()
     {
         $cls = get_called_class(); // late-static-bound class name

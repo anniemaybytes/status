@@ -3,12 +3,23 @@
 namespace Status\Controller;
 
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Status\Exception\NotFound;
 
+/**
+ * Class ErrorCtrl
+ *
+ * @package Status\Controller
+ */
 class ErrorCtrl extends BaseCtrl
 {
+    /**
+     * @param $statusCode
+     *
+     * @return array
+     */
     private function getData($statusCode)
     {
         $data = [];
@@ -17,6 +28,13 @@ class ErrorCtrl extends BaseCtrl
         return $data;
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $exception
+     *
+     * @return ResponseInterface|Response
+     */
     public function handleException(Request $request, Response $response, $exception)
     {
         // make sure we don't throw an exception
@@ -44,12 +62,20 @@ class ErrorCtrl extends BaseCtrl
                     return $this->view->render($response, 'error.twig', $data)->withStatus($statusCode);
             }
         } catch (Exception $e) {
-            error_log('Caught exception in exception handler - ' . $e->getFile() . '(' . $e->getLine() . ') ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            error_log(
+                'Caught exception in exception handler - ' . $e->getFile() . '(' . $e->getLine(
+                ) . ') ' . $e->getMessage() . "\n" . $e->getTraceAsString()
+            );
             $response->getBody()->write('Something broke. Sorry.');
             return $response->withStatus(500);
         }
     }
 
+    /**
+     * @param Request $request
+     * @param Exception $exception
+     * @param $data
+     */
     private function logError(Request $request, Exception $exception, $data)
     {
         $uri = $request->getUri();

@@ -2,10 +2,16 @@
 
 namespace Status;
 
+use Exception;
 use Slim\App;
 use Slim\Container;
 use Status\Route as R;
 
+/**
+ * Class Dispatcher
+ *
+ * @package Status
+ */
 class Dispatcher extends Singleton
 {
     /** @var App $app */
@@ -25,11 +31,19 @@ class Dispatcher extends Singleton
         return self::getInstance()->app;
     }
 
+    /**
+     * @param $key
+     *
+     * @return mixed
+     */
     public static function config($key)
     {
         return self::getInstance()->config[$key];
     }
 
+    /**
+     * @return mixed
+     */
     public static function getConfig()
     {
         return self::getInstance()->config;
@@ -45,12 +59,17 @@ class Dispatcher extends Singleton
         return self::getInstance()->di;
     }
 
+    /**
+     * @throws Exception
+     */
     private function initConfig()
     {
         $config = ConfigLoader::load();
         $config['templates.path'] = BASE_ROOT . '/' . $config['templates.path'];
         $config['templates.cache_path'] = BASE_ROOT . '/' . $config['templates.cache_path'];
-        if (!isset($config['site_root'])) $config['site_root'] = '';
+        if (!isset($config['site_root'])) {
+            $config['site_root'] = '';
+        }
         $this->config = $config;
     }
 
@@ -73,6 +92,13 @@ class Dispatcher extends Singleton
         $this->app = $app;
     }
 
+    /**
+     * Dispatcher constructor.
+     *
+     * @param $args
+     *
+     * @throws Exception
+     */
     protected function __construct($args)
     {
         $this->initConfig();

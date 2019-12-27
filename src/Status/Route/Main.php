@@ -5,9 +5,14 @@ namespace Status\Route;
 use Slim\App;
 use Status\Controller\IndexCtrl;
 
+/**
+ * Class Main
+ *
+ * @package Status\Route
+ */
 class Main extends Base
 {
-    protected function addRoutes()
+    protected function addRoutes() /** @formatter:off */
     {
         $app = $this->app;
 
@@ -18,4 +23,5 @@ class Main extends Base
             $this->get('/json', IndexCtrl::class . ':indexJson')->setName('index:json');
         });
     }
+    /** @formatter:on */
 }
