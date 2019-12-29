@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status\Utilities;
 
@@ -12,6 +12,7 @@ use Slim\Http\Uri;
  */
 class View
 {
+    /** @var Container $di */
     private $di;
 
     /**
@@ -25,53 +26,53 @@ class View
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return string
      */
-    public function assetUrl($file)
+    public function assetUrl(string $file) : string
     {
         return $this->di['config']['site.site_root'] . $this->di['utility.assets']->path($file);
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return string
      */
-    public function cssUrl($file)
+    public function cssUrl(string $file) : string
     {
         return $this->assetUrl(sprintf('css/%s.css', $file));
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return string
      */
-    public function jsUrl($file)
+    public function jsUrl(string $file) : string
     {
         return $this->assetUrl(sprintf('js/%s.js', $file));
     }
 
     /**
-     * @param $file
+     * @param string $file
      *
      * @return string
      */
-    public function imgUrl($file)
+    public function imgUrl(string $file) : string
     {
         return $this->assetUrl(sprintf('img/%s', $file));
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param array $data
      * @param array $queryParams
      *
-     * @return mixed
+     * @return string
      */
-    public function pathFor($name, $data = [], $queryParams = [])
+    public function pathFor(string $name, array $data = [], array $queryParams = []) : string
     {
         return $this->di['router']->pathFor($name, $data, $queryParams);
     }
@@ -79,7 +80,7 @@ class View
     /**
      * @return string
      */
-    public function baseUrl()
+    public function baseUrl() : string
     {
         /**
          * @var Uri $uri
@@ -96,7 +97,7 @@ class View
     /**
      * @return string
      */
-    public function currentUrl()
+    public function currentUrl() : string
     {
         return $this->baseUrl() . $this->di['request']->getUri()->getPath();
     }
@@ -114,7 +115,7 @@ class View
     /**
      * @return Container
      */
-    public function getDi()
+    public function getDi() : Container
     {
         return $this->di;
     }
@@ -125,7 +126,7 @@ class View
      *
      * @return string
      */
-    public function getQueryString($params = [], $formParams = [])
+    public function getQueryString(array $params = [], array $formParams = []) : string
     {
         $request = $this->di['request'];
         $getParams = $request->getQueryParams();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status\Exception;
 
@@ -9,23 +9,24 @@ namespace Status\Exception;
  */
 class FileNotFoundException extends NotFound
 {
+    /** @var string $what */
     protected $what;
 
     /**
      * FileNotFoundException constructor.
      *
-     * @param $what
+     * @param string $what
      */
-    public function __construct($what)
+    public function __construct(string $what)
     {
         $this->what = $what;
         parent::__construct("File {$what} not found");
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getWhat()
+    public function getWhat() : string
     {
         return $this->what;
     }

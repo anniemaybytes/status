@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status\Utilities;
 
@@ -28,17 +28,17 @@ class Assets
      *
      * @return string
      */
-    public function path($filename)
+    public function path(string $filename) : string
     {
         return $this->di['config']['site.assets_root'] . '/' . $filename;
     }
 
     /**
-     * @param $filename
+     * @param string $filename
      *
      * @return string
      */
-    public function absolutePath($filename)
+    public function absolutePath($filename) : string
     {
         return PUBLIC_ROOT . $this->di['config']['site.assets_root'] . '/' . $filename;
     }

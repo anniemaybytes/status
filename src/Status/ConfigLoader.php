@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status;
 
-use Exception;
+use RuntimeException;
 
 /**
  * Class ConfigLoader
@@ -12,13 +12,13 @@ use Exception;
 class ConfigLoader
 {
     /**
-     * @param $array
-     * @param $prefix
+     * @param array $array
+     * @param string $prefix
      * @param bool $deep
      *
      * @return array
      */
-    private static function parseArray($array, $prefix, $deep = false)
+    private static function parseArray(array $array, string $prefix, bool $deep = false): array
     {
         $output = [];
 
@@ -38,16 +38,15 @@ class ConfigLoader
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return array
-     * @throws Exception
      */
-    private static function loadFile($path)
+    private static function loadFile(string $path): array
     {
         // load it as an ini
         if (!file_exists($path)) {
-            throw new Exception("Couldn't find config file $path");
+            throw new RuntimeException("Couldn't find config file $path");
         }
         $parsedFile = parse_ini_file($path, true);
 
@@ -58,9 +57,8 @@ class ConfigLoader
      * @param string $configPath
      *
      * @return array
-     * @throws Exception
      */
-    public static function load($configPath = 'config/')
+    public static function load(string $configPath = 'config/'): array
     {
         if ($configPath[0] !== '/' && strpos($configPath, '://') === false) {
             $configPath = BASE_ROOT . '/' . $configPath;

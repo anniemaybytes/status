@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status;
 
 use Exception;
+use RunTracy\Helpers\Profiler\Exception\ProfilerException;
+use RunTracy\Helpers\Profiler\Profiler;
 use Slim\App;
 use Slim\Container;
 use Status\Route as R;
@@ -26,7 +28,7 @@ class Dispatcher extends Singleton
      *
      * @return App
      */
-    public static function app()
+    public static function app() : App
     {
         return self::getInstance()->app;
     }
@@ -42,9 +44,9 @@ class Dispatcher extends Singleton
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public static function getConfig()
+    public static function getConfig() : array
     {
         return self::getInstance()->config;
     }
@@ -54,17 +56,20 @@ class Dispatcher extends Singleton
      *
      * @return Container
      */
-    public static function di()
+    public static function &di() : Container
     {
         return self::getInstance()->di;
     }
 
     /**
-     * @throws Exception
+     * @throws ProfilerException
      */
     private function initConfig()
     {
+        Profiler::start('initConfig');
         $config = ConfigLoader::load();
+        Profiler::finish('initConfig');
+
         $config['templates.path'] = BASE_ROOT . '/' . $config['templates.path'];
         $config['templates.cache_path'] = BASE_ROOT . '/' . $config['templates.cache_path'];
         if (!isset($config['site_root'])) {
@@ -73,19 +78,28 @@ class Dispatcher extends Singleton
         $this->config = $config;
     }
 
+    /**
+     * @throws ProfilerException
+     */
     private function initDependencyInjection()
     {
-        $di = DependencyInjection::get($this->config);
-        $this->di = $di;
+        Profiler::start('initDependencyInjection');
+        $this->di = DependencyInjection::get($this->config);
+        Profiler::finish('initDependencyInjection');
     }
 
+    /**
+     * @throws ProfilerException
+     */
     private function initApplication()
     {
         $app = new App($this->di);
 
+        Profiler::start('initRoutes');
         $routes = [
             new R\Main($app),
         ];
+        Profiler::finish('initRoutes');
 
         $this->di['routes'] = $routes;
 

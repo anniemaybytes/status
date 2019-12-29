@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status;
 
@@ -31,7 +31,7 @@ class TwigExtension extends AbstractExtension
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return 'slim';
     }
@@ -41,7 +41,7 @@ class TwigExtension extends AbstractExtension
      *
      * @return TwigFunction[]
      */
-    public function getFunctions()
+    public function getFunctions() : array
     {
         $fn = $this->view_functions;
 

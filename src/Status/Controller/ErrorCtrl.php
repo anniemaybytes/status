@@ -1,12 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status\Controller;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Status\Exception\AccessDeniedException;
 use Status\Exception\NotFound;
+use Throwable;
+use Tracy\Debugger;
 
 /**
  * Class ErrorCtrl
@@ -16,11 +18,11 @@ use Status\Exception\NotFound;
 class ErrorCtrl extends BaseCtrl
 {
     /**
-     * @param $statusCode
+     * @param int $statusCode
      *
      * @return array
      */
-    private function getData($statusCode)
+    private function getData(int $statusCode) : array
     {
         $data = [];
         $data['status_code'] = $statusCode;
@@ -31,17 +33,18 @@ class ErrorCtrl extends BaseCtrl
     /**
      * @param Request $request
      * @param Response $response
-     * @param $exception
+     * @param Throwable $exception
      *
-     * @return ResponseInterface|Response
+     * @return ResponseInterface
      */
-    public function handleException(Request $request, Response $response, $exception)
+    public function handleException(Request $request, Response $response, Throwable $exception)
     {
-        // make sure we don't throw an exception
         try {
             $statusCode = 500;
             if ($exception instanceof NotFound) {
                 $statusCode = 404;
+            } elseif ($exception instanceof AccessDeniedException) {
+                $statusCode = 403;
             }
 
             $data = $this->getData($statusCode);
@@ -53,6 +56,17 @@ class ErrorCtrl extends BaseCtrl
             $body->rewind();
             $response = $response->withBody($body);
 
+            // clear output buffer
+            while (ob_get_level() > $this->di['obLevel']) {
+                $status = ob_get_status();
+                if (in_array($status['name'], ['ob_gzhandler', 'zlib output compression'], true)) {
+                    break;
+                }
+                if (!@ob_end_clean()) { // @ may be not removable
+                    break;
+                }
+            }
+
             switch ($statusCode) {
                 case 404:
                     return $this->view->render($response, 'not_found.twig', $data)->withStatus($statusCode);
@@ -61,47 +75,23 @@ class ErrorCtrl extends BaseCtrl
                 default:
                     return $this->view->render($response, 'error.twig', $data)->withStatus($statusCode);
             }
-        } catch (Exception $e) {
-            error_log(
-                'Caught exception in exception handler - ' . $e->getFile() . '(' . $e->getLine(
-                ) . ') ' . $e->getMessage() . "\n" . $e->getTraceAsString()
-            );
-            $response->getBody()->write('Something broke. Sorry.');
-            return $response->withStatus(500);
+        } catch (Throwable $e) {
+            return (new FatalErrorCtrl($this->di))->handleError($request, $response, $e);
         }
     }
 
     /**
      * @param Request $request
-     * @param Exception $exception
-     * @param $data
+     * @param Throwable $exception
+     * @param array $data
      */
-    private function logError(Request $request, Exception $exception, $data)
+    private function logError(Request $request, Throwable $exception, array $data)
     {
-        $uri = $request->getUri();
-        $path = $uri->getPath();
-        $query = $uri->getQuery();
-        $fragment = $uri->getFragment();
-        $path = $path . ($query ? '?' . $query : '') . ($fragment ? '#' . $fragment : '');
-        $method = $request->getMethod();
-        $referrer = $request->getHeaderLine('HTTP_REFERER');
-        $ua = $request->getHeaderLine('HTTP_USER_AGENT');
-        $bt = '';
-
-        $prefix = "Error: {$data['status_code']} Method: $method $path ";
-        if ($referrer) {
-            $prefix .= '(referrer: ' . $referrer . ') ';
-        }
-        $msg = $prefix . ' - ' . $data['status_message'] . ' - ' . $ua;
-        $msg = sprintf("%s\n%s:%s", $msg, $exception->getFile(), $exception->getLine());
-
-        $ErrorData = sprintf("%s\nMessage:%s\nBacktrace:\n%s", $msg, $exception->getMessage(), $bt);
-
         // don't log 404s
         if ($data['status_code'] == 404) {
             return;
         }
 
-        error_log($ErrorData);
+        Debugger::log($exception, Debugger::EXCEPTION);
     }
 }

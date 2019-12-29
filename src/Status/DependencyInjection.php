@@ -1,7 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status;
 
+use RunTracy\Helpers\Profiler\Exception\ProfilerException;
+use RunTracy\Helpers\Profiler\Profiler;
 use Slim\Container;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
@@ -16,12 +18,13 @@ use Twig\Profiler\Profile;
 class DependencyInjection
 {
     /**
-     * @param $config
+     * @param array $config
      * @param array $args
      *
-     * @return mixed|Container
+     * @return Container
+     * @throws ProfilerException
      */
-    public static function get($config, $args = [])
+    public static function get(array $config, array $args = []) : Container
     {
         if (!$args) {
             $args = [
@@ -35,6 +38,8 @@ class DependencyInjection
         }
 
         $di = new Container($args);
+
+        $di['obLevel'] = ob_get_level();
 
         $di['config'] = $config;
 
@@ -51,12 +56,12 @@ class DependencyInjection
 
             $config = [
                 'cache' => $di['config']['templates.cache_path'],
+                'strict_variables' => true,
             ];
 
             if ($di['config']['mode'] == 'development') {
                 $config['debug'] = true;
                 $config['auto_reload'] = true;
-                $config['strict_variables'] = true;
             }
 
             $view = new Twig($dir, $config);
@@ -64,11 +69,6 @@ class DependencyInjection
             $view->addExtension(new TwigExtension($di['utility.view']));
 
             $view->getEnvironment()->addGlobal('di', $di);
-
-            $constants = get_defined_constants();
-            foreach ($constants as $name => $value) {
-                $view->getEnvironment()->addGlobal($name, $value);
-            }
 
             if ($di['config']['mode'] == 'development') {
                 $view->addExtension(new DebugExtension());
@@ -84,34 +84,47 @@ class DependencyInjection
             // delegate to the error handler
             throw new Exception\NotFound();
         };
+        $di['notAllowedHandler'] = function ($di) {
+            // let's pretend it doesn't exist
+            throw new Exception\NotFound();
+        };
 
-        unset($di['phpErrorHandler']);
         if ($config['mode'] != 'development') {
             $di['errorHandler'] = function ($di) {
                 $ctrl = new Controller\ErrorCtrl($di);
                 return [$ctrl, 'handleException'];
             };
+            $di['phpErrorHandler'] = function ($di) {
+                $ctrl = new Controller\FatalErrorCtrl($di);
+                return [$ctrl, 'handleError'];
+            };
         } else {
             unset($di['errorHandler']);
+            unset($di['phpErrorHandler']);
         }
 
         return $di;
     }
 
     /**
-     * @param $di
+     * @param Container $di
      *
-     * @return mixed
+     * @return Container
+     * @throws ProfilerException
      */
-    private static function setUtilities($di) /** @formatter:off */
+    private static function setUtilities(Container $di) : Container /** @formatter:off */
     {
-        $di['utility.assets'] = function ($di) {
+        Profiler::start('setUtilities');
+
+        $di['utility.assets'] = function (Container $di) {
             return new Utilities\Assets($di);
         };
 
-        $di['utility.view'] = function ($di) {
+        $di['utility.view'] = function (Container $di) {
             return new Utilities\View($di);
         };
+
+        Profiler::finish('setUtilities');
 
         return $di;
     }

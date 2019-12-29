@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status\Utilities;
 
@@ -20,13 +20,13 @@ class Time
      *
      * Unix timestamp format is 'U'
      *
-     * @param $str
+     * @param mixed $str
      *
      * @return DateTime
      */
-    public static function fromEpoch($str)
+    public static function fromEpoch($str) : DateTime
     {
-        return DateTime::createFromFormat('U', $str);
+        return DateTime::createFromFormat('U', intval($str));
     }
 
     /**
@@ -35,7 +35,7 @@ class Time
      * @return DateTime
      * @throws Exception
      */
-    public static function now()
+    public static function now() : DateTime
     {
         return new DateTime();
     }
@@ -45,11 +45,11 @@ class Time
      *  interval('-1 day');
      *  interval('+1 year');
      *
-     * @param $s
+     * @param string $s
      *
      * @return DateInterval
      */
-    public static function interval($s)
+    public static function interval(string $s) : DateInterval
     {
         return DateInterval::createFromDateString($s);
     }

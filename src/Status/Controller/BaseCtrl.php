@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status\Controller;
 
+use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Views\Twig;
 use Status\Cache\Apc;
@@ -14,6 +15,9 @@ use Status\Utilities\View;
  */
 abstract class BaseCtrl
 {
+    /**
+     * @var Container $di
+     */
     protected $di;
 
     /**
@@ -41,27 +45,24 @@ abstract class BaseCtrl
      */
     protected $environment;
 
-    /**
-     * @param $di
-     */
-    public function setDependencies($di)
+    public function setDependencies()
     {
-        $this->config = $di['config'];
-        $this->view_functions = $di['utility.view'];
-        $this->environment = $di['environment'];
-        $this->view = $di['view'];
-        $this->cache = $di['cache'];
+        $this->config = $this->di['config'];
+        $this->view_functions = $this->di['utility.view'];
+        $this->environment = $this->di['environment'];
+        $this->view = $this->di['view'];
+        $this->cache = $this->di['cache'];
     }
 
     /**
      * BaseCtrl constructor.
      *
-     * @param $di
+     * @param Container $di
      */
-    public function __construct($di)
+    public function __construct(Container &$di)
     {
-        $this->di = $di;
+        $this->di = &$di;
 
-        $this->setDependencies($di);
+        $this->setDependencies();
     }
 }

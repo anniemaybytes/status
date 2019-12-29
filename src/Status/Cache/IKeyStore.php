@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Status\Cache;
 
@@ -13,30 +13,30 @@ interface IKeyStore
      *
      * @param string $key
      */
-    public function fetch($key);
+    public function fetch(string $key);
 
     /**
      * Set the key to value.
      * Return true on success or false on failure.
      *
-     * @param $key
+     * @param string $key
      * @param $value
-     * @param int|number $time
+     * @param int $time
      */
-    public function add($key, $value, $time = 3600);
+    public function add(string $key, $value, int $time = 3600);
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return mixed
      */
-    public function exists($key);
+    public function exists(string $key);
 
     /**
      * Delete the value stored against key.
      * Return true on success or false on failure.
      *
-     * @param $key
+     * @param string $key
      */
-    public function delete($key);
+    public function delete(string $key);
 }
