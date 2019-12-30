@@ -46,7 +46,8 @@ array_push(
     'CSRF',
     'SERVER_ADDR',
     'REMOTE_ADDR',
-    '_tracy'
+    '_tracy',
+    'PHP_AUTH_PW'
 );
 
 Profiler::start('initMiddlewares');
