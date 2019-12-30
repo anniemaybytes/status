@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace RunTracy\Helpers;
 
 use Tracy\IBarPanel;
 use Twig\Profiler\Dumper\HtmlDumper;
+use Twig\Profiler\Profile;
 
 /**
  * Class TwigPanel
@@ -19,9 +20,9 @@ class TwigPanel implements IBarPanel
     /**
      * TwigPanel constructor.
      *
-     * @param null $data
+     * @param Profile|null $data
      */
-    public function __construct($data = null)
+    public function __construct(?Profile $data = null)
     {
         $this->data = $data;
         $this->dumper = new HtmlDumper();
@@ -30,7 +31,7 @@ class TwigPanel implements IBarPanel
     /**
      * @return string
      */
-    public function getTab()
+    public function getTab(): string
     {
         $this->icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 532 178" style="width: 35px"><path ' .
             'fill="#016301" d="m439 153.67c-13.839-3.3534-27.492-13.852-34.543-26.563-1.9832-3.575-4.8271-10.55-' .
@@ -88,7 +89,7 @@ class TwigPanel implements IBarPanel
     /**
      * @return string
      */
-    public function getPanel()
+    public function getPanel(): string
     {
         return '<h1>' . $this->icon . ' Slim 3 / Twig </h1>
         <div class="tracy-inner">
