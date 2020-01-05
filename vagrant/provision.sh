@@ -48,3 +48,7 @@ echo Starting daemons...
 systemctl daemon-reload
 systemctl start nginx
 systemctl start php7.3-fpm
+
+echo
+echo Creating required directories
+sudo -u vagrant mkdir -p /code/logs

@@ -27,13 +27,14 @@ if ($di['config']['mode'] == 'production') {
     Profiler::disable();
 }
 
-Debugger::$maxDepth = 5;
+Debugger::$maxDepth = 7;
+Debugger::$showFireLogger = false;
 Debugger::$maxLength = 520;
 Debugger::$logSeverity = ERROR_REPORTING;
 Debugger::$reservedMemorySize = 5000000; // 5 megabytes because we increase depth for bluescreen
 Debugger::enable(
     $di['config']['mode'] == 'development' ? Debugger::DEVELOPMENT : Debugger::PRODUCTION,
-    BASE_ROOT . '/logs'
+    $di['config']['logs_dir']
 );
 if ($di['config']['mode'] == 'production') { // tracy resets error_reporting to E_ALL when it's enabled, silence it on production please
     error_reporting(ERROR_REPORTING);
@@ -43,7 +44,6 @@ Debugger::getBlueScreen()->maxDepth = 7;
 Debugger::getBlueScreen()->maxLength = 520;
 array_push(
     Debugger::getBlueScreen()->keysToHide,
-    'CSRF',
     'SERVER_ADDR',
     'REMOTE_ADDR',
     '_tracy',

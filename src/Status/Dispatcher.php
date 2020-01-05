@@ -71,10 +71,7 @@ class Dispatcher extends Singleton
         Profiler::finish('initConfig');
 
         $config['templates.path'] = BASE_ROOT . '/' . $config['templates.path'];
-        $config['templates.cache_path'] = BASE_ROOT . '/' . $config['templates.cache_path'];
-        if (!isset($config['site_root'])) {
-            $config['site_root'] = '';
-        }
+        $config['logs_dir'] = BASE_ROOT . '/' . $config['logs_dir'];
         $this->config = $config;
     }
 
