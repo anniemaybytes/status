@@ -3,8 +3,8 @@
 namespace Status\Controller;
 
 use DI\Container;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 use Throwable;
 use Tracy\Debugger;

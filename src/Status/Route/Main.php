@@ -2,7 +2,6 @@
 
 namespace Status\Route;
 
-use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 use Status\Controller\IndexCtrl;
 
@@ -18,9 +17,7 @@ class Main extends Base
         $app = $this->app;
 
         $app->group('', function (RouteCollectorProxy $group) {
-            /** @var App $this */
             $group->get('/', IndexCtrl::class . ':index')->setName('index');
-            /** @var App $this */
             $group->get('/json', IndexCtrl::class . ':indexJson')->setName('index:json');
         });
     }

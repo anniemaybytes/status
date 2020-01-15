@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+
+declare(strict_types=1);
 
 define('BASE_ROOT', __DIR__);
 define('ERROR_REPORTING', E_ALL & ~(E_STRICT | E_NOTICE | E_WARNING | E_DEPRECATED));
@@ -14,8 +16,8 @@ use Slim\Middleware\OutputBufferingMiddleware;
 use Slim\Psr7\Factory\StreamFactory;
 use Status\Controller\ErrorCtrl;
 use Status\Dispatcher;
-use Tracy\Debugger;
 use Status\Middleware;
+use Tracy\Debugger;
 
 date_default_timezone_set('UTC');
 error_reporting(ERROR_REPORTING);

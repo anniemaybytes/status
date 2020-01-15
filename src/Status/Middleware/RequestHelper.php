@@ -5,6 +5,7 @@ namespace Status\Middleware;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use RunTracy\Helpers\Profiler\Exception\ProfilerException;
 use RunTracy\Helpers\Profiler\Profiler;
 use Slim\MiddlewareDispatcher;
 
@@ -38,6 +39,7 @@ class RequestHelper
      * @param MiddlewareDispatcher $handler
      *
      * @return Response
+     * @throws ProfilerException
      */
     public function __invoke(Request $request, $handler): Response
     {

@@ -24,7 +24,7 @@ class Time
      *
      * @return DateTime
      */
-    public static function fromEpoch($str) : DateTime
+    public static function fromEpoch($str): DateTime
     {
         return DateTime::createFromFormat('U', intval($str));
     }
@@ -35,7 +35,7 @@ class Time
      * @return DateTime
      * @throws Exception
      */
-    public static function now() : DateTime
+    public static function now(): DateTime
     {
         return new DateTime();
     }
@@ -49,7 +49,7 @@ class Time
      *
      * @return DateInterval
      */
-    public static function interval(string $s) : DateInterval
+    public static function interval(string $s): DateInterval
     {
         return DateInterval::createFromDateString($s);
     }

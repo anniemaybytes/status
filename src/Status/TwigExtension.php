@@ -31,7 +31,7 @@ class TwigExtension extends AbstractExtension
     /**
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return 'slim';
     }
@@ -41,7 +41,7 @@ class TwigExtension extends AbstractExtension
      *
      * @return TwigFunction[]
      */
-    public function getFunctions() : array
+    public function getFunctions(): array
     {
         $fn = $this->view_functions;
 

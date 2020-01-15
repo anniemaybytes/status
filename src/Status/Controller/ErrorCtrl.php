@@ -2,8 +2,8 @@
 
 namespace Status\Controller;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpException;
 use Throwable;
 use Tracy\Debugger;
@@ -22,12 +22,12 @@ class ErrorCtrl extends BaseCtrl
      *
      * @return Response
      */
-    public function handleException(Request $request, Response $response, Throwable $exception) : Response
+    public function handleException(Request $request, Response $response, Throwable $exception): Response
     {
         try {
             $status = 500;
             $message = '500 Internal Server Error';
-            if($exception instanceof HttpException) {
+            if ($exception instanceof HttpException) {
                 $status = $exception->getCode();
                 $message = $exception->getTitle();
             }

@@ -3,9 +3,9 @@
 namespace Status\Controller;
 
 use DOMDocument;
-use Status\Utilities\Curl;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Status\Utilities\Curl;
 
 /**
  * Class IndexCtrl
@@ -29,7 +29,7 @@ class IndexCtrl extends BaseCtrl
     /**
      * @return int
      */
-    private function checkSite() : int
+    private function checkSite(): int
     {
         $curl = new Curl("https://animebytes.tv");
         $curl->setoptArray(
@@ -51,7 +51,7 @@ class IndexCtrl extends BaseCtrl
         if (is_string($content)) {
             $doc = new DOMDocument();
             @$doc->loadHTML($content);
-            if(!$doc) { // unable to parse output, assume site is down
+            if (!$doc) { // unable to parse output, assume site is down
                 $this->cache->add('site_status', 0, $this->cacheFor);
                 return (int)0;
             }
@@ -82,9 +82,9 @@ class IndexCtrl extends BaseCtrl
     /**
      * @return int
      */
-    private function checkMei() : int
+    private function checkMei(): int
     {
-        $curl = new Curl("https://mei.animebytes.tv");
+        $curl = new Curl("https://mei.animebytes.tv/images/error.jpg");
         $curl->setoptArray(
             [
                 CURLOPT_USERAGENT => "status.animebytes.tv",
@@ -94,14 +94,17 @@ class IndexCtrl extends BaseCtrl
                 CURLOPT_TIMEOUT => $this->meiTimeout,
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                CURLOPT_SSL_VERIFYHOST => 2
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_HEADER => true,
+                CURLOPT_NOBODY => true,
             ]
         );
-        $content = $curl->exec();
+        $body = $curl->exec();
         $httpCode = $curl->getInfo(CURLINFO_HTTP_CODE);
         unset($curl);
 
-        if ($httpCode === 404 && is_string($content) && $content === '404 - Route Not Found') {
+        preg_match("/\r?\n(?:Location|URI): *(.*?) *\r?\n/im", $body, $headers);
+        if ($httpCode === 301 && $headers[1] === '/error.jpg') {
             $this->cache->add('mei_status', 1, $this->cacheFor);
             return (int)1;
         }
@@ -115,7 +118,7 @@ class IndexCtrl extends BaseCtrl
      *
      * @return int
      */
-    private function checkTrackerSingular(string $ip) : int
+    private function checkTrackerSingular(string $ip): int
     {
         $curl = new Curl("https://$ip");
         $curl->setoptArray(
@@ -144,7 +147,7 @@ class IndexCtrl extends BaseCtrl
     /**
      * @return array
      */
-    private function checkTracker() : array
+    private function checkTracker(): array
     {
         $nsRecords = $this->di->get('config')['tracker.ns'];
 
@@ -186,7 +189,7 @@ class IndexCtrl extends BaseCtrl
     private function checkIrc()
     {
         $nsRecord = dns_get_record("irc.animebytes.tv", DNS_A)[0]['ip'];
-        if(!is_string($nsRecord)) {
+        if (!is_string($nsRecord)) {
             $this->cache->add('irc_status', 0, $this->cacheFor);
             return 0;
         }
@@ -209,7 +212,7 @@ class IndexCtrl extends BaseCtrl
      *
      * @return Response
      */
-    public function index(Request $request, Response $response, array $args) : Response
+    public function index(Request $request, Response $response, array $args): Response
     {
         $data = [];
         $data['site_status'] = $this->cache->exists('site_status') ? $this->cache->fetch(
@@ -238,7 +241,7 @@ class IndexCtrl extends BaseCtrl
      *
      * @return Response
      */
-    public function indexJson(Request $request, Response $response, array $args) : Response
+    public function indexJson(Request $request, Response $response, array $args): Response
     {
         $data = [];
         $data['site_status'] =

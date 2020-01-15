@@ -12,11 +12,9 @@ desktop.ini
 /cache/*
 
 # general extensions of files we dont want
-*.sql.gz
-*.sql
 *.log
-*.mmdb
 
 # project stuff
 config/config.ini
 routes.cache.php
+logs/*

@@ -2,11 +2,11 @@
 
 namespace Status;
 
+use DI\Container;
 use Exception;
 use RunTracy\Helpers\Profiler\Exception\ProfilerException;
 use RunTracy\Helpers\Profiler\Profiler;
 use Slim\App;
-use DI\Container;
 use Slim\Factory\AppFactory;
 use Status\Route as R;
 
@@ -29,7 +29,7 @@ class Dispatcher extends Singleton
      *
      * @return App
      */
-    public static function app() : App
+    public static function app(): App
     {
         return self::getInstance()->app;
     }
@@ -47,7 +47,7 @@ class Dispatcher extends Singleton
     /**
      * @return array
      */
-    public static function getConfig() : array
+    public static function getConfig(): array
     {
         return self::getInstance()->config;
     }
@@ -57,7 +57,7 @@ class Dispatcher extends Singleton
      *
      * @return Container
      */
-    public static function &di() : Container
+    public static function &di(): Container
     {
         return self::getInstance()->di;
     }

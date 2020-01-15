@@ -2,7 +2,7 @@
 
 namespace Status;
 
-use BadFunctionCallException;
+use BadMethodCallException;
 
 /**
  * Class Singleton
@@ -16,9 +16,9 @@ class Singleton
     /**
      * Singleton constructor.
      *
-     * @param $args
+     * @param array $args
      */
-    protected function __construct($args)
+    protected function __construct(array $args)
     {
     }
 
@@ -28,13 +28,13 @@ class Singleton
 
     public function __wakeup()
     {
-        throw new BadFunctionCallException("Cannot unserialize singleton");
+        throw new BadMethodCallException("Cannot unserialize singleton");
     }
 
     /**
-     * @return mixed
+     * @return object
      */
-    public static function getInstance()
+    public static function getInstance(): object
     {
         $cls = get_called_class(); // late-static-bound class name
         if (!isset(self::$instances[$cls])) {

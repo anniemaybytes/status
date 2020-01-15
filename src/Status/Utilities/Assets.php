@@ -28,7 +28,7 @@ class Assets
      *
      * @return string
      */
-    public function path(string $filename) : string
+    public function path(string $filename): string
     {
         return $this->di->get('config')['site.assets_root'] . '/' . $filename;
     }
@@ -38,7 +38,7 @@ class Assets
      *
      * @return string
      */
-    public function absolutePath($filename) : string
+    public function absolutePath($filename): string
     {
         return PUBLIC_ROOT . $this->di->get('config')['site.assets_root'] . '/' . $filename;
     }

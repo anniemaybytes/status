@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="status" pattern="(file:src//*||file:public/index.php||file:dispatch.php)&amp;&amp;!file:src/RunTracy//*" />
+</component>

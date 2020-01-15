@@ -32,7 +32,7 @@ class View
      *
      * @return string
      */
-    public function assetUrl(string $file) : string
+    public function assetUrl(string $file): string
     {
         return $this->di->get('config')['site.site_root'] . $this->di->get('utility.assets')->path($file);
     }
@@ -42,7 +42,7 @@ class View
      *
      * @return string
      */
-    public function cssUrl(string $file) : string
+    public function cssUrl(string $file): string
     {
         return $this->assetUrl(sprintf('css/%s.css', $file));
     }
@@ -52,7 +52,7 @@ class View
      *
      * @return string
      */
-    public function jsUrl(string $file) : string
+    public function jsUrl(string $file): string
     {
         return $this->assetUrl(sprintf('js/%s.js', $file));
     }
@@ -62,7 +62,7 @@ class View
      *
      * @return string
      */
-    public function imgUrl(string $file) : string
+    public function imgUrl(string $file): string
     {
         return $this->assetUrl(sprintf('img/%s', $file));
     }
@@ -74,7 +74,7 @@ class View
      *
      * @return string
      */
-    public function pathFor(string $name, array $data = [], array $queryParams = []) : string
+    public function pathFor(string $name, array $data = [], array $queryParams = []): string
     {
         return $this->di->get('router')->relativeUrlFor($name, $data, $queryParams);
     }
@@ -82,7 +82,7 @@ class View
     /**
      * @return string
      */
-    public function baseUrl() : string
+    public function baseUrl(): string
     {
         /**
          * @var Uri $uri
@@ -99,7 +99,7 @@ class View
     /**
      * @return string
      */
-    public function currentUrl() : string
+    public function currentUrl(): string
     {
         return $this->baseUrl() . $this->di->get('request')->getUri()->getPath();
     }
@@ -117,7 +117,7 @@ class View
     /**
      * @return Container
      */
-    public function getDi() : Container
+    public function getDi(): Container
     {
         return $this->di;
     }
@@ -128,7 +128,7 @@ class View
      *
      * @return string
      */
-    public function getQueryString(array $params = [], array $formParams = []) : string
+    public function getQueryString(array $params = [], array $formParams = []): string
     {
         $request = $this->di->get('request');
         $getParams = $request->getQueryParams();

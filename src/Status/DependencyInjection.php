@@ -2,10 +2,10 @@
 
 namespace Status;
 
+use DI\Container;
 use DI\ContainerBuilder;
 use RunTracy\Helpers\Profiler\Exception\ProfilerException;
 use RunTracy\Helpers\Profiler\Profiler;
-use DI\Container;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ProfilerExtension;
@@ -24,16 +24,19 @@ class DependencyInjection
      * @return Container
      * @throws ProfilerException
      */
-    public static function setup(array $config) : Container
+    public static function setup(array $config): Container
     {
         $builder = new ContainerBuilder();
         $builder->useAutowiring(false);
         $builder->useAnnotations(false);
-        $builder->addDefinitions([
-            'settings' => [
-                'xdebugHelperIdeKey' => 'tentacles',
+        $builder->addDefinitions(
+            [
+                'settings' => [
+                    'xdebugHelperIdeKey' => 'status',
+                ]
             ]
-        ]);
+        );
+        /** @noinspection PhpUnhandledExceptionInspection */
         $di = $builder->build();
 
         $di->set('config', $config);
@@ -42,37 +45,43 @@ class DependencyInjection
         $di = self::setUtilities($di);
 
         if ($di->get('config')['mode'] == 'development') {
-            $di->set('twig_profile', function () {
-                return new Profile();
-            });
+            $di->set(
+                'twig_profile',
+                function () {
+                    return new Profile();
+                }
+            );
         }
 
-        $di->set('view', function ($di) {
-            $dir = $di->get('config')['templates.path'];
+        $di->set(
+            'view',
+            function ($di) {
+                $dir = $di->get('config')['templates.path'];
 
-            $config = [
-                'cache' => $di->get('config')['templates.cache_path'],
-                'strict_variables' => true,
-            ];
+                $config = [
+                    'cache' => $di->get('config')['templates.cache_path'],
+                    'strict_variables' => true,
+                ];
 
-            if ($di->get('config')['mode'] == 'development') {
-                $config['debug'] = true;
-                $config['auto_reload'] = true;
+                if ($di->get('config')['mode'] == 'development') {
+                    $config['debug'] = true;
+                    $config['auto_reload'] = true;
+                }
+
+                $view = Twig::create($dir, $config);
+
+                $view->addExtension(new TwigExtension($di->get('utility.view')));
+
+                $view->getEnvironment()->addGlobal('di', $di);
+
+                if ($di->get('config')['mode'] == 'development') {
+                    $view->addExtension(new DebugExtension());
+                    $view->addExtension(new ProfilerExtension($di->get('twig_profile')));
+                }
+
+                return $view;
             }
-
-            $view = Twig::create($dir, $config);
-
-            $view->addExtension(new TwigExtension($di->get('utility.view')));
-
-            $view->getEnvironment()->addGlobal('di', $di);
-
-            if ($di->get('config')['mode'] == 'development') {
-                $view->addExtension(new DebugExtension());
-                $view->addExtension(new ProfilerExtension($di->get('twig_profile')));
-            }
-
-            return $view;
-        });
+        );
 
         $di->set('cache', new Cache\Apc());
 
