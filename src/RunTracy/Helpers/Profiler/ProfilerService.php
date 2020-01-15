@@ -98,7 +98,7 @@ class ProfilerService implements SingletonInterface
         if (empty($this->metaData)) {
             $this->metaData[self::META_TIME_LINE] = [];
             $this->metaData[self::META_MEMORY_PEAK] = 0;
-            if (count($this->profiles) == 0) {
+            if (count($this->profiles) === 0) {
                 $this->metaData[self::META_TIME_ZERO] = 0;
                 $timeEnd = 0;
             } else {

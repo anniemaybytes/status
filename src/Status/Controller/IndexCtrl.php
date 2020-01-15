@@ -4,9 +4,8 @@ namespace Status\Controller;
 
 use DOMDocument;
 use Status\Utilities\Curl;
-use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Class IndexCtrl
@@ -30,7 +29,7 @@ class IndexCtrl extends BaseCtrl
     /**
      * @return int
      */
-    private function checkSite()
+    private function checkSite() : int
     {
         $curl = new Curl("https://animebytes.tv");
         $curl->setoptArray(
@@ -83,7 +82,7 @@ class IndexCtrl extends BaseCtrl
     /**
      * @return int
      */
-    private function checkMei()
+    private function checkMei() : int
     {
         $curl = new Curl("https://mei.animebytes.tv");
         $curl->setoptArray(
@@ -112,11 +111,11 @@ class IndexCtrl extends BaseCtrl
     }
 
     /**
-     * @param $ip
+     * @param string $ip
      *
      * @return int
      */
-    private function checkTrackerSingular($ip)
+    private function checkTrackerSingular(string $ip) : int
     {
         $curl = new Curl("https://$ip");
         $curl->setoptArray(
@@ -145,9 +144,9 @@ class IndexCtrl extends BaseCtrl
     /**
      * @return array
      */
-    private function checkTracker()
+    private function checkTracker() : array
     {
-        $nsRecords = $this->di['config']['tracker.ns'];
+        $nsRecords = $this->di->get('config')['tracker.ns'];
 
         $working = false;
         $error = false;
@@ -208,9 +207,9 @@ class IndexCtrl extends BaseCtrl
      * @param Response $response
      * @param array $args
      *
-     * @return ResponseInterface
+     * @return Response
      */
-    public function index(Request $request, Response $response, array $args) : ResponseInterface
+    public function index(Request $request, Response $response, array $args) : Response
     {
         $data = [];
         $data['site_status'] = $this->cache->exists('site_status') ? $this->cache->fetch(

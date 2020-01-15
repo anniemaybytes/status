@@ -2,9 +2,10 @@
 
 namespace Status;
 
+use DI\ContainerBuilder;
 use RunTracy\Helpers\Profiler\Exception\ProfilerException;
 use RunTracy\Helpers\Profiler\Profiler;
-use Slim\Container;
+use DI\Container;
 use Slim\Views\Twig;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ProfilerExtension;
@@ -19,89 +20,61 @@ class DependencyInjection
 {
     /**
      * @param array $config
-     * @param array $args
      *
      * @return Container
      * @throws ProfilerException
      */
-    public static function get(array $config, array $args = []) : Container
+    public static function setup(array $config) : Container
     {
-        if (!$args) {
-            $args = [
-                'settings' => [
-                    'displayErrorDetails' => ($config['mode'] == 'development'),
-                    'determineRouteBeforeAppMiddleware' => true,
-                    'addContentLengthHeader' => false,
-                    'xdebugHelperIdeKey' => 'status',
-                ]
-            ];
-        }
+        $builder = new ContainerBuilder();
+        $builder->useAutowiring(false);
+        $builder->useAnnotations(false);
+        $builder->addDefinitions([
+            'settings' => [
+                'xdebugHelperIdeKey' => 'tentacles',
+            ]
+        ]);
+        $di = $builder->build();
 
-        $di = new Container($args);
-
-        $di['obLevel'] = ob_get_level();
-
-        $di['config'] = $config;
+        $di->set('config', $config);
+        $di->set('obLevel', ob_get_level());
 
         $di = self::setUtilities($di);
 
-        if ($di['config']['mode'] == 'development') {
-            $di['twig_profile'] = function () {
+        if ($di->get('config')['mode'] == 'development') {
+            $di->set('twig_profile', function () {
                 return new Profile();
-            };
+            });
         }
 
-        $di['view'] = function ($di) {
-            $dir = $di['config']['templates.path'];
+        $di->set('view', function ($di) {
+            $dir = $di->get('config')['templates.path'];
 
             $config = [
-                'cache' => $di['config']['templates.cache_path'],
+                'cache' => $di->get('config')['templates.cache_path'],
                 'strict_variables' => true,
             ];
 
-            if ($di['config']['mode'] == 'development') {
+            if ($di->get('config')['mode'] == 'development') {
                 $config['debug'] = true;
                 $config['auto_reload'] = true;
             }
 
-            $view = new Twig($dir, $config);
+            $view = Twig::create($dir, $config);
 
-            $view->addExtension(new TwigExtension($di['utility.view']));
+            $view->addExtension(new TwigExtension($di->get('utility.view')));
 
             $view->getEnvironment()->addGlobal('di', $di);
 
-            if ($di['config']['mode'] == 'development') {
+            if ($di->get('config')['mode'] == 'development') {
                 $view->addExtension(new DebugExtension());
-                $view->addExtension(new ProfilerExtension($di['twig_profile']));
+                $view->addExtension(new ProfilerExtension($di->get('twig_profile')));
             }
 
             return $view;
-        };
+        });
 
-        $di['cache'] = new Cache\Apc();
-
-        $di['notFoundHandler'] = function () {
-            // delegate to the error handler
-            throw new Exception\NotFound();
-        };
-        $di['notAllowedHandler'] = function ($di) {
-            // let's pretend it doesn't exist
-            throw new Exception\NotFound();
-        };
-
-        if ($config['mode'] != 'development') {
-            $di['errorHandler'] = function ($di) {
-                $ctrl = new Controller\ErrorCtrl($di);
-                return [$ctrl, 'handleException'];
-            };
-            $di['phpErrorHandler'] = function ($di) {
-                $ctrl = new Controller\FatalErrorCtrl($di);
-                return [$ctrl, 'handleError'];
-            };
-        } else {
-            unset($di['errorHandler']);
-            unset($di['phpErrorHandler']);
-        }
+        $di->set('cache', new Cache\Apc());
 
         return $di;
     }
@@ -116,13 +89,13 @@ class DependencyInjection
     {
         Profiler::start('setUtilities');
 
-        $di['utility.assets'] = function (Container $di) {
+        $di->set('utility.assets', function (Container $di) {
             return new Utilities\Assets($di);
-        };
+        });
 
-        $di['utility.view'] = function (Container $di) {
+        $di->set('utility.view', function (Container $di) {
             return new Utilities\View($di);
-        };
+        });
 
         Profiler::finish('setUtilities');
 

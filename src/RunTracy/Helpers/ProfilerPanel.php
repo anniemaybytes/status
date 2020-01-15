@@ -37,7 +37,7 @@ class ProfilerPanel implements IBarPanel
             '<span title="%s">⏱ %s</span>',
             'Profiler info',
             Profiler::isEnabled() ? sprintf(
-                $countOfProfiles == 1 ? '%d profile' : '%d profiles',
+                $countOfProfiles === 1 ? '%d profile' : '%d profiles',
                 $countOfProfiles
             ) : 'disabled'
         );
@@ -66,7 +66,7 @@ class ProfilerPanel implements IBarPanel
                         $profile->meta[ProfilerService::TIME_LINE_INACTIVE]) < 1) {
                     return /* continue */ ;
                 }
-                if ($profile->meta[Profiler::START_LABEL] == $profile->meta[Profiler::FINISH_LABEL]) {
+                if ($profile->meta[Profiler::START_LABEL] === $profile->meta[Profiler::FINISH_LABEL]) {
                     /** @noinspection PhpFormatFunctionParametersMismatchInspection */
                     $labels = sprintf(
                         '<td colspan="2">%s</td>',
@@ -190,7 +190,7 @@ class ProfilerPanel implements IBarPanel
                     $firstIteration = false;
                 }
                 $thisX = floor(max(0, $time) / $metaData[ProfilerService::META_TIME_TOTAL] * $maxWidth);
-                if ($thisX == $prevX) {
+                if ($thisX === $prevX) {
                     return /* continue */ ;
                 }
                 $thisY = floor($maxHeight - $height * $maxHeight / 100);

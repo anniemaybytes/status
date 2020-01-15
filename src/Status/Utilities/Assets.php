@@ -2,7 +2,7 @@
 
 namespace Status\Utilities;
 
-use Slim\Container;
+use DI\Container;
 
 /**
  * Class Assets
@@ -30,7 +30,7 @@ class Assets
      */
     public function path(string $filename) : string
     {
-        return $this->di['config']['site.assets_root'] . '/' . $filename;
+        return $this->di->get('config')['site.assets_root'] . '/' . $filename;
     }
 
     /**
@@ -40,6 +40,6 @@ class Assets
      */
     public function absolutePath($filename) : string
     {
-        return PUBLIC_ROOT . $this->di['config']['site.assets_root'] . '/' . $filename;
+        return PUBLIC_ROOT . $this->di->get('config')['site.assets_root'] . '/' . $filename;
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Status\Controller;
 
-use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Status\Exception\AccessDeniedException;
 use Status\Exception\NotFound;
 use Throwable;
@@ -35,9 +34,9 @@ class ErrorCtrl extends BaseCtrl
      * @param Response $response
      * @param Throwable $exception
      *
-     * @return ResponseInterface
+     * @return Response
      */
-    public function handleException(Request $request, Response $response, Throwable $exception)
+    public function handleException(Request $request, Response $response, Throwable $exception) : Response
     {
         try {
             $statusCode = 500;
@@ -57,7 +56,7 @@ class ErrorCtrl extends BaseCtrl
             $response = $response->withBody($body);
 
             // clear output buffer
-            while (ob_get_level() > $this->di['obLevel']) {
+            while (ob_get_level() > $this->di->get('obLevel')) {
                 $status = ob_get_status();
                 if (in_array($status['name'], ['ob_gzhandler', 'zlib output compression'], true)) {
                     break;

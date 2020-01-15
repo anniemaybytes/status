@@ -2,11 +2,9 @@
 
 namespace Status\Controller;
 
-use Exception;
-use Psr\Http\Message\ResponseInterface;
-use Slim\Container;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use DI\Container;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Views\Twig;
 use Throwable;
 use Tracy\Debugger;
@@ -36,7 +34,7 @@ class FatalErrorCtrl
     public function __construct(Container &$di)
     {
         $this->di = &$di;
-        $this->view = $this->di['view'];
+        $this->view = $di->get('view');
     }
 
     /**
@@ -48,9 +46,9 @@ class FatalErrorCtrl
      * @param Response $response
      * @param Throwable $error
      *
-     * @return ResponseInterface
+     * @return Response
      */
-    public function handleError(Request $request, Response $response, Throwable $error): ResponseInterface
+    public function handleError(Request $request, Response $response, Throwable $error): Response
     {
         // have tracy log the error
         Debugger::log($error, Debugger::ERROR);
@@ -61,7 +59,7 @@ class FatalErrorCtrl
         $response = $response->withBody($body);
 
         // clear output buffer
-        while (ob_get_level() > @$this->di['obLevel']) {
+        while (ob_get_level() > @$this->di->get('obLevel')) {
             $status = ob_get_status();
             if (in_array($status['name'], ['ob_gzhandler', 'zlib output compression'], true)) {
                 break;

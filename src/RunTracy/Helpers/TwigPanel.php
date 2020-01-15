@@ -91,7 +91,7 @@ class TwigPanel implements IBarPanel
      */
     public function getPanel(): string
     {
-        return '<h1>' . $this->icon . ' Slim 3 / Twig </h1>
+        return '<h1>' . $this->icon . ' Twig </h1>
         <div class="tracy-inner">
             <p>
                 <table width="100%">
