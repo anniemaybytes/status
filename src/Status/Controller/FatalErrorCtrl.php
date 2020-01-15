@@ -69,6 +69,6 @@ class FatalErrorCtrl
             }
         }
 
-        return $this->view->render($response, 'error.twig', [])->withStatus(500);
+        return $response->withStatus(500)->write('500 Internal Server Error');
     }
 }

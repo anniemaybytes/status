@@ -4,8 +4,7 @@ namespace Status\Controller;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Status\Exception\AccessDeniedException;
-use Status\Exception\NotFound;
+use Slim\Exception\HttpException;
 use Throwable;
 use Tracy\Debugger;
 
@@ -17,19 +16,6 @@ use Tracy\Debugger;
 class ErrorCtrl extends BaseCtrl
 {
     /**
-     * @param int $statusCode
-     *
-     * @return array
-     */
-    private function getData(int $statusCode) : array
-    {
-        $data = [];
-        $data['status_code'] = $statusCode;
-
-        return $data;
-    }
-
-    /**
      * @param Request $request
      * @param Response $response
      * @param Throwable $exception
@@ -39,16 +25,13 @@ class ErrorCtrl extends BaseCtrl
     public function handleException(Request $request, Response $response, Throwable $exception) : Response
     {
         try {
-            $statusCode = 500;
-            if ($exception instanceof NotFound) {
-                $statusCode = 404;
-            } elseif ($exception instanceof AccessDeniedException) {
-                $statusCode = 403;
+            $status = 500;
+            $message = '500 Internal Server Error';
+            if($exception instanceof HttpException) {
+                $status = $exception->getCode();
+                $message = $exception->getTitle();
             }
-
-            $data = $this->getData($statusCode);
-
-            $this->logError($request, $exception, $data);
+            $this->logError($request, $exception, $status);
 
             // clear the body first
             $body = $response->getBody();
@@ -66,14 +49,7 @@ class ErrorCtrl extends BaseCtrl
                 }
             }
 
-            switch ($statusCode) {
-                case 404:
-                    return $this->view->render($response, 'not_found.twig', $data)->withStatus($statusCode);
-                case 403:
-                    return $this->view->render($response, 'forbidden.twig', $data)->withStatus($statusCode);
-                default:
-                    return $this->view->render($response, 'error.twig', $data)->withStatus($statusCode);
-            }
+            return $response->withStatus($status)->write($message);
         } catch (Throwable $e) {
             return (new FatalErrorCtrl($this->di))->handleError($request, $response, $e);
         }
@@ -82,12 +58,11 @@ class ErrorCtrl extends BaseCtrl
     /**
      * @param Request $request
      * @param Throwable $exception
-     * @param array $data
+     * @param int $status
      */
-    private function logError(Request $request, Throwable $exception, array $data)
+    private function logError(Request $request, Throwable $exception, int $status)
     {
-        // don't log 404s
-        if ($data['status_code'] == 404) {
+        if ($status !== 500) {
             return;
         }
 
