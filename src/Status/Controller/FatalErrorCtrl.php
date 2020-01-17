@@ -29,11 +29,11 @@ class FatalErrorCtrl
     /**
      * FatalErrorCtrl constructor.
      *
-     * @param $di
+     * @param Container $di
      */
-    public function __construct(Container &$di)
+    public function __construct(Container $di)
     {
-        $this->di = &$di;
+        $this->di = $di;
         $this->view = $di->get('view');
     }
 
