@@ -104,7 +104,7 @@ class IndexCtrl extends BaseCtrl
         unset($curl);
 
         preg_match("/\r?\n(?:Location|URI): *(.*?) *\r?\n/im", $body, $headers);
-        if ($httpCode === 301 && $headers[1] === '/error.jpg') {
+        if ($httpCode === 302 && $headers[1] === '/error.jpg') {
             $this->cache->add('mei_status', 1, $this->cacheFor);
             return (int)1;
         }
