@@ -2,8 +2,8 @@
 
 namespace Status;
 
-use DI\Container;
 use Exception;
+use Psr\Container\ContainerInterface as Container;
 use Psr\Http\Message\ResponseFactoryInterface;
 use RunTracy\Helpers\Profiler\Profiler;
 use Slim\App;

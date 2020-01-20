@@ -4,6 +4,7 @@ namespace Status;
 
 use DI;
 use Exception;
+use Psr\Container\ContainerInterface as Container;
 use RunTracy\Helpers\Profiler\Profiler;
 use Slim\Views\Twig;
 use Status\Cache\IKeyStore;
@@ -21,10 +22,10 @@ class DependencyInjection
     /**
      * @param array $config
      *
-     * @return DI\Container
+     * @return Container
      * @throws Exception
      */
-    public static function setup(array $config): DI\Container
+    public static function setup(array $config): Container
     {
         $builder = new DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -48,7 +49,7 @@ class DependencyInjection
 
         $di->set(
             Twig::class,
-            function (DI\Container $di) {
+            function (Container $di) {
                 $dir = $di->get('config')['templates.path'];
 
                 $config = [
@@ -80,11 +81,11 @@ class DependencyInjection
     }
 
     /**
-     * @param DI\Container $di
+     * @param Container $di
      *
-     * @return DI\Container
+     * @return Container
      */
-    private static function setUtilities(DI\Container $di) : DI\Container /** @formatter:off */
+    private static function setUtilities(Container $di) : Container /** @formatter:off */
     {
         Profiler::start('setUtilities');
 

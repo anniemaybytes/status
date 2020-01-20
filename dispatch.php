@@ -56,7 +56,6 @@ Debugger::getBlueScreen()->maxLength = 520;
 array_push(
     Debugger::getBlueScreen()->keysToHide,
     'SERVER_ADDR',
-    'REMOTE_ADDR',
     '_tracy',
     'PHP_AUTH_PW'
 );
