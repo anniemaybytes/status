@@ -2,8 +2,6 @@
 
 namespace Status\Utilities;
 
-use DI\Container;
-
 /**
  * Class Assets
  *
@@ -11,17 +9,11 @@ use DI\Container;
  */
 class Assets
 {
-    private $di;
-
     /**
-     * Assets constructor.
-     *
-     * @param Container $di
+     * @var array
+     * @Inject("config")
      */
-    public function __construct(Container $di)
-    {
-        $this->di = $di;
-    }
+    private $config;
 
     /**
      * @param $filename
@@ -30,7 +22,7 @@ class Assets
      */
     public function path(string $filename): string
     {
-        return $this->di->get('config')['site.assets_root'] . '/' . $filename;
+        return $this->config['site.assets_root'] . '/' . $filename;
     }
 
     /**
@@ -40,6 +32,6 @@ class Assets
      */
     public function absolutePath($filename): string
     {
-        return PUBLIC_ROOT . $this->di->get('config')['site.assets_root'] . '/' . $filename;
+        return PUBLIC_ROOT . $this->config['site.assets_root'] . '/' . $filename;
     }
 }

@@ -4,9 +4,11 @@ namespace Status;
 
 use DI\Container;
 use Exception;
+use Psr\Http\Message\ResponseFactoryInterface;
 use RunTracy\Helpers\Profiler\Profiler;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Routing\RouteParser;
 use Status\Route as R;
 
 /**
@@ -16,11 +18,19 @@ use Status\Route as R;
  */
 class Dispatcher extends Singleton
 {
-    /** @var App $app */
+    /**
+     * @var App $app
+     */
     private $app;
 
+    /**
+     * @var array
+     */
     private $config;
 
+    /**
+     * @var Container
+     */
     private $di;
 
     /**
@@ -90,13 +100,13 @@ class Dispatcher extends Singleton
         Profiler::start('initRoutes');
 
         $routeCollector = $app->getRouteCollector();
-        $this->di->set('response.factory', $app->getResponseFactory());
+        $this->di->set(ResponseFactoryInterface::class, $app->getResponseFactory());
 
         $routes = [
             new R\Main($app),
         ];
         $this->di->set('routes', $routes);
-        $this->di->set('router', $routeCollector->getRouteParser());
+        $this->di->set(RouteParser::class, $routeCollector->getRouteParser());
 
         if ($this->di->get('config')['mode'] === 'production') {
             $routeCollector->setCacheFile(BASE_ROOT . '/routes.cache.php');

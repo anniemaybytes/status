@@ -5,6 +5,7 @@ namespace Status\Cache;
 /**
  * Simple key store interface
  *
+ * @package Status\Cache
  */
 interface IKeyStore
 {
@@ -13,7 +14,11 @@ interface IKeyStore
      *
      * @param string $key
      */
-    public function fetch(string $key);
+    public function doGet(string $key);
+
+    public function getCacheHits();
+
+    public function getExecutionTime();
 
     /**
      * Set the key to value.
@@ -22,21 +27,50 @@ interface IKeyStore
      * @param string $key
      * @param $value
      * @param int $time
-     */
-    public function add(string $key, $value, int $time = 3600);
-
-    /**
-     * @param string $key
      *
-     * @return mixed
+     * @return bool
      */
-    public function exists(string $key);
+    public function doSet(string $key, $value, int $time = 10800);
 
     /**
      * Delete the value stored against key.
      * Return true on success or false on failure.
      *
      * @param string $key
+     *
+     * @return bool
      */
-    public function delete(string $key);
+    public function doDelete(string $key);
+
+    /**
+     * @param string $key
+     * @param int $n
+     * @param int $initial
+     * @param int $expiry
+     *
+     * @return int|false
+     */
+    public function doIncrement(string $key, int $n = 1, int $initial = 1, int $expiry = 0);
+
+    /**
+     * @param string $key
+     * @param int $expiry
+     *
+     * @return bool
+     */
+    public function doTouch(string $key, int $expiry = 10800);
+
+    /**
+     * @param bool $val
+     */
+    public function setClearOnGet(bool $val);
+
+    public function doFlush();
+
+    /**
+     * @return array
+     */
+    public function getAllKeys();
+
+    public function getStats();
 }

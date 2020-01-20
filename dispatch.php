@@ -7,6 +7,7 @@ define('ERROR_REPORTING', E_ALL & ~(E_STRICT | E_NOTICE | E_WARNING | E_DEPRECAT
 require_once BASE_ROOT . '/vendor/autoload.php'; // set up autoloading
 
 use DI\Container;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use RunTracy\Helpers\Profiler\Profiler;
 use RunTracy\Middlewares\TracyMiddleware;
@@ -90,18 +91,18 @@ if ($di->get('config')['mode'] === 'production') {
     $errorHandler->setErrorHandler( // handling for built-in errors when route not found or method not allowed
         HttpException::class,
         function (Request $request, Throwable $exception) use ($di) {
-            return (new ErrorCtrl($di))->handleException(
+            return (new ErrorCtrl())->handleException(
                 $request,
-                $di->get('response.factory')->createResponse(),
+                $di->get(ResponseFactoryInterface::class)->createResponse(),
                 $exception
             );
         }
     );
     $errorHandler->setDefaultErrorHandler( // default error handler
         function (Request $request, Throwable $exception) use ($di) {
-            return (new ErrorCtrl($di))->handleException(
+            return (new ErrorCtrl())->handleException(
                 $request,
-                $di->get('response.factory')->createResponse(),
+                $di->get(ResponseFactoryInterface::class)->createResponse(),
                 $exception
             );
         }

@@ -2,8 +2,8 @@
 
 namespace Status\Utilities;
 
-use DI\Container;
-use Slim\Http\Uri;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Routing\RouteParser;
 
 /**
  * Class View
@@ -13,19 +13,28 @@ use Slim\Http\Uri;
 class View
 {
     /**
-     * @var Container $di
+     * @Inject
+     * @var Assets
      */
-    private $di;
+    private $assets;
 
     /**
-     * View constructor.
-     *
-     * @param Container $di
+     * @Inject("config")
+     * @var array
      */
-    public function __construct(Container $di)
-    {
-        $this->di = $di;
-    }
+    private $config;
+
+    /**
+     * @Inject
+     * @var RouteParser
+     */
+    private $router;
+
+    /**
+     * @Inject
+     * @var ServerRequestInterface
+     */
+    private $request;
 
     /**
      * @param string $file
@@ -34,7 +43,7 @@ class View
      */
     public function assetUrl(string $file): string
     {
-        return $this->di->get('config')['site.site_root'] . $this->di->get('utility.assets')->path($file);
+        return $this->config['site.site_root'] . $this->assets->path($file);
     }
 
     /**
@@ -76,7 +85,7 @@ class View
      */
     public function pathFor(string $name, array $data = [], array $queryParams = []): string
     {
-        return $this->di->get('router')->relativeUrlFor($name, $data, $queryParams);
+        return $this->router->relativeUrlFor($name, $data, $queryParams);
     }
 
     /**
@@ -84,10 +93,7 @@ class View
      */
     public function baseUrl(): string
     {
-        /**
-         * @var Uri $uri
-         */
-        $uri = $this->di->get('request')->getUri();
+        $uri = $this->request->getUri();
         $uri = $uri->withUserInfo('');
 
         $scheme = $uri->getScheme();
@@ -101,7 +107,7 @@ class View
      */
     public function currentUrl(): string
     {
-        return $this->baseUrl() . $this->di->get('request')->getUri()->getPath();
+        return $this->baseUrl() . $this->request->getUri()->getPath();
     }
 
     /**
@@ -111,15 +117,7 @@ class View
      */
     public function config($key)
     {
-        return $this->di->get('config')[$key];
-    }
-
-    /**
-     * @return Container
-     */
-    public function getDi(): Container
-    {
-        return $this->di;
+        return $this->config[$key];
     }
 
     /**
@@ -130,7 +128,7 @@ class View
      */
     public function getQueryString(array $params = [], array $formParams = []): string
     {
-        $request = $this->di->get('request');
+        $request = $this->request;
         $getParams = $request->getQueryParams();
         $getParams = array_merge($getParams, $formParams);
         $getParams = array_merge($getParams, $params);

@@ -33,7 +33,7 @@ class TwigExtension extends AbstractExtension
      */
     public function getName(): string
     {
-        return 'slim';
+        return 'status';
     }
 
     /**
@@ -51,7 +51,6 @@ class TwigExtension extends AbstractExtension
             'baseurl' => 'baseUrl',
             'currenturl' => 'currentUrl',
             'config' => 'config',
-            'di' => 'getDi',
             'url' => 'pathFor',
             'asseturl' => 'assetUrl',
             'cssurl' => 'cssUrl',

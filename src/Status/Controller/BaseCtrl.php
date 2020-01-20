@@ -2,9 +2,8 @@
 
 namespace Status\Controller;
 
-use DI\Container;
 use Slim\Views\Twig;
-use Status\Cache\Apc;
+use Status\Cache\IKeyStore;
 use Status\Utilities\View;
 
 /**
@@ -15,47 +14,28 @@ use Status\Utilities\View;
 abstract class BaseCtrl
 {
     /**
-     * @var Container $di
-     */
-    protected $di;
-
-    /**
-     * @var Apc
+     * @Inject
+     * @var IKeyStore
      */
     protected $cache;
 
     /**
+     * @Inject
      * @var Twig
      */
     protected $view;
 
     /**
+     * @Inject
      * @var View
      */
     protected $view_functions;
 
     /**
      * The configuration array
+     *
+     * @Inject("config")
+     * @var array
      */
     protected $config;
-
-    public function setDependencies()
-    {
-        $this->config = $this->di->get('config');
-        $this->view_functions = $this->di->get('utility.view');
-        $this->view = $this->di->get('view');
-        $this->cache = $this->di->get('cache');
-    }
-
-    /**
-     * BaseCtrl constructor.
-     *
-     * @param Container $di
-     */
-    public function __construct(Container $di)
-    {
-        $this->di = $di;
-
-        $this->setDependencies();
-    }
 }

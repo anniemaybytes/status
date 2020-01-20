@@ -2,8 +2,11 @@
 
 namespace RunTracy\Middlewares;
 
-use Psr\Http\Message\RequestInterface as Request;
+use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface;
 use RunTracy\Helpers\IncludedFiles;
 use RunTracy\Helpers\ProfilerPanel;
 use RunTracy\Helpers\SlimContainerPanel;
@@ -12,8 +15,11 @@ use RunTracy\Helpers\SlimRouterPanel;
 use RunTracy\Helpers\TwigPanel;
 use RunTracy\Helpers\XDebugHelper;
 use Slim\App;
+use Slim\Routing\RouteParser;
 use Tracy\Debugger;
 use Tracy\Dumper;
+use Twig\Environment;
+use Twig\Profiler\Profile as TwigProfile;
 
 /**
  * Class TracyMiddleware
@@ -22,7 +28,14 @@ use Tracy\Dumper;
  */
 class TracyMiddleware
 {
+    /**
+     * @var Container
+     */
     private $container;
+
+    /**
+     * @var array
+     */
     private $versions;
 
     /**
@@ -36,13 +49,14 @@ class TracyMiddleware
             $this->container = $app->getContainer();
             $this->versions = [
                 'slim' => App::VERSION,
+                'twig' => Environment::VERSION
             ];
         }
     }
 
     /**
      * @param Request $request
-     * @param $handler
+     * @param RequestHandlerInterface $handler
      *
      * @return Response
      */
@@ -52,7 +66,8 @@ class TracyMiddleware
 
         Debugger::getBar()->addPanel(
             new TwigPanel(
-                $this->container->get('twig_profile')
+                $this->container->get(TwigProfile::class),
+                $this->versions
             )
         );
 
@@ -65,14 +80,14 @@ class TracyMiddleware
 
         Debugger::getBar()->addPanel(
             new SlimRouterPanel(
-                Dumper::toHtml($this->container->get('router')),
+                Dumper::toHtml($this->container->get(RouteParser::class)),
                 $this->versions
             )
         );
 
         Debugger::getBar()->addPanel(
             new SlimRequestPanel(
-                Dumper::toHtml($this->container->get('request')),
+                Dumper::toHtml($this->container->get(ServerRequestInterface::class)),
                 $this->versions
             )
         );

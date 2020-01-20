@@ -2,14 +2,14 @@
 
 namespace Status;
 
-use DI\Container;
-use DI\ContainerBuilder;
+use DI;
 use Exception;
 use RunTracy\Helpers\Profiler\Profiler;
 use Slim\Views\Twig;
+use Status\Cache\IKeyStore;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ProfilerExtension;
-use Twig\Profiler\Profile;
+use Twig\Profiler\Profile as TwigProfile;
 
 /**
  * Class DependencyInjection
@@ -21,40 +21,34 @@ class DependencyInjection
     /**
      * @param array $config
      *
-     * @return Container
+     * @return DI\Container
      * @throws Exception
      */
-    public static function setup(array $config): Container
+    public static function setup(array $config): DI\Container
     {
-        $builder = new ContainerBuilder();
-        $builder->useAutowiring(false);
-        $builder->useAnnotations(false);
+        $builder = new DI\ContainerBuilder();
+        $builder->useAnnotations(true);
         $builder->addDefinitions(
             [
                 'settings' => [
                     'xdebugHelperIdeKey' => 'status',
-                ]
+                ],
+                'config' => $config,
+                'obLevel' => ob_get_level(),
+                IKeyStore::class => DI\autowire("\Status\Cache\Apc")->constructorParameter('keyPrefix', '')
             ]
         );
         $di = $builder->build();
 
-        $di->set('config', $config);
-        $di->set('obLevel', ob_get_level());
-
         $di = self::setUtilities($di);
 
         if ($di->get('config')['mode'] == 'development') {
-            $di->set(
-                'twig_profile',
-                function () {
-                    return new Profile();
-                }
-            );
+            $di->set(TwigProfile::class, new TwigProfile());
         }
 
         $di->set(
-            'view',
-            function ($di) {
+            Twig::class,
+            function (DI\Container $di) {
                 $dir = $di->get('config')['templates.path'];
 
                 $config = [
@@ -69,40 +63,33 @@ class DependencyInjection
 
                 $view = Twig::create($dir, $config);
 
-                $view->addExtension(new TwigExtension($di->get('utility.view')));
+                $view->addExtension(new TwigExtension($di->get(Utilities\View::class)));
 
                 $view->getEnvironment()->addGlobal('di', $di);
 
                 if ($di->get('config')['mode'] == 'development') {
                     $view->addExtension(new DebugExtension());
-                    $view->addExtension(new ProfilerExtension($di->get('twig_profile')));
+                    $view->addExtension(new ProfilerExtension($di->get(TwigProfile::class)));
                 }
 
                 return $view;
             }
         );
 
-        $di->set('cache', new Cache\Apc());
-
         return $di;
     }
 
     /**
-     * @param Container $di
+     * @param DI\Container $di
      *
-     * @return Container
+     * @return DI\Container
      */
-    private static function setUtilities(Container $di) : Container /** @formatter:off */
+    private static function setUtilities(DI\Container $di) : DI\Container /** @formatter:off */
     {
         Profiler::start('setUtilities');
 
-        $di->set('utility.assets', function (Container $di) {
-            return new Utilities\Assets($di);
-        });
-
-        $di->set('utility.view', function (Container $di) {
-            return new Utilities\View($di);
-        });
+        $di->set(Utilities\Assets::class, DI\autowire());
+        $di->set(Utilities\View::class, DI\autowire());
 
         Profiler::finish('setUtilities');
 

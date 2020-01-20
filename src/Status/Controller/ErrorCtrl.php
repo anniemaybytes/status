@@ -16,6 +16,11 @@ use Tracy\Debugger;
 class ErrorCtrl extends BaseCtrl
 {
     /**
+     * @Inject("ob.level")
+     */
+    private $obLevel;
+
+    /**
      * @param Request $request
      * @param Response $response
      * @param Throwable $exception
@@ -25,13 +30,13 @@ class ErrorCtrl extends BaseCtrl
     public function handleException(Request $request, Response $response, Throwable $exception): Response
     {
         try {
-            $status = 500;
+            $statusCode = 500;
             $message = '500 Internal Server Error';
             if ($exception instanceof HttpException) {
-                $status = $exception->getCode();
+                $statusCode = $exception->getCode();
                 $message = $exception->getTitle();
             }
-            $this->logError($request, $exception, $status);
+            $this->logError($request, $exception, $statusCode);
 
             // clear the body first
             $body = $response->getBody();
@@ -39,7 +44,7 @@ class ErrorCtrl extends BaseCtrl
             $response = $response->withBody($body);
 
             // clear output buffer
-            while (ob_get_level() > $this->di->get('obLevel')) {
+            while (ob_get_level() > $this->obLevel) {
                 $status = ob_get_status();
                 if (in_array($status['name'], ['ob_gzhandler', 'zlib output compression'], true)) {
                     break;
@@ -49,9 +54,9 @@ class ErrorCtrl extends BaseCtrl
                 }
             }
 
-            return $response->withStatus($status)->write($message);
+            return $response->withStatus($statusCode)->write($message);
         } catch (Throwable $e) {
-            return (new FatalErrorCtrl($this->di))->handleError($request, $response, $e);
+            return (new FatalErrorCtrl())->handleError($request, $response, $e);
         }
     }
 
