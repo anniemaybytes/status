@@ -49,14 +49,12 @@ class TwigExtension extends AbstractExtension
         // the view functions utility
         $functionMappings = [
             'baseurl' => 'baseUrl',
-            'currenturl' => 'currentUrl',
             'config' => 'config',
             'url' => 'pathFor',
             'asseturl' => 'assetUrl',
             'cssurl' => 'cssUrl',
             'jsurl' => 'jsUrl',
             'imgurl' => 'imgUrl',
-            'qs' => 'getQueryString',
         ];
 
         $functions = [];

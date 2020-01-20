@@ -17,7 +17,6 @@ use Slim\Middleware\OutputBufferingMiddleware;
 use Slim\Psr7\Factory\StreamFactory;
 use Status\Controller\ErrorCtrl;
 use Status\Dispatcher;
-use Status\Middleware;
 use Tracy\Debugger;
 
 date_default_timezone_set('UTC');
@@ -67,7 +66,6 @@ array_push(
 Profiler::start('initMiddlewares');
 
 // 'before' middleware (either stops execution flow or calls next middleware)
-$app->add(new Middleware\RequestHelper($di));
 if ($di->get('config')['mode'] == 'development') {
     $app->add(new TracyMiddleware($app));
 }

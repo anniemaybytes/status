@@ -15,6 +15,6 @@ desktop.ini
 *.log
 
 # project stuff
-config/config.ini
+config/private.ini
 routes.cache.php
 logs/*

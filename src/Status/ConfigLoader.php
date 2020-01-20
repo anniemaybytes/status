@@ -63,6 +63,9 @@ class ConfigLoader
         if ($configPath[0] !== '/' && strpos($configPath, '://') === false) {
             $configPath = BASE_ROOT . '/' . $configPath;
         }
-        return self::loadFile($configPath . 'config.ini');
+        $public = self::loadFile($configPath . 'config.ini');
+        $private = self::loadFile($configPath . 'private.ini');
+
+        return array_merge($public, $private);
     }
 }

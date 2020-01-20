@@ -232,7 +232,9 @@ class IndexCtrl extends BaseCtrl
      */
     public function index(Request $request, Response $response, array $args): Response
     {
-        $data = [];
+        $data = [
+            'server_request' => $request
+        ];
         $data['site_status'] = $this->cache->doGet('site_status') ? $this->cache->doGet(
             'site_status'
         ) : $this->checkSite();

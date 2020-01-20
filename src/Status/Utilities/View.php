@@ -2,7 +2,7 @@
 
 namespace Status\Utilities;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteParser;
 
 /**
@@ -29,12 +29,6 @@ class View
      * @var RouteParser
      */
     private $router;
-
-    /**
-     * @Inject
-     * @var ServerRequestInterface
-     */
-    private $request;
 
     /**
      * @param string $file
@@ -89,25 +83,19 @@ class View
     }
 
     /**
+     * @param Request $request
+     *
      * @return string
      */
-    public function baseUrl(): string
+    public function baseUrl(Request $request): string
     {
-        $uri = $this->request->getUri();
+        $uri = $request->getUri();
         $uri = $uri->withUserInfo('');
 
         $scheme = $uri->getScheme();
         $authority = $uri->getAuthority();
 
         return "$scheme://$authority";
-    }
-
-    /**
-     * @return string
-     */
-    public function currentUrl(): string
-    {
-        return $this->baseUrl() . $this->request->getUri()->getPath();
     }
 
     /**
@@ -118,26 +106,5 @@ class View
     public function config($key)
     {
         return $this->config[$key];
-    }
-
-    /**
-     * @param array $params
-     * @param array $formParams
-     *
-     * @return string
-     */
-    public function getQueryString(array $params = [], array $formParams = []): string
-    {
-        $request = $this->request;
-        $getParams = $request->getQueryParams();
-        $getParams = array_merge($getParams, $formParams);
-        $getParams = array_merge($getParams, $params);
-        $getParams = array_filter(
-            $getParams,
-            function ($e) {
-                return $e !== '';
-            }
-        );
-        return http_build_query($getParams);
     }
 }

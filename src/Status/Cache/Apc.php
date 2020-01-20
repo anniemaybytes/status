@@ -178,7 +178,7 @@ class Apc implements IKeyStore
     }
 
     /** {@inheritDoc} */
-    public function doTouch(string $key, int $expiry = 10800)
+    public function doTouch(string $key, int $expiry = 10800): bool
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
