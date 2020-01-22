@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php /** @noinspection StaticClosureCanBeUsedInspection */
+
+declare(strict_types=1);
 
 namespace Status\Route;
 
@@ -12,7 +14,7 @@ use Status\Controller\IndexCtrl;
  */
 class Main extends Base
 {
-    protected function addRoutes() /** @formatter:off */
+    protected function addRoutes(): void /** @formatter:off */
     {
         $app = $this->app;
 

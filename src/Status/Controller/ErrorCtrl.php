@@ -17,6 +17,7 @@ class ErrorCtrl extends BaseCtrl
 {
     /**
      * @Inject("ob.level")
+     * @var int
      */
     private $obLevel;
 
@@ -65,7 +66,7 @@ class ErrorCtrl extends BaseCtrl
      * @param Throwable $exception
      * @param int $status
      */
-    private function logError(Request $request, Throwable $exception, int $status)
+    private function logError(Request $request, Throwable $exception, int $status): void
     {
         if ($status !== 500) {
             return;

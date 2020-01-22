@@ -44,7 +44,7 @@ class Dispatcher extends Singleton
     }
 
     /**
-     * @param $key
+     * @param mixed $key
      *
      * @return mixed
      */
@@ -71,7 +71,7 @@ class Dispatcher extends Singleton
         return self::getInstance()->di;
     }
 
-    private function initConfig()
+    private function initConfig(): void
     {
         Profiler::start('initConfig');
         $config = ConfigLoader::load();
@@ -85,14 +85,14 @@ class Dispatcher extends Singleton
     /**
      * @throws Exception
      */
-    private function initDependencyInjection()
+    private function initDependencyInjection(): void
     {
         Profiler::start('initDependencyInjection');
         $this->di = DependencyInjection::setup($this->config);
         Profiler::finish('initDependencyInjection');
     }
 
-    private function initApplication()
+    private function initApplication(): void
     {
         AppFactory::setContainer($this->di);
         $app = AppFactory::create();
@@ -120,15 +120,12 @@ class Dispatcher extends Singleton
     /**
      * Dispatcher constructor.
      *
-     * @param $args
-     *
      * @throws Exception
      */
-    protected function __construct($args)
+    protected function __construct()
     {
         $this->initConfig();
         $this->initDependencyInjection();
         $this->initApplication();
-        parent::__construct($args);
     }
 }

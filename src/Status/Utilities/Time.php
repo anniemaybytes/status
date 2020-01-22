@@ -26,7 +26,7 @@ class Time
      */
     public static function fromEpoch($str): DateTime
     {
-        return DateTime::createFromFormat('U', intval($str));
+        return DateTime::createFromFormat('U', (string)(int)$str);
     }
 
     /**

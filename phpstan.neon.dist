@@ -1,0 +1,21 @@
+parameters:
+    level: 6
+    paths:
+        - src
+        - dispatch.php
+        - public/index.php
+    bootstrap: phpstan-bootstrap.php
+    inferPrivatePropertyTypeFromConstructor: true
+    checkMissingIterableValueType: false
+    ignoreErrors:
+        -
+            message: '#Unsafe usage of new static\(\)#'
+            paths:
+                - src/Status/Singleton.php
+        - '#Call to an undefined method Psr\\Container\\ContainerInterface::set#'
+        - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface::write#'
+        - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface::withJson#'
+        -
+            message: '#Parameter \#1 \$exception_handler of function set_exception_handler expects#'
+            path: public/index.php
+        - '#Method RunTracy\\Helpers\\Profiler\\AdvancedProfiler::(start|finish)\(\) has parameter \$opt with no typehint specified#'

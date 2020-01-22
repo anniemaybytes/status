@@ -44,10 +44,10 @@ class IndexCtrl extends BaseCtrl
      */
     private function checkSite(): int
     {
-        $curl = new Curl("https://animebytes.tv");
+        $curl = new Curl('https://animebytes.tv');
         $curl->setoptArray(
             [
-                CURLOPT_USERAGENT => "status.animebytes.tv",
+                CURLOPT_USERAGENT => 'status.animebytes.tv',
                 CURLOPT_HTTPHEADER => ['Host: animebytes.tv', 'Connection: Close'],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_VERBOSE => false,
@@ -63,8 +63,7 @@ class IndexCtrl extends BaseCtrl
 
         if (is_string($content)) {
             $doc = new DOMDocument();
-            @$doc->loadHTML($content);
-            if (!$doc) { // unable to parse output, assume site is down
+            if (!@$doc->loadHTML($content)) { // unable to parse output, assume site is down
                 $this->cache->doSet('site_status', 0, $this->cacheFor);
                 return 0;
             }
@@ -97,10 +96,10 @@ class IndexCtrl extends BaseCtrl
      */
     private function checkMei(): int
     {
-        $curl = new Curl("https://mei.animebytes.tv/images/error.jpg");
+        $curl = new Curl('https://mei.animebytes.tv/images/error.jpg');
         $curl->setoptArray(
             [
-                CURLOPT_USERAGENT => "status.animebytes.tv",
+                CURLOPT_USERAGENT => 'status.animebytes.tv',
                 CURLOPT_HTTPHEADER => ['Host: mei.animebytes.tv', 'Connection: Close'],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_VERBOSE => false,
@@ -135,13 +134,14 @@ class IndexCtrl extends BaseCtrl
      * @param string $ip
      *
      * @return int
+     * @noinspection CurlSslServerSpoofingInspection
      */
     private function checkTrackerSingular(string $ip): int
     {
         $curl = new Curl("https://$ip");
         $curl->setoptArray(
             [
-                CURLOPT_USERAGENT => "status.animebytes.tv",
+                CURLOPT_USERAGENT => 'status.animebytes.tv',
                 CURLOPT_HTTPHEADER => ['Host: tracker.animebytes.tv', 'Connection: Close'],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_VERBOSE => false,
@@ -156,7 +156,7 @@ class IndexCtrl extends BaseCtrl
         unset($curl);
 
         if ($httpCode >= 200 && $httpCode < 300 && is_string($content)) {
-            $val = !preg_match('/unavailable/', $content);
+            $val = false === strpos($content, 'unavailable');
             return (int)$val;
         }
         return 0;
@@ -182,31 +182,36 @@ class IndexCtrl extends BaseCtrl
                     $this->trackerTimeout--;
                 } // at least one tracker proxy is down so reduce timeout for others
             }
-            $details[] = ['status' => (int)$status, 'ip' => $nsName];
+            $details[] = ['status' => $status, 'ip' => $nsName];
         }
 
         $this->cache->doSet('tracker_details', $details, $this->cacheFor);
         if ($working && $error) {
             $this->cache->doSet('tracker_status', 2, $this->cacheFor);
-            return ['status' => (int)2, 'details' => $details];
-        } elseif ($working && !$error) {
-            $this->cache->doSet('tracker_status', 1, $this->cacheFor);
-            return ['status' => (int)1, 'details' => $details];
-        } elseif (!$working && $error) {
-            $this->cache->doSet('tracker_status', 0, $this->cacheFor);
-            return ['status' => (int)0, 'details' => $details];
-        } else { // assume error
-            $this->cache->doSet('tracker_status', 0, $this->cacheFor);
-            return ['status' => (int)0, 'details' => $details];
+            return ['status' => 2, 'details' => $details];
         }
+
+        if ($working && !$error) {
+            $this->cache->doSet('tracker_status', 1, $this->cacheFor);
+            return ['status' => 1, 'details' => $details];
+        }
+
+        if (!$working && $error) {
+            $this->cache->doSet('tracker_status', 0, $this->cacheFor);
+            return ['status' => 0, 'details' => $details];
+        }
+
+// assume error
+        $this->cache->doSet('tracker_status', 0, $this->cacheFor);
+        return ['status' => 0, 'details' => $details];
     }
 
     /**
      * @return int
      */
-    private function checkIrc()
+    private function checkIrc(): int
     {
-        $nsRecord = dns_get_record("irc.animebytes.tv", DNS_A)[0]['ip'];
+        $nsRecord = dns_get_record('irc.animebytes.tv', DNS_A)[0]['ip'];
         if (!is_string($nsRecord)) {
             $this->cache->doSet('irc_status', 0, $this->cacheFor);
             return 0;
@@ -235,9 +240,7 @@ class IndexCtrl extends BaseCtrl
         $data = [
             'server_request' => $request
         ];
-        $data['site_status'] = $this->cache->doGet('site_status') ? $this->cache->doGet(
-            'site_status'
-        ) : $this->checkSite();
+        $data['site_status'] = $this->cache->doGet('site_status') ?: $this->checkSite();
         if (!$this->cache->doGet('tracker_status') || !$this->cache->doGet('tracker_details')) {
             $tr = $this->checkTracker();
             $data['tracker_status'] = $tr['status'];
@@ -247,9 +250,9 @@ class IndexCtrl extends BaseCtrl
             $data['tracker_details'] = $this->cache->doGet('tracker_details');
         }
         $data['irc_status'] =
-            $this->cache->doGet('irc_status') ? $this->cache->doGet('irc_status') : $this->checkIrc();
+            $this->cache->doGet('irc_status') ?: $this->checkIrc();
         $data['mei_status'] =
-            $this->cache->doGet('mei_status') ? $this->cache->doGet('mei_status') : $this->checkMei();
+            $this->cache->doGet('mei_status') ?: $this->checkMei();
 
         return $this->view->render($response, 'index.twig', $data);
     }
@@ -265,7 +268,7 @@ class IndexCtrl extends BaseCtrl
     {
         $data = [];
         $data['site_status'] =
-            $this->cache->doGet('site_status') ? $this->cache->doGet('site_status') : $this->checkSite();
+            $this->cache->doGet('site_status') ?: $this->checkSite();
         if (!$this->cache->doGet('tracker_status') || !$this->cache->doGet('tracker_details')) {
             $tr = $this->checkTracker();
             $data['tracker_status'] = $tr['status'];
@@ -275,9 +278,9 @@ class IndexCtrl extends BaseCtrl
             $data['tracker_details'] = $this->cache->doGet('tracker_details');
         }
         $data['irc_status'] =
-            $this->cache->doGet('irc_status') ? $this->cache->doGet('irc_status') : $this->checkIrc();
+            $this->cache->doGet('irc_status') ?: $this->checkIrc();
         $data['mei_status'] =
-            $this->cache->doGet('mei_status') ? $this->cache->doGet('mei_status') : $this->checkMei();
+            $this->cache->doGet('mei_status') ?: $this->checkMei();
 
         return $response->withJson($data, 200, JSON_NUMERIC_CHECK);
     }

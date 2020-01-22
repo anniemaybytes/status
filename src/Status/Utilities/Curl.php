@@ -20,7 +20,7 @@ class Curl
     /**
      * @var null|resource $curl
      */
-    private $curl = null;
+    private $curl;
 
     /**
      * Curl constructor.
@@ -29,7 +29,7 @@ class Curl
      */
     public function __construct(?string $url = null)
     {
-        if (is_null($url)) {
+        if ($url === null) {
             $this->curl = curl_init();
         } else {
             $this->curl = curl_init($url);
@@ -43,7 +43,7 @@ class Curl
 
     /**
      * @param int $option
-     * @param $value
+     * @param mixed $value
      *
      * @return bool
      */

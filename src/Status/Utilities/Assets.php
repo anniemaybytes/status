@@ -16,7 +16,7 @@ class Assets
     private $config;
 
     /**
-     * @param $filename
+     * @param string $filename
      *
      * @return string
      */

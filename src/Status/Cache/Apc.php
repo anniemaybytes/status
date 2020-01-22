@@ -27,7 +27,7 @@ class Apc implements IKeyStore
     private $cacheHits = [];
 
     /**
-     * @var int $time
+     * @var float $time
      */
     private $time = 0;
 
@@ -41,11 +41,7 @@ class Apc implements IKeyStore
         $this->keyPrefix = $keyPrefix;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return mixed
-     */
+    /** {@inheritDoc} */
     public function doGet(string $key)
     {
         $start = $this->startCall();
@@ -73,24 +69,14 @@ class Apc implements IKeyStore
         return $res;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool|string[]
-     */
-    private function exists(string $key)
+    /** {@inheritDoc} */
+    private function exists(string $key): bool
     {
         return apcu_exists($key);
     }
 
-    /**
-     * @param string $key
-     * @param $value
-     * @param int $expiry
-     *
-     * @return array|bool
-     */
-    public function doSet(string $key, $value, int $expiry = 3600)
+    /** {@inheritDoc} */
+    public function doSet(string $key, $value, int $expiry = 3600): bool
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
@@ -102,12 +88,8 @@ class Apc implements IKeyStore
         return $res;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool|string[]
-     */
-    public function doDelete(string $key)
+    /** {@inheritDoc} */
+    public function doDelete(string $key): bool
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
@@ -130,7 +112,7 @@ class Apc implements IKeyStore
     }
 
     /** {@inheritDoc} */
-    public function getExecutionTime(): int
+    public function getExecutionTime(): float
     {
         return $this->time;
     }
@@ -172,7 +154,7 @@ class Apc implements IKeyStore
     /**
      * @param float $start
      */
-    private function endCall(float $start)
+    private function endCall(float $start): void
     {
         $this->time += (microtime(true) - $start) * 1000;
     }
@@ -197,7 +179,7 @@ class Apc implements IKeyStore
     }
 
     /** {@inheritDoc} */
-    public function doFlush()
+    public function doFlush(): void
     {
         apcu_clear_cache();
     }
@@ -207,13 +189,13 @@ class Apc implements IKeyStore
     {
         $keys = [];
         foreach (new APCUIterator('/.+/') as $counter) {
-            array_push($keys, $counter['key']);
+            $keys[] = $counter['key'];
         }
         return $keys;
     }
 
     /** {@inheritDoc} */
-    public function setClearOnGet(bool $val)
+    public function setClearOnGet(bool $val): void
     {
         $this->clearOnGet = $val;
     }

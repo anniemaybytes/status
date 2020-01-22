@@ -40,7 +40,7 @@ class ProfilerService implements SingletonInterface
      *
      * @return void
      */
-    public static function init()
+    public static function init(): void
     {
         static::getInstance();
     }
@@ -69,7 +69,7 @@ class ProfilerService implements SingletonInterface
     /**
      * @param callable $callback
      */
-    public function iterateProfiles(callable $callback)
+    public function iterateProfiles(callable $callback): void
     {
         $metaData = $this->getMetaData();
         foreach ($this->profiles as $profile) {
@@ -86,7 +86,7 @@ class ProfilerService implements SingletonInterface
             $profile->meta[static::TIME_LINE_AFTER] = 100 - $profile->meta[static::TIME_LINE_BEFORE] -
                 $profile->meta[static::TIME_LINE_ACTIVE] - $profile->meta[static::TIME_LINE_INACTIVE];
 
-            call_user_func($callback, $profile, $metaData);
+            $callback($profile, $metaData);
         }
     }
 
@@ -136,7 +136,7 @@ class ProfilerService implements SingletonInterface
     /**
      * @param callable $callback
      */
-    public function iterateMemoryTimeLine(callable $callback)
+    public function iterateMemoryTimeLine(callable $callback): void
     {
         $metaData = $this->getMetaData();
         $totalTime = 0;
@@ -147,10 +147,10 @@ class ProfilerService implements SingletonInterface
                 $values[self::META_TIME_LINE__MEMORY_USAGE] / $metaData[self::META_MEMORY_PEAK] * 100
             );
             $totalTime += $time;
-            call_user_func($callback, $time, $height, $metaData);
+            $callback($time, $height, $metaData);
         }
         if ($totalTime < $metaData[self::META_TIME_TOTAL]) {
-            call_user_func($callback, $metaData[self::META_TIME_TOTAL] - $totalTime, $height, $metaData);
+            $callback($metaData[self::META_TIME_TOTAL] - $totalTime, $height, $metaData);
         }
     }
 }

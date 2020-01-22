@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php /** @noinspection StaticClosureCanBeUsedInspection */
+
+declare(strict_types=1);
 
 namespace RunTracy\Helpers;
 
@@ -14,15 +16,15 @@ use Tracy\IBarPanel;
  */
 class ProfilerPanel implements IBarPanel
 {
-
+    /**
+     * @var ProfilerService
+     */
     private $profilerService;
 
     /**
      * ProfilerPanel constructor.
-     *
-     * @param array $config
      */
-    public function __construct(array $config = [])
+    public function __construct()
     {
         $this->profilerService = ProfilerService::getInstance();
     }
@@ -63,15 +65,13 @@ class ProfilerPanel implements IBarPanel
         $this->profilerService->iterateProfiles(
             function (Profile $profile) use (&$table) {
                 if (($profile->meta[ProfilerService::TIME_LINE_ACTIVE] +
-                        $profile->meta[ProfilerService::TIME_LINE_INACTIVE]) < 1) {
+                        (int)$profile->meta[ProfilerService::TIME_LINE_INACTIVE]) < 1) {
                     return /* continue */ ;
                 }
                 if ($profile->meta[Profiler::START_LABEL] === $profile->meta[Profiler::FINISH_LABEL]) {
-                    /** @noinspection PhpFormatFunctionParametersMismatchInspection */
                     $labels = sprintf(
                         '<td colspan="2">%s</td>',
-                        $profile->meta[Profiler::START_LABEL],
-                        $profile->meta[Profiler::FINISH_LABEL]
+                        $profile->meta[Profiler::START_LABEL]
                     );
                 } else {
                     $labels = sprintf(

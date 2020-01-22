@@ -13,9 +13,24 @@ use Twig\Profiler\Profile;
  */
 class TwigPanel implements IBarPanel
 {
+    /**
+     * @var Profile|null
+     */
     private $data;
+
+    /**
+     * @var HtmlDumper
+     */
     private $dumper;
+
+    /**
+     * @var string
+     */
     private $icon;
+
+    /**
+     * @var array
+     */
     private $ver;
 
     /**

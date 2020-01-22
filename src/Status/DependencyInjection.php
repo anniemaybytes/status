@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php /** @noinspection StaticClosureCanBeUsedInspection */
+
+declare(strict_types=1);
 
 namespace Status;
 
@@ -7,6 +9,7 @@ use Exception;
 use Psr\Container\ContainerInterface as Container;
 use RunTracy\Helpers\Profiler\Profiler;
 use Slim\Views\Twig;
+use Status\Cache\Apc;
 use Status\Cache\IKeyStore;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ProfilerExtension;
@@ -36,14 +39,14 @@ class DependencyInjection
                 ],
                 'config' => $config,
                 'obLevel' => ob_get_level(),
-                IKeyStore::class => DI\autowire("\Status\Cache\Apc")->constructorParameter('keyPrefix', '')
+                IKeyStore::class => DI\autowire(Apc::class)->constructorParameter('keyPrefix', '')
             ]
         );
         $di = $builder->build();
 
         $di = self::setUtilities($di);
 
-        if ($di->get('config')['mode'] == 'development') {
+        if ($di->get('config')['mode'] === 'development') {
             $di->set(TwigProfile::class, new TwigProfile());
         }
 
@@ -57,7 +60,7 @@ class DependencyInjection
                     'strict_variables' => true,
                 ];
 
-                if ($di->get('config')['mode'] == 'development') {
+                if ($di->get('config')['mode'] === 'development') {
                     $config['debug'] = true;
                     $config['auto_reload'] = true;
                 }
@@ -68,7 +71,7 @@ class DependencyInjection
 
                 $view->getEnvironment()->addGlobal('di', $di);
 
-                if ($di->get('config')['mode'] == 'development') {
+                if ($di->get('config')['mode'] === 'development') {
                     $view->addExtension(new DebugExtension());
                     $view->addExtension(new ProfilerExtension($di->get(TwigProfile::class)));
                 }

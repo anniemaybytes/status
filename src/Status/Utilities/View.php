@@ -99,7 +99,7 @@ class View
     }
 
     /**
-     * @param $key
+     * @param mixed $key
      *
      * @return mixed
      */
