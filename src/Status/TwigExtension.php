@@ -11,7 +11,7 @@ use Twig\TwigFunction;
  *
  * @package Status
  */
-class TwigExtension extends AbstractExtension
+final class TwigExtension extends AbstractExtension
 {
     /**
      * @var Utilities\View

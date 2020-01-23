@@ -10,7 +10,7 @@ use Slim\Routing\RouteParser;
  *
  * @package Status\Utilities
  */
-class View
+final class View
 {
     /**
      * @Inject

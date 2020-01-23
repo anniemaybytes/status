@@ -11,7 +11,7 @@ use Twig\Profiler\Profile;
  *
  * @package RunTracy\Helpers
  */
-class TwigPanel implements IBarPanel
+final class TwigPanel implements IBarPanel
 {
     /**
      * @var Profile|null
@@ -29,7 +29,7 @@ class TwigPanel implements IBarPanel
     private $icon;
 
     /**
-     * @var array
+     * @var mixed
      */
     private $ver;
 
@@ -37,9 +37,9 @@ class TwigPanel implements IBarPanel
      * TwigPanel constructor.
      *
      * @param Profile|null $data
-     * @param array $ver
+     * @param mixed $ver
      */
-    public function __construct(?Profile $data = null, array $ver = [])
+    public function __construct(?Profile $data = null, $ver = null)
     {
         $this->data = $data;
         $this->ver = $ver;
@@ -109,11 +109,11 @@ class TwigPanel implements IBarPanel
      */
     public function getPanel(): string
     {
-        return '<h1>' . $this->icon . ' Twig ' . $this->ver['twig'] . '</h1>
+        return '<h1>' . $this->icon . ' Twig ' . $this->ver . '</h1>
         <div class="tracy-inner">
             <p>
                 <table width="100%">
-                    <thead><tr><th><b>Twig ' . $this->ver['twig'] . ' profiler result</b></th></tr></thead>
+                    <thead><tr><th><b>Profiler result</b></th></tr></thead>
                     <tr class="yes"><th><b>' . $this->dumper->dump($this->data) . '</b></th></tr>
                 </table>
             </p>

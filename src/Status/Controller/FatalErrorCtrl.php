@@ -12,7 +12,7 @@ use Tracy\Debugger;
  *
  * @package Status\Controller
  */
-class FatalErrorCtrl
+final class FatalErrorCtrl
 {
     /**
      * @Inject("ob.level")

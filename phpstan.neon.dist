@@ -8,10 +8,6 @@ parameters:
     inferPrivatePropertyTypeFromConstructor: true
     checkMissingIterableValueType: false
     ignoreErrors:
-        -
-            message: '#Unsafe usage of new static\(\)#'
-            paths:
-                - src/Status/Singleton.php
         - '#Call to an undefined method Psr\\Container\\ContainerInterface::set#'
         - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface::write#'
         - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface::withJson#'

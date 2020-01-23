@@ -13,7 +13,7 @@ use Tracy\Debugger;
  *
  * @package Status\Controller
  */
-class ErrorCtrl extends BaseCtrl
+final class ErrorCtrl extends BaseCtrl
 {
     /**
      * @Inject("ob.level")

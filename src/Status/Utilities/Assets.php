@@ -7,7 +7,7 @@ namespace Status\Utilities;
  *
  * @package Status\Utilities
  */
-class Assets
+final class Assets
 {
     /**
      * @var array

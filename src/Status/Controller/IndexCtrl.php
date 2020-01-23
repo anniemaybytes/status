@@ -12,7 +12,7 @@ use Status\Utilities\Curl;
  *
  * @package Status\Controller
  */
-class IndexCtrl extends BaseCtrl
+final class IndexCtrl extends BaseCtrl
 {
     /**
      * @var int $siteTimeout

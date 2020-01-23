@@ -9,7 +9,7 @@ use RuntimeException;
  *
  * @package Status
  */
-class ConfigLoader
+final class ConfigLoader
 {
     /**
      * @param array $array

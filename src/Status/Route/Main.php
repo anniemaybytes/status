@@ -12,7 +12,7 @@ use Status\Controller\IndexCtrl;
  *
  * @package Status\Route
  */
-class Main extends Base
+final class Main extends Base
 {
     protected function addRoutes(): void /** @formatter:off */
     {

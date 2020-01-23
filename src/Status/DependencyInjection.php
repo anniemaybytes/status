@@ -8,19 +8,20 @@ use DI;
 use Exception;
 use Psr\Container\ContainerInterface as Container;
 use RunTracy\Helpers\Profiler\Profiler;
+use RunTracy\Helpers\TwigPanel;
 use Slim\Views\Twig;
 use Status\Cache\Apc;
 use Status\Cache\IKeyStore;
-use Twig\Extension\DebugExtension;
+use Tracy\Debugger;
 use Twig\Extension\ProfilerExtension;
-use Twig\Profiler\Profile as TwigProfile;
+use Twig\Profiler\Profile;
 
 /**
  * Class DependencyInjection
  *
  * @package Status
  */
-class DependencyInjection
+final class DependencyInjection
 {
     /**
      * @param array $config
@@ -46,10 +47,6 @@ class DependencyInjection
 
         $di = self::setUtilities($di);
 
-        if ($di->get('config')['mode'] === 'development') {
-            $di->set(TwigProfile::class, new TwigProfile());
-        }
-
         $di->set(
             Twig::class,
             function (Container $di) {
@@ -67,14 +64,13 @@ class DependencyInjection
 
                 $view = Twig::create($dir, $config);
 
-                $view->addExtension(new TwigExtension($di->get(Utilities\View::class)));
-
-                $view->getEnvironment()->addGlobal('di', $di);
-
                 if ($di->get('config')['mode'] === 'development') {
-                    $view->addExtension(new DebugExtension());
-                    $view->addExtension(new ProfilerExtension($di->get(TwigProfile::class)));
+                    $profiler = new Profile();
+                    $view->addExtension(new ProfilerExtension($profiler));
+                    Debugger::getBar()->addPanel(new TwigPanel($profiler));
                 }
+
+                $view->addExtension(new TwigExtension($di->get(Utilities\View::class)));
 
                 return $view;
             }

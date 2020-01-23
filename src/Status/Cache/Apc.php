@@ -9,7 +9,7 @@ use APCUIterator;
  *
  * @package Status\Cache
  */
-class Apc implements IKeyStore
+final class Apc implements IKeyStore
 {
     /**
      * @var string $keyPrefix

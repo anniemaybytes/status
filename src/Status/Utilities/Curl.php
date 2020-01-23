@@ -15,7 +15,7 @@ use function curl_setopt_array;
  *
  * @package Status\Utilities
  */
-class Curl
+final class Curl
 {
     /**
      * @var null|resource $curl

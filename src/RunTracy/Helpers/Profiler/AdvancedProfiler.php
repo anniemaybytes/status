@@ -86,6 +86,7 @@ class AdvancedProfiler extends SimpleProfiler
 
     /**
      * @inheritdoc
+     *
      * @param mixed $opt
      */
     public static function finish(?string $labelOrFormat = null, $args = null, $opt = null)

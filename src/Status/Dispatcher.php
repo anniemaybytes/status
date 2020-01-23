@@ -3,6 +3,8 @@
 namespace Status;
 
 use Exception;
+use PetrKnap\Php\Singleton\SingletonInterface;
+use PetrKnap\Php\Singleton\SingletonTrait;
 use Psr\Container\ContainerInterface as Container;
 use Psr\Http\Message\ResponseFactoryInterface;
 use RunTracy\Helpers\Profiler\Profiler;
@@ -16,8 +18,9 @@ use Status\Route as R;
  *
  * @package Status
  */
-class Dispatcher extends Singleton
+final class Dispatcher implements SingletonInterface
 {
+    use SingletonTrait;
     /**
      * @var App $app
      */
