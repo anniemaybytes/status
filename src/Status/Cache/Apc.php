@@ -3,6 +3,8 @@
 namespace Status\Cache;
 
 use APCUIterator;
+use Throwable;
+use Tracy\Debugger;
 
 /**
  * Class Apc
@@ -39,6 +41,20 @@ final class Apc implements IKeyStore
     public function __construct(string $keyPrefix)
     {
         $this->keyPrefix = $keyPrefix;
+
+        $bar = new CacheTracyBarPanel($this);
+        Debugger::getBar()->addPanel($bar);
+        Debugger::getBlueScreen()->addPanel(
+            static function (?Throwable $e) use ($bar) {
+                if ($e) {
+                    return null;
+                }
+                return [
+                    'tab' => 'Apc hits',
+                    'panel' => $bar->getPanel(),
+                ];
+            }
+        );
     }
 
     /** {@inheritDoc} */

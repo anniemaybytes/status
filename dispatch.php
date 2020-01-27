@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
@@ -79,6 +79,9 @@ if ($di->get('config')['mode'] === 'development') {
 // in and first as the response comes out.
 Profiler::start('initMiddlewares');
 
+// 'before' middleware (either stops execution flow or calls next middleware)
+$app->addBodyParsingMiddleware(); // parses xml and json body
+
 // output caching should be in the middle of the stack
 $app->add(new OutputBufferingMiddleware(new StreamFactory(), OutputBufferingMiddleware::APPEND));
 
@@ -87,7 +90,6 @@ if ($di->get('config')['mode'] === 'production') {
     $contentLengthMiddleware = new ContentLengthMiddleware();
     $app->add($contentLengthMiddleware); // adds content-length but only on production
 }
-$app->addBodyParsingMiddleware(); // parses xml and json body
 $app->addRoutingMiddleware();
 
 // error handler must be added before everything else on request or it won't handle errors from middleware stack
