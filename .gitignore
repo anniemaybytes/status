@@ -17,4 +17,5 @@ desktop.ini
 # project stuff
 config/private.ini
 routes.cache.php
+CompiledContainer.php
 logs/*
