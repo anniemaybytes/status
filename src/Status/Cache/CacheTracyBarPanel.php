@@ -10,7 +10,7 @@ use Tracy\IBarPanel;
  *
  * @package Status\Cache
  */
-class CacheTracyBarPanel implements IBarPanel
+final class CacheTracyBarPanel implements IBarPanel
 {
     /**
      * Base64 icon for Tracy panel.
