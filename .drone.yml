@@ -19,3 +19,7 @@ steps:
         failure: ignore
         commands:
             - ./composer.phar phpstan
+
+trigger:
+    branch:
+        - master
