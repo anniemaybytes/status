@@ -11,6 +11,11 @@
       <fqn value="\Twig\Error\Error" />
     </unchecked_exceptions>
   </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor" />
+    </include_path>
+  </component>
   <component name="PhpProjectServersManager">
     <servers>
       <server host="status.animebytes.local" id="5ccedc54-ad30-4e2b-b667-085c70b84971" name="status.animebytes.local" port="443" use_path_mappings="true">

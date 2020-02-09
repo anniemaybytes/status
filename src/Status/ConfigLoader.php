@@ -36,7 +36,7 @@ final class ConfigLoader
                 $output[$prefix . $k] = $v;
             }
         }
-        return array_merge($output + [[]], ...$subOutput);
+        return array_merge($output, ...$subOutput);
     }
 
     /**

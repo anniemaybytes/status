@@ -1,5 +1,6 @@
 # dev stuff (IDE configs etc)
 .idea/
+composer.phar
 nbproject/*
 .vagrant/*
 .buildpath/*
@@ -19,3 +20,9 @@ config/private.ini
 routes.cache.php
 CompiledContainer.php
 logs/*
+
+# these files might exist on production and we dont really want them
+/*.sh
+scripts/
+.htaccess
+.well-known/
