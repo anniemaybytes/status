@@ -1,0 +1,70 @@
+---
+kind: pipeline
+name: default
+type: docker
+
+platform:
+    os: linux
+    arch: amd64
+
+steps:
+    -   name: install
+        image: thecodingmachine/php:7.3-v3-cli
+        commands:
+            - composer self-update
+            - composer --version
+            - php -v
+            - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
+        depends_on: [ clone ]
+    -   name: phplint
+        image: thecodingmachine/php:7.3-v3-cli
+        commands:
+            - composer phplint
+        depends_on: [ install ]
+    -   name: phpspec
+        image: thecodingmachine/php:7.3-v3-cli
+        commands:
+            - composer phpspec
+        depends_on: [ install ]
+    -   name: phpstan
+        image: thecodingmachine/php:7.3-v3-cli
+        commands:
+            - composer phpstan
+        depends_on: [ install ]
+trigger:
+    branch:
+        - master
+    event:
+        exclude:
+            - cron
+
+---
+kind: pipeline
+name: outdated
+type: docker
+
+platform:
+    os: linux
+    arch: amd64
+
+steps:
+    -   name: install
+        image: thecodingmachine/php:7.3-v3-cli
+        commands:
+            - composer self-update
+            - composer --version
+            - php -v
+            - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist --no-dev
+    -   name: outdated
+        image: thecodingmachine/php:7.3-v3-cli
+        commands:
+            - composer outdated -n --direct --strict --ansi --ignore roave/security-advisories
+trigger:
+    branch:
+        - master
+
+---
+kind: signature
+hmac: 76ff61efe80028afd12c9bb2ab4382804d404ae128ee6ad83ac71ad579800170
+
+...
