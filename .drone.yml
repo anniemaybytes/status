@@ -11,16 +11,22 @@ steps:
     -   name: restore-cache
         image: meltwater/drone-cache
         failure: ignore
+        environment:
+            AWS_ACCESS_KEY_ID:
+                from_secret: aws_access_key_id
+            AWS_SECRET_ACCESS_KEY:
+                from_secret: aws_secret_access_key
+            PLUGIN_PATH_STYLE: true
         settings:
-            backend: "filesystem"
+            endpoint:
+                from_secret: aws_endpoint
+            region: ab-1
+            bucket: drone-cache
             restore: true
             cache_key: '{{ checksum "composer.json" }}_{{ checksum "composer.lock" }}_default'
-            archive_format: "gzip"
+            archive_format: gzip
             mount:
-                - 'vendor'
-        volumes:
-            -   name: drone-cache
-                path: /tmp/cache
+                - ./vendor
         depends_on: [ clone ]
     -   name: install
         image: thecodingmachine/php:7.3-v3-cli
@@ -48,16 +54,22 @@ steps:
     -   name: rebuild-cache
         image: meltwater/drone-cache
         failure: ignore
+        environment:
+            AWS_ACCESS_KEY_ID:
+                from_secret: aws_access_key_id
+            AWS_SECRET_ACCESS_KEY:
+                from_secret: aws_secret_access_key
+            PLUGIN_PATH_STYLE: true
         settings:
-            backend: "filesystem"
+            endpoint:
+                from_secret: aws_endpoint
+            region: ab-1
+            bucket: drone-cache
             rebuild: true
             cache_key: '{{ checksum "composer.json" }}_{{ checksum "composer.lock" }}_default'
-            archive_format: "gzip"
+            archive_format: gzip
             mount:
-                - 'vendor'
-        volumes:
-            -   name: drone-cache
-                path: /tmp/cache
+                - ./vendor
         depends_on: [ install ]
 
 trigger:
@@ -67,11 +79,6 @@ trigger:
     event:
         exclude:
             - cron
-
-volumes:
-    -   name: drone-cache
-        host:
-            path: /var/lib/cache
 
 ---
 kind: pipeline
@@ -86,16 +93,22 @@ steps:
     -   name: restore-cache
         image: meltwater/drone-cache
         failure: ignore
+        environment:
+            AWS_ACCESS_KEY_ID:
+                from_secret: aws_access_key_id
+            AWS_SECRET_ACCESS_KEY:
+                from_secret: aws_secret_access_key
+            PLUGIN_PATH_STYLE: true
         settings:
-            backend: "filesystem"
+            endpoint:
+                from_secret: aws_endpoint
+            region: ab-1
+            bucket: drone-cache
             restore: true
             cache_key: '{{ checksum "composer.json" }}_{{ checksum "composer.lock" }}_outdated'
-            archive_format: "gzip"
+            archive_format: gzip
             mount:
-                - 'vendor'
-        volumes:
-            -   name: drone-cache
-                path: /tmp/cache
+                - ./vendor
         depends_on: [ clone ]
     -   name: install
         image: thecodingmachine/php:7.3-v3-cli
@@ -113,13 +126,22 @@ steps:
     -   name: rebuild-cache
         image: meltwater/drone-cache
         failure: ignore
+        environment:
+            AWS_ACCESS_KEY_ID:
+                from_secret: aws_access_key_id
+            AWS_SECRET_ACCESS_KEY:
+                from_secret: aws_secret_access_key
+            PLUGIN_PATH_STYLE: true
         settings:
-            backend: "filesystem"
+            endpoint:
+                from_secret: aws_endpoint
+            region: ab-1
+            bucket: drone-cache
             rebuild: true
             cache_key: '{{ checksum "composer.json" }}_{{ checksum "composer.lock" }}_outdated'
-            archive_format: "gzip"
+            archive_format: gzip
             mount:
-                - 'vendor'
+                - ./vendor
         volumes:
             -   name: drone-cache
                 path: /tmp/cache
@@ -130,12 +152,8 @@ trigger:
         - master
         - drone
 
-volumes:
-    -   name: drone-cache
-        host:
-            path: /var/lib/cache
 ---
 kind: signature
-hmac: 492477ba3a1f0d9fc4bffa99f46f2894907e6eee791dcb05fb8cbb669af6e017
+hmac: 25fbbbca6c047d2aa639ee19bf2487bd9e86dbd8c152d7418050bcd8436a9147
 
 ...
