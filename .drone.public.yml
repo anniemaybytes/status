@@ -1,11 +1,6 @@
----
 kind: pipeline
 name: default
 type: docker
-
-platform:
-    os: linux
-    arch: amd64
 
 steps:
     -   name: install
@@ -31,21 +26,11 @@ steps:
         commands:
             - composer phpstan
         depends_on: [ install ]
-trigger:
-    branch:
-        - master
-    event:
-        exclude:
-            - cron
 
 ---
 kind: pipeline
 name: outdated
 type: docker
-
-platform:
-    os: linux
-    arch: amd64
 
 steps:
     -   name: install
@@ -59,12 +44,3 @@ steps:
         image: thecodingmachine/php:7.3-v3-cli
         commands:
             - composer outdated -n --direct --strict --ansi --ignore roave/security-advisories
-trigger:
-    branch:
-        - master
-
----
-kind: signature
-hmac: 76ff61efe80028afd12c9bb2ab4382804d404ae128ee6ad83ac71ad579800170
-
-...

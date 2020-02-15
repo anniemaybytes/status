@@ -1,11 +1,6 @@
----
 kind: pipeline
 name: default
 type: docker
-
-platform:
-    os: linux
-    arch: amd64
 
 steps:
     -   name: restore-cache
@@ -23,7 +18,7 @@ steps:
             region: ab-1
             bucket: drone-cache
             restore: true
-            cache_key: '{{ checksum "composer.json" }}_{{ checksum "composer.lock" }}_default'
+            cache_key: '{{ .Commit.Branch }}-default'
             archive_format: gzip
             mount:
                 - ./vendor
@@ -66,16 +61,13 @@ steps:
             region: ab-1
             bucket: drone-cache
             rebuild: true
-            cache_key: '{{ checksum "composer.json" }}_{{ checksum "composer.lock" }}_default'
+            cache_key: '{{ .Commit.Branch }}-default'
             archive_format: gzip
             mount:
                 - ./vendor
         depends_on: [ install ]
 
 trigger:
-    branch:
-        - master
-        - drone
     event:
         exclude:
             - cron
@@ -84,10 +76,6 @@ trigger:
 kind: pipeline
 name: outdated
 type: docker
-
-platform:
-    os: linux
-    arch: amd64
 
 steps:
     -   name: restore-cache
@@ -105,7 +93,7 @@ steps:
             region: ab-1
             bucket: drone-cache
             restore: true
-            cache_key: '{{ checksum "composer.json" }}_{{ checksum "composer.lock" }}_outdated'
+            cache_key: '{{ .Commit.Branch }}-outdated'
             archive_format: gzip
             mount:
                 - ./vendor
@@ -138,22 +126,8 @@ steps:
             region: ab-1
             bucket: drone-cache
             rebuild: true
-            cache_key: '{{ checksum "composer.json" }}_{{ checksum "composer.lock" }}_outdated'
+            cache_key: '{{ .Commit.Branch }}-outdated'
             archive_format: gzip
             mount:
                 - ./vendor
-        volumes:
-            -   name: drone-cache
-                path: /tmp/cache
         depends_on: [ install ]
-
-trigger:
-    branch:
-        - master
-        - drone
-
----
-kind: signature
-hmac: 25fbbbca6c047d2aa639ee19bf2487bd9e86dbd8c152d7418050bcd8436a9147
-
-...
