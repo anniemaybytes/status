@@ -93,6 +93,9 @@ steps:
                 from_secret: aws_secret_access_key
             endpoint:
                 from_secret: aws_endpoint
+        when:
+            target:
+                - production
     -   name: flush
         image: plugins/s3-cache
         settings:
@@ -105,6 +108,9 @@ steps:
                 from_secret: aws_secret_access_key
             endpoint:
                 from_secret: aws_endpoint
+        when:
+            target:
+                - production
 
 trigger:
     event:
