@@ -27,7 +27,7 @@
         "php": "~7.3",
         "slim/slim": "4.4.0",
         "slim/twig-view": "3.0.0",
-        "tracy/tracy": "2.7.2",
+        "tracy/tracy": "2.7.3",
         "php-di/php-di": "6.0.11",
         "slim/psr7": "1.0",
         "slim/http": "1.0",
@@ -47,8 +47,8 @@
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
-        "phpstan/phpstan": "^0.12.8",
-        "overtrue/phplint": "^1.2",
-        "phpspec/phpspec": "^6.1.1"
+        "phpstan/phpstan": "0.12.11",
+        "overtrue/phplint": "1.2.1",
+        "phpspec/phpspec": "6.1.1"
     }
 }
