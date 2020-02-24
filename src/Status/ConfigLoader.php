@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Status;
 
@@ -28,9 +30,8 @@ final class ConfigLoader
 
         $subOutput = [];
         foreach ($array as $k => $v) {
-            if (is_array(
-                    $v
-                ) && !isset($v[0]) && !$deep) { // if it's a subarray, and it *looks* associative and is not deep
+            if (is_array($v) && !isset($v[0]) && !$deep) {
+                // if it's a subarray, and it *looks* associative and is not deep
                 $subOutput[] = self::parseArray($v, $prefix . $k, true);
             } else {
                 $output[$prefix . $k] = $v;

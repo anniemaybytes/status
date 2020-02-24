@@ -1,4 +1,6 @@
-<?php /** @noinspection StaticClosureCanBeUsedInspection */
+<?php
+
+/** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
@@ -51,9 +53,9 @@ Debugger::enable(
     $di->get('config')['mode'] === 'development' ? Debugger::DEVELOPMENT : Debugger::PRODUCTION,
     $di->get('config')['logs_dir']
 );
-if ($di->get(
-        'config'
-    )['mode'] === 'production') { // tracy resets error_reporting to E_ALL when it's enabled, silence it on production please
+
+// tracy resets error_reporting to E_ALL when it's enabled, silence it on production please
+if ($di->get('config')['mode'] === 'production') {
     error_reporting(ERROR_REPORTING);
 }
 

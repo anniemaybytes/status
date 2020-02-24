@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Status;
 
@@ -22,6 +24,7 @@ use Status\Route as R;
 final class Dispatcher implements SingletonInterface
 {
     use SingletonTrait;
+
     /**
      * @var App $app
      */
