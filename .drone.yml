@@ -6,6 +6,7 @@ steps:
     -   name: install
         image: thecodingmachine/php:7.3-v3-cli
         commands:
+            - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
     -   name: phplint
         image: thecodingmachine/php:7.3-v3-cli
@@ -37,6 +38,7 @@ steps:
     -   name: install
         image: thecodingmachine/php:7.3-v3-cli
         commands:
+            - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
     -   name: phpspec
         image: thecodingmachine/php:7.3-v3-cli
@@ -57,6 +59,7 @@ steps:
     -   name: collect
         image: thecodingmachine/php:7.3-v3-cli
         commands:
+            - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist --no-dev
     -   name: upload
         image: plugins/s3-cache
