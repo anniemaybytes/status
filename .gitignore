@@ -8,6 +8,7 @@ nbproject/*
 .settings/*
 desktop.ini
 .phplint-cache
+.phpcs-cache
 
 # dynamic vendor stuff
 /vendor/*
