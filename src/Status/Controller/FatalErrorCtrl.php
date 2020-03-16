@@ -54,6 +54,6 @@ final class FatalErrorCtrl
             }
         }
 
-        return $response->withStatus(500)->write('500 Internal Server Error');
+        return $response->withStatus(500);
     }
 }

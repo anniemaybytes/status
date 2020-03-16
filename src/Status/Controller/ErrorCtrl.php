@@ -34,12 +34,13 @@ final class ErrorCtrl extends BaseCtrl
     {
         try {
             $statusCode = 500;
-            $message = '500 Internal Server Error';
             if ($exception instanceof HttpException) {
                 $statusCode = $exception->getCode();
-                $message = $exception->getTitle();
             }
-            $this->logError($request, $exception, $statusCode);
+
+            if ($statusCode === 500) {
+                Debugger::log($exception, Debugger::EXCEPTION);
+            }
 
             // clear the body first
             $body = $response->getBody();
@@ -57,23 +58,9 @@ final class ErrorCtrl extends BaseCtrl
                 }
             }
 
-            return $response->withStatus($statusCode)->write($message);
+            return $response->withStatus($statusCode);
         } catch (Throwable $e) {
             return (new FatalErrorCtrl())->handleError($request, $response, $e);
         }
-    }
-
-    /**
-     * @param Request $request
-     * @param Throwable $exception
-     * @param int $status
-     */
-    private function logError(Request $request, Throwable $exception, int $status): void
-    {
-        if ($status !== 500) {
-            return;
-        }
-
-        Debugger::log($exception, Debugger::EXCEPTION);
     }
 }
