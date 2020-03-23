@@ -140,7 +140,7 @@ final class IndexCtrl extends BaseCtrl
      */
     private function checkTrackerSingular(string $ip): int
     {
-        $curl = new Curl("https://$ip");
+        $curl = new Curl("https://$ip/check");
         $curl->setoptArray(
             [
                 CURLOPT_USERAGENT => 'status.animebytes.tv',
