@@ -9,6 +9,12 @@ apt-get update
 apt-get -y install apt-transport-https dirmngr curl htop iotop
 
 echo
+echo Adding repositories
+cd /vagrantroot/configs/etc/apt
+cp -avu * /etc/apt/
+curl -sSL https://packages.sury.org/php/apt.gpg | apt-key add -
+
+echo
 echo Updating apt cache
 apt-get update
 
@@ -18,7 +24,9 @@ apt-get -y dist-upgrade
 
 echo
 echo Installing packages...
-apt-get -y install software-properties-common nginx php7.3 php7.3-curl php7.3-fpm php7.3-common phpunit pv php7.3-dev php-pear libcurl3-openssl-dev build-essential php7.3-cli git libpq5 libodbc1 unzip zip php7.3-apcu php7.3-json
+apt-get -y install software-properties-common nginx php7.3 php7.3-curl php7.3-fpm php7.3-common phpunit pv php7.3-dev \
+php-pear libcurl3-openssl-dev build-essential php7.3-cli git libpq5 libodbc1 unzip zip php7.3-apcu php7.3-json \
+php7.3-mbstring php7.3-xml
 
 pecl install xdebug-2.7.2
 

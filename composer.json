@@ -44,7 +44,8 @@
         "ext-json": "*",
         "ext-apcu": "*",
         "ext-openssl": "*",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-zend-opcache": "*"
     },
     "autoload": {
         "psr-4": {
