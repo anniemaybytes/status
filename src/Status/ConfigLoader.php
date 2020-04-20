@@ -71,14 +71,4 @@ final class ConfigLoader
 
         return array_merge($public, $private);
     }
-
-    /**
-     * @param string $config
-     *
-     * @return array
-     */
-    public static function loadString(string $config): array
-    {
-        return self::parseArray(parse_ini_string($config, true, INI_SCANNER_TYPED), '');
-    }
 }

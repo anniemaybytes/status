@@ -9,6 +9,7 @@ namespace Status;
 use DI;
 use Exception;
 use Psr\Container\ContainerInterface as Container;
+use RuntimeException;
 use RunTracy\Helpers\TwigPanel;
 use Slim\Views\Twig;
 use Status\Cache\Apc;
@@ -47,6 +48,20 @@ final class DependencyInjection
                 Twig::class => function (Container $di) {
                     $dir = $di->get('config')['templates.path'];
 
+                    $dirs = [$dir];
+                    $dh = opendir($dir);
+
+                    if (!$dh) {
+                        throw new RuntimeException('Unable to open templates path');
+                    }
+
+                    while (false !== ($filename = readdir($dh))) {
+                        $fullPath = "$dir/$filename";
+                        if ($filename[0] !== '.' && is_dir($fullPath)) {
+                            $dirs[$filename] = $fullPath;
+                        }
+                    }
+
                     $config = [
                         'cache' => $di->get('config')['templates.cache_path'],
                         'strict_variables' => true,
@@ -57,7 +72,7 @@ final class DependencyInjection
                         $config['auto_reload'] = true;
                     }
 
-                    $view = Twig::create($dir, $config);
+                    $view = Twig::create($dirs, $config);
 
                     if ($di->get('config')['mode'] === 'development') {
                         $profiler = new TwigProfile();

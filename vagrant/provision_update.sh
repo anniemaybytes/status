@@ -23,4 +23,5 @@ cd /code
 
 echo
 echo Updating composer from lock file
-sudo -u vagrant composer install
+composer self-update
+su -s /bin/bash vagrant -c 'composer install'

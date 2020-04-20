@@ -12,13 +12,13 @@
             "@phplint",
             "@phpcs",
             "@phpstan",
-            "@phpspec"
+            "@phpunit"
         ],
         "phpstan": [
             "phpstan analyze --ansi --memory-limit=-1"
         ],
-        "phpspec": [
-            "phpspec run --ansi"
+        "phpunit": [
+            "phpunit --colors=always"
         ],
         "phplint": [
             "phplint --ansi -n"
@@ -32,9 +32,9 @@
     },
     "require": {
         "php": "~7.3",
-        "slim/slim": "4.4.0",
-        "slim/twig-view": "3.0.0",
-        "tracy/tracy": "2.7.3",
+        "slim/slim": "4.5.0",
+        "slim/twig-view": "3.1.0",
+        "tracy/tracy": "2.7.4",
         "php-di/php-di": "6.1.0",
         "slim/psr7": "1.0",
         "slim/http": "1.0",
@@ -56,10 +56,11 @@
     "require-dev": {
         "roave/security-advisories": "dev-master",
         "phpstan/phpstan": "0.12.18",
-        "phpstan/extension-installer": "1.0.4",
         "phpstan/phpstan-deprecation-rules": "0.12.2",
         "overtrue/phplint": "1.2.1",
-        "phpspec/phpspec": "6.1.1",
-        "squizlabs/php_codesniffer": "3.5.4"
+        "squizlabs/php_codesniffer": "3.5.5",
+        "mikey179/vfsstream": "1.6.8",
+        "dg/bypass-finals": "1.1.2",
+        "phpunit/phpunit": "8.5.3"
     }
 }

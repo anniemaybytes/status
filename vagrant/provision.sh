@@ -59,4 +59,4 @@ systemctl start php7.3-fpm
 
 echo
 echo Creating required directories
-sudo -u vagrant mkdir -p /code/logs
+su -s /bin/bash vagrant -c 'mkdir -p /code/logs'

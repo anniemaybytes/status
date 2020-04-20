@@ -3,15 +3,15 @@
   <head>
     <title>{% block full_title %}{{ config("site.site_name") }}{% endblock %}</title>
       {% block meta %}
-          {% include "meta.twig" %}
+          {% include "@layout/meta.twig" %}
       {% endblock %}
 
       {% block styles %}
-          {% include "styles.twig" %}
+          {% include "@layout/styles.twig" %}
       {% endblock %}
 
       {% block scripts %}
-          {% include "scripts.twig" %}
+          {% include "@layout/scripts.twig" %}
       {% endblock %}
     </head>
     <body{% if document is defined %} id="{{ document }}"{% endif %}>

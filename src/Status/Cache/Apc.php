@@ -87,7 +87,11 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
     private function exists(string $key): bool
     {
         return apcu_exists($key);
@@ -196,7 +200,6 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    /** {@inheritDoc} */
     public function doFlush(): void
     {
         apcu_clear_cache();
