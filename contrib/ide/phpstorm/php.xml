@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+    <component name="PhpAnalysisConfiguration">
+        <unchecked_exceptions>
+            <fqn value="\DI\DependencyException"/>
+            <fqn value="\DI\NotFoundException"/>
+            <fqn value="\Error"/>
+            <fqn value="\LogicException"/>
+            <fqn value="\RunTracy\Helpers\Profiler\Exception\ProfilerException"/>
+            <fqn value="\RuntimeException"/>
+            <fqn value="\Twig\Error\Error"/>
+        </unchecked_exceptions>
+    </component>
+    <component name="PhpIncludePathManager">
+        <include_path>
+            <path value="$PROJECT_DIR$/vendor"/>
+        </include_path>
+    </component>
+    <component name="PhpInterpreters">
+        <interpreters>
+            <interpreter id="9d7459ac-e16d-481f-aa98-8217c4b6e6e5" name="Vagrant" home="vagrant://DATA"
+                         debugger_id="php.debugger.XDebug">
+                <remote_data INTERPRETER_PATH="/usr/bin/php" HELPERS_PATH="/home/vagrant/.phpstorm_helpers"
+                             INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false"
+                             VAGRANT_FOLDER="$PROJECT_DIR$"/>
+            </interpreter>
+        </interpreters>
+    </component>
+    <component name="PhpProjectServersManager">
+        <servers>
+            <server host="status.animebytes.local" id="5ccedc54-ad30-4e2b-b667-085c70b84971"
+                    name="status.animebytes.local" port="443" use_path_mappings="true">
+                <path_mappings>
+                    <mapping local-root="$PROJECT_DIR$" remote-root="/code"/>
+                </path_mappings>
+            </server>
+        </servers>
+    </component>
+    <component name="PhpProjectSharedConfiguration" php_language_level="7.3"/>
+    <component name="PhpUnit">
+        <phpunit_settings>
+            <phpunit_by_interpreter interpreter_id="9d7459ac-e16d-481f-aa98-8217c4b6e6e5"
+                                    configuration_file_path="/code/phpunit.xml.dist"
+                                    custom_loader_path="/code/vendor/autoload.php" phpunit_phar_path=""
+                                    use_configuration_file="true"/>
+        </phpunit_settings>
+    </component>
+</project>

@@ -10,9 +10,5 @@ parameters:
     ignoreErrors:
         - '#Call to an undefined method Psr\\Container\\ContainerInterface::set#'
         - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface::withJson#'
-        -
-            message: '#Parameter \#1 \$exception_handler of function set_exception_handler expects#'
-            path: public/index.php
-        - '#Method RunTracy\\Helpers\\Profiler\\AdvancedProfiler::(start|finish)\(\) has parameter \$opt with no typehint specified#'
 includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
