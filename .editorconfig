@@ -7,6 +7,32 @@ insert_final_newline = true
 charset = utf-8
 indent_size = 4
 indent_style = space
+max_line_length = 120
+tab_width = 4
 
 [*.twig]
+insert_final_newline = false
+
+[*.js]
+indent_size = 2
+tab_width = 2
+
+[*.json]
+indent_size = 2
+tab_width = 2
+
+[*.css]
+indent_size = 2
+tab_width = 2
+
+[*.yml]
+insert_final_newline = false
+
+[*.xml]
+insert_final_newline = false
+
+[*.xml.dist]
+insert_final_newline = false
+
+[*.neon.dist]
 insert_final_newline = false

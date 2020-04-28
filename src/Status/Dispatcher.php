@@ -93,8 +93,6 @@ final class Dispatcher implements SingletonInterface
             );
         }
 
-        $config['templates.path'] = BASE_ROOT . '/' . $config['templates.path'];
-        $config['logs_dir'] = BASE_ROOT . '/' . $config['logs_dir'];
         $this->config = $config;
     }
 

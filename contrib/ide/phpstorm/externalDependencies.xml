@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalDependencies">
-    <plugin id="com.kalessil.phpStorm.phpInspectionsEA" />
-    <plugin id="org.editorconfig.editorconfigjetbrains" />
-    <plugin id="org.jetbrains.plugins.phpstorm-remote-interpreter" />
-    <plugin id="org.jetbrains.plugins.vagrant" />
+      <plugin id="Git4Idea"/>
+      <plugin id="JavaScriptDebugger"/>
+      <plugin id="NodeJS"/>
+      <plugin id="com.intellij.css"/>
+      <plugin id="com.intellij.database"/>
+      <plugin id="com.jetbrains.php"/>
+      <plugin id="com.jetbrains.php.framework"/>
+      <plugin id="com.jetbrains.plugins.ini4idea"/>
+      <plugin id="com.jetbrains.plugins.webDeployment"/>
+      <plugin id="com.jetbrains.twig"/>
+      <plugin id="com.kalessil.phpStorm.phpInspectionsEA"/>
+      <plugin id="intellij.prettierJS"/>
+      <plugin id="mobi.hsz.idea.gitignore"/>
+      <plugin id="org.editorconfig.editorconfigjetbrains"/>
+      <plugin id="org.jetbrains.plugins.node-remote-interpreter"/>
+      <plugin id="org.jetbrains.plugins.phpstorm-remote-interpreter"/>
+      <plugin id="org.jetbrains.plugins.remote-run"/>
+      <plugin id="org.jetbrains.plugins.vagrant"/>
+      <plugin id="org.jetbrains.plugins.yaml"/>
   </component>
 </project>

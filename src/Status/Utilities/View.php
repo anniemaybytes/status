@@ -6,6 +6,7 @@ namespace Status\Utilities;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteParser;
+use Status\Exception\FileNotFoundException;
 
 /**
  * Class View
@@ -33,43 +34,14 @@ final class View
     private $router;
 
     /**
-     * @param string $file
+     * @param string $filename
      *
      * @return string
+     * @throws FileNotFoundException
      */
-    public function assetUrl(string $file): string
+    public function assetUrl(string $filename): string
     {
-        return $this->config['site.site_root'] . $this->assets->path($file);
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    public function cssUrl(string $file): string
-    {
-        return $this->assetUrl(sprintf('css/%s.css', $file));
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    public function jsUrl(string $file): string
-    {
-        return $this->assetUrl(sprintf('js/%s.js', $file));
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    public function imgUrl(string $file): string
-    {
-        return $this->assetUrl(sprintf('img/%s', $file));
+        return $this->assets->path($filename);
     }
 
     /**

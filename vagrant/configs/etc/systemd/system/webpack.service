@@ -1,0 +1,13 @@
+[Unit]
+Description=Webpack watch service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=never
+User=vagrant
+WorkingDirectory=/code
+ExecStart=/usr/bin/node ./node_modules/webpack/bin/webpack.js --watch --info-verbosity verbose
+
+[Install]
+WantedBy=multi-user.target

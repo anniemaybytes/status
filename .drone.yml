@@ -1,45 +1,94 @@
+---
 kind: pipeline
 name: compliance
 type: docker
 
 steps:
-    -   name: install
+    -   name: composer
         image: thecodingmachine/php:7.3-v3-cli
         commands:
             - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
+        depends_on: [ clone ]
+    -   name: yarn
+        image: node:12-alpine
+        commands:
+            - yarn --frozen-lockfile --non-interactive --no-bin-links --ignore-optional
+        depends_on: [ clone ]
+    -   name: stylelint
+        image: node:12-alpine
+        commands:
+            - yarn lint:stylelint
+        depends_on: [ yarn ]
+    -   name: eslint
+        image: node:12-alpine
+        commands:
+            - yarn lint:eslint
+        depends_on: [ yarn ]
+    -   name: prettier
+        image: node:12-alpine
+        commands:
+            - yarn lint:prettier
+        depends_on: [ yarn ]
     -   name: phplint
         image: thecodingmachine/php:7.3-v3-cli
         environment:
             PHP_INI_ERROR_REPORTING: E_ALL & ~(E_STRICT | E_NOTICE | E_WARNING | E_DEPRECATED)
         commands:
             - composer phplint
-        depends_on: [ install ]
+        depends_on: [ composer ]
     -   name: phpcs
         image: thecodingmachine/php:7.3-v3-cli
         environment:
             PHP_INI_ERROR_REPORTING: E_ALL & ~(E_STRICT | E_NOTICE | E_WARNING | E_DEPRECATED)
         commands:
             - composer phpcs
-        depends_on: [ install ]
+        depends_on: [ composer ]
     -   name: phpstan
         image: thecodingmachine/php:7.3-v3-cli
         commands:
             - composer phpstan
-        depends_on: [ install ]
+        depends_on: [ composer ]
 
+trigger:
+    ref:
+        - refs/heads/master
+        - refs/pull/**
+        - refs/tags/**
 ---
 kind: pipeline
 name: tests
 type: docker
 
 steps:
-    -   name: install
+    -   name: composer
         image: thecodingmachine/php:7.3-v3-cli
         commands:
             - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
+        depends_on: [ clone ]
+    -   name: yarn
+        image: node:12-alpine
+        environment:
+            NODE_ENV: production
+        commands:
+            - yarn --frozen-lockfile --non-interactive --no-bin-links --production
+        depends_on: [ clone ]
     -   name: phpunit
         image: thecodingmachine/php:7.3-v3-cli
         commands:
             - composer phpunit
+        depends_on: [ composer ]
+    -   name: webpack
+        image: node:12-alpine
+        environment:
+            NODE_ENV: production
+        commands:
+            - node ./node_modules/webpack/bin/webpack.js --color
+        depends_on: [ yarn ]
+
+trigger:
+    ref:
+        - refs/heads/master
+        - refs/pull/**
+        - refs/tags/**

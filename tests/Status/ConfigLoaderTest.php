@@ -33,24 +33,6 @@ class ConfigLoaderTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Config loader should bork if private.ini is missing
-     */
-    public function testShouldFailIfPrivateMissing(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->root->removeChild('config');
-        vfs\vfsStream::create(
-            [
-                'config' => [
-                    'config.ini' => '[site]
-hi=true',
-                ]
-            ]
-        );
-        ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
-    }
-
-    /**
      * Config loader should correctly load file
      */
     public function testCheckLoadFile(): void
@@ -59,39 +41,14 @@ hi=true',
         vfs\vfsStream::create(
             [
                 'config' => [
-                    'config.ini' => '[site]
+                    'private.ini' => '[site]
 test=true',
-                    'private.ini' => '',
                 ]
             ]
         );
         $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
         $this->assertArrayHasKey('site.test', $c);
         $this->assertEquals(true, $c['site.test']);
-    }
-
-    /**
-     * Config loader should merge config.ini and private.ini
-     */
-    public function testCheckMergeFiles(): void
-    {
-        $this->root->removeChild('config');
-        vfs\vfsStream::create(
-            [
-                'config' => [
-                    'config.ini' => '[site]
-overridden=false',
-                    'private.ini' => '[site]
-private=true
-overridden=true',
-                ]
-            ]
-        );
-        $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
-        $this->assertArrayHasKey('site.private', $c);
-        $this->assertArrayHasKey('site.overridden', $c);
-        $this->assertEquals(true, $c['site.private']);
-        $this->assertEquals(true, $c['site.overridden']);
     }
 
     /**
@@ -103,18 +60,15 @@ overridden=true',
         vfs\vfsStream::create(
             [
                 'config' => [
-                    'config.ini' => '[site]
-assets_root = assets',
-                    'private.ini' => '[templates]
-path = templates',
+                    'private.ini' => '[static]
+location = /static/',
                 ]
             ]
         );
         $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
         $this->assertEquals(
             [
-                'site.assets_root' => 'assets',
-                'templates.path' => 'templates'
+                'static.location' => '/static/'
             ],
             $c
         );
@@ -129,16 +83,14 @@ path = templates',
         vfs\vfsStream::create(
             [
                 'config' => [
-                    'config.ini' => '',
                     'private.ini' => 'mode = development
-logs_dir = logs
+logs_dir = /code/logs
 
 [site]
 site_name = AnimeBytes Status
-site_root =
 
 [templates]
-cache_path = /tmp/cache
+cache_path = /tmp/twig-cache
 
 [tracker]
 ns[cloudflare] = 1.1.1.1
@@ -150,10 +102,9 @@ ns[google] = 8.8.8.8',
         $this->assertEquals(
             [
                 'mode' => 'development',
-                'logs_dir' => 'logs',
+                'logs_dir' => '/code/logs',
                 'site.site_name' => 'AnimeBytes Status',
-                'site.site_root' => '',
-                'templates.cache_path' => '/tmp/cache',
+                'templates.cache_path' => '/tmp/twig-cache',
                 'tracker.ns' => [
                     'cloudflare' => '1.1.1.1',
                     'google' => '8.8.8.8',

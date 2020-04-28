@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Status\Utilities;
 
+use RuntimeException;
+use Status\Exception\FileNotFoundException;
+
 /**
  * Class Assets
  *
@@ -12,28 +15,62 @@ namespace Status\Utilities;
 final class Assets
 {
     /**
-     * @var array
-     * @Inject("config")
+     * @var string
      */
-    private $config;
+    private $publicPath;
 
     /**
-     * @param string $filename
-     *
-     * @return string
+     * @var string
      */
-    public function path(string $filename): string
+    private $manifestFile;
+
+    /**
+     * @var array
+     */
+    private $compiledAssets = [];
+
+    /**
+     * Assets constructor.
+     *
+     * @param array $config
+     *
+     * @throws FileNotFoundException
+     */
+    public function __construct(array $config)
     {
-        return $this->config['site.assets_root'] . '/' . $filename;
+        $this->publicPath = $config['static.location'];
+        $this->manifestFile = BASE_ROOT . '/public/static/manifest.json';
+        $this->loadCompiledAssets();
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    private function loadCompiledAssets(): void
+    {
+        if (!file_exists($this->manifestFile)) {
+            throw new FileNotFoundException($this->manifestFile);
+        }
+
+        /** @noinspection JsonEncodingApiUsageInspection */
+        $this->compiledAssets = json_decode(file_get_contents($this->manifestFile), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new RuntimeException('Failed to parse manifest file');
+        }
     }
 
     /**
      * @param string $filename
      *
      * @return string
+     * @throws FileNotFoundException
      */
-    public function absolutePath($filename): string
+    public function path(string $filename): string
     {
-        return PUBLIC_ROOT . $this->config['site.assets_root'] . '/' . $filename;
+        if (array_key_exists($filename, $this->compiledAssets)) {
+            return $this->publicPath . $this->compiledAssets[$filename];
+        }
+
+        throw new FileNotFoundException($filename);
     }
 }

@@ -1,0 +1,6 @@
+# build artifacts
+public/static
+
+# package managers
+vendor
+node_modules

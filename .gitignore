@@ -12,7 +12,7 @@ desktop.ini
 
 # dynamic vendor stuff
 /vendor/*
-/cache/*
+node_modules/*
 
 # general extensions of files we dont want
 *.log
@@ -22,6 +22,7 @@ config/private.ini
 routes.cache.php
 CompiledContainer.php
 logs/*
+public/static/*
 
 # these files might exist on production and we dont really want them
 /*.sh

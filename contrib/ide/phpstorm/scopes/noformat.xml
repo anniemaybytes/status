@@ -1,0 +1,4 @@
+<component name="DependencyValidationManager">
+    <scope name="noformat"
+           pattern="(file:webpack.config.js||file:postcss.config.js||file:assets//*)&amp;&amp;!file:assets/css//*"/>
+</component>

@@ -41,12 +41,12 @@ final class DependencyInjection
         $builder->addDefinitions(
             [
                 // utilities
-                Utilities\Assets::class => DI\autowire(),
+                Utilities\Assets::class => DI\autowire()->constructorParameter('config', DI\get('config')),
                 Utilities\View::class => DI\autowire(),
                 // runtime
                 IKeyStore::class => DI\autowire(Apc::class)->constructorParameter('keyPrefix', ''),
                 Twig::class => function (Container $di) {
-                    $dir = $di->get('config')['templates.path'];
+                    $dir = BASE_ROOT . '/templates';
 
                     $dirs = [$dir];
                     $dh = opendir($dir);

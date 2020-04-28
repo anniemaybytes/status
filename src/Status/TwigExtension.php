@@ -53,10 +53,7 @@ final class TwigExtension extends AbstractExtension
             'baseurl' => 'baseUrl',
             'config' => 'config',
             'url' => 'pathFor',
-            'asseturl' => 'assetUrl',
-            'cssurl' => 'cssUrl',
-            'jsurl' => 'jsUrl',
-            'imgurl' => 'imgUrl',
+            'asset_url' => 'assetUrl',
         ];
 
         $functions = [];
