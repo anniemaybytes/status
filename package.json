@@ -29,7 +29,7 @@
     "webpack-manifest-plugin": "2.2.0"
   },
   "devDependencies": {
-    "check-outdated": "1.4.3",
+    "check-outdated": "2.0.0",
     "prettier": "2.0.5",
     "stylelint": "13.3.3",
     "stylelint-config-standard": "20.0.0",
