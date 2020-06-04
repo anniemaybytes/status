@@ -9,12 +9,6 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 // https://github.com/webpack/loader-utils/issues/121
 const hashDigestLength = 10;
 
-/*
-  copy-webpack-plugin uses md5 internally we need to ensure that file-loader uses same algo
-  so that the urls resolved from css-loader match emmited files on filesystem
- */
-const hashMethod = 'md5';
-
 module.exports = {
   mode: 'none',
   watchOptions: {
@@ -29,7 +23,6 @@ module.exports = {
     path: path.resolve(__dirname, 'public/static'),
     filename: '[name].[chunkhash].js',
     hashDigestLength: hashDigestLength,
-    hashFunction: hashMethod,
   },
   module: {
     rules: [
@@ -68,7 +61,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               outputPath: 'common',
-              name: `[name].[${hashMethod}:contenthash:hex:${hashDigestLength}].[ext]`,
+              name: `[name].[contenthash:hex:${hashDigestLength}].[ext]`,
               emitFile: false,
             },
           },
@@ -91,7 +84,9 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
     }),
-    new CopyPlugin([{ from: 'assets/common', to: `common/[name].[contenthash:${hashDigestLength}].[ext]` }]),
+    new CopyPlugin({
+      patterns: [{ from: 'assets/common', to: `common/[name].[contenthash:${hashDigestLength}].[ext]` }],
+    }),
   ],
   optimization: {
     moduleIds: 'hashed',
