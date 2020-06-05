@@ -26,15 +26,15 @@ apt-get update
 
 echo
 echo Updating currently installed packages
-apt-get -y dist-upgrade
+apt-get -y -o Dpkg::Options::="--force-confnew" dist-upgrade
 
 echo
 echo Installing packages...
-apt-get -y install software-properties-common nginx php7.3 php7.3-curl php7.3-fpm php7.3-common phpunit pv php7.3-dev \
-    php-pear libcurl3-openssl-dev build-essential php7.3-cli git libpq5 libodbc1 unzip zip php7.3-apcu php7.3-json \
-    php7.3-mbstring php7.3-xml nodejs
+apt-get -y -o Dpkg::Options::="--force-confold" install software-properties-common nginx php7.4 php7.4-curl php7.4-fpm \
+    php7.4-common phpunit pv php7.4-dev php-pear libcurl3-openssl-dev build-essential php7.4-cli git libpq5 libodbc1 \
+    unzip zip php7.4-apcu php7.4-json php7.4-mbstring php7.4-xml nodejs
 
-pecl install xdebug-2.7.2
+pecl install xdebug-2.9.6
 
 echo
 echo Setting up packages...
@@ -55,20 +55,20 @@ echo
 echo Configuring daemons...
 systemctl daemon-reload
 systemctl disable nginx
-systemctl disable php7.3-fpm
+systemctl disable php7.4-fpm
 systemctl disable webpack
 
 echo
 echo Stopping daemons...
 systemctl stop nginx
-systemctl stop php7.3-fpm
+systemctl stop php7.4-fpm
 systemctl stop webpack
 systemctl stop cron
 
 echo
 echo Starting daemons...
 systemctl start nginx
-systemctl start php7.3-fpm
+systemctl start php7.4-fpm
 systemctl start cron
 
 echo

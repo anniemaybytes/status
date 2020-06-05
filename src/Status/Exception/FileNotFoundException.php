@@ -16,7 +16,7 @@ final class FileNotFoundException extends Exception
     /**
      * @var string
      */
-    protected $what;
+    protected string $what;
 
     /**
      * FileNotFoundException constructor.

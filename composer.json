@@ -27,7 +27,7 @@
     ]
   },
   "require": {
-    "php": "~7.3",
+    "php": "~7.4",
     "slim/slim": "4.5.0",
     "slim/twig-view": "3.1.0",
     "tracy/tracy": "2.7.5",

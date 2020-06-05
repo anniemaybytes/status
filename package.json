@@ -15,7 +15,7 @@
   "dependencies": {
     "@claviska/jquery-dropdown": "2.0.3",
     "clean-webpack-plugin": "3.0.0",
-    "copy-webpack-plugin": "6.0.1",
+    "copy-webpack-plugin": "6.0.2",
     "css-loader": "3.5.3",
     "cssnano": "4.1.10",
     "file-loader": "6.0.0",

@@ -15,6 +15,7 @@ use Slim\Views\Twig;
 use Status\Cache\Apc;
 use Status\Cache\IKeyStore;
 use Tracy\Debugger;
+use Twig\Environment;
 use Twig\Extension\ProfilerExtension;
 use Twig\Profiler\Profile as TwigProfile;
 
@@ -77,7 +78,7 @@ final class DependencyInjection
                     if ($di->get('config')['mode'] === 'development') {
                         $profiler = new TwigProfile();
                         $view->addExtension(new ProfilerExtension($profiler));
-                        Debugger::getBar()->addPanel(new TwigPanel($profiler));
+                        Debugger::getBar()->addPanel(new TwigPanel($profiler, Environment::VERSION));
                     }
 
                     $view->addExtension(new TwigExtension($di->get(Utilities\View::class)));

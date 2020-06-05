@@ -20,7 +20,7 @@ final class FatalErrorCtrl
      * @Inject("ob.level")
      * @var int
      */
-    private $obLevel;
+    private int $obLevel;
 
     /**
      * Render very simple error page in case of fatal PHP error

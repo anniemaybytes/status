@@ -17,17 +17,17 @@ final class Assets
     /**
      * @var string
      */
-    private $publicPath;
+    private string $publicPath;
 
     /**
      * @var string
      */
-    private $manifestFile;
+    private string $manifestFile;
 
     /**
      * @var array
      */
-    private $compiledAssets = [];
+    private array $compiledAssets = [];
 
     /**
      * Assets constructor.

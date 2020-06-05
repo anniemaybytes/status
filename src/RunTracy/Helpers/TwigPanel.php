@@ -16,32 +16,32 @@ use Twig\Profiler\Profile;
 final class TwigPanel implements IBarPanel
 {
     /**
-     * @var Profile|null
+     * @var Profile
      */
-    private $data;
+    private Profile $data;
 
     /**
      * @var HtmlDumper
      */
-    private $dumper;
+    private HtmlDumper $dumper;
 
     /**
      * @var string
      */
-    private $icon;
+    private string $icon;
 
     /**
-     * @var mixed
+     * @var string
      */
-    private $ver;
+    private string $ver;
 
     /**
      * TwigPanel constructor.
      *
-     * @param Profile|null $data
-     * @param mixed $ver
+     * @param Profile $data
+     * @param string $ver
      */
-    public function __construct(?Profile $data = null, $ver = null)
+    public function __construct(Profile $data, string $ver)
     {
         $this->data = $data;
         $this->ver = $ver;

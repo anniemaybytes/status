@@ -19,19 +19,19 @@ abstract class BaseCtrl
      * @Inject
      * @var IKeyStore
      */
-    protected $cache;
+    protected IKeyStore $cache;
 
     /**
      * @Inject
      * @var Twig
      */
-    protected $view;
+    protected Twig $view;
 
     /**
      * @Inject
      * @var View
      */
-    protected $view_functions;
+    protected View $view_functions;
 
     /**
      * The configuration array
@@ -39,5 +39,5 @@ abstract class BaseCtrl
      * @Inject("config")
      * @var array
      */
-    protected $config;
+    protected array $config;
 }

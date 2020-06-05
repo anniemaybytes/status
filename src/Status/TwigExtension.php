@@ -18,7 +18,7 @@ final class TwigExtension extends AbstractExtension
     /**
      * @var Utilities\View
      */
-    private $view_functions;
+    private Utilities\View $view_functions;
 
     /**
      * TwigExtension constructor.

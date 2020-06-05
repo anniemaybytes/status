@@ -19,27 +19,27 @@ final class IndexCtrl extends BaseCtrl
     /**
      * @var int $siteTimeout
      */
-    private $siteTimeout = 3;
+    private int $siteTimeout = 3;
 
     /**
      * @var int $trackerTimeout
      */
-    private $trackerTimeout = 3;
+    private int $trackerTimeout = 3;
 
     /**
      * @var int $ircTimeout
      */
-    private $ircTimeout = 2;
+    private int $ircTimeout = 2;
 
     /**
      * @var int $meiTimeout
      */
-    private $meiTimeout = 2;
+    private int $meiTimeout = 2;
 
     /**
      * @var int $cacheFor
      */
-    private $cacheFor = 15;
+    private int $cacheFor = 15;
 
     /**
      * @return int

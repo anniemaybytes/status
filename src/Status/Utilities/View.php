@@ -19,19 +19,19 @@ final class View
      * @Inject
      * @var Assets
      */
-    private $assets;
+    private Assets $assets;
 
     /**
      * @Inject("config")
      * @var array
      */
-    private $config;
+    private array $config;
 
     /**
      * @Inject
      * @var RouteParser
      */
-    private $router;
+    private RouteParser $router;
 
     /**
      * @param string $filename

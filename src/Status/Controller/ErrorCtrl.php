@@ -21,7 +21,7 @@ final class ErrorCtrl extends BaseCtrl
      * @Inject("ob.level")
      * @var int
      */
-    private $obLevel;
+    private int $obLevel;
 
     /**
      * @param Request $request
