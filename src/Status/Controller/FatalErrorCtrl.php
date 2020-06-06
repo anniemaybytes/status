@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\Controller;
 
+use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Throwable;
@@ -17,10 +18,19 @@ use Tracy\Debugger;
 final class FatalErrorCtrl
 {
     /**
-     * @Inject("ob.level")
      * @var int
      */
     private int $obLevel;
+
+    /**
+     * FatalErrorCtrl constructor.
+     *
+     * @param Container $di
+     */
+    public function __construct(Container $di)
+    {
+        $this->obLevel = $di->get('obLevel');
+    }
 
     /**
      * Render very simple error page in case of fatal PHP error

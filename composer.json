@@ -57,6 +57,6 @@
     "squizlabs/php_codesniffer": "3.5.5",
     "mikey179/vfsstream": "1.6.8",
     "dg/bypass-finals": "1.2.1",
-    "phpunit/phpunit": "9.1.5"
+    "phpunit/phpunit": "9.2.1"
   }
 }

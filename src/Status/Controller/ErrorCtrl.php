@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\Controller;
 
+use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpException;
@@ -18,10 +19,25 @@ use Tracy\Debugger;
 final class ErrorCtrl extends BaseCtrl
 {
     /**
-     * @Inject("ob.level")
      * @var int
      */
     private int $obLevel;
+
+    /**
+     * @var Container
+     */
+    private Container $di;
+
+    /**
+     * ErrorCtrl constructor.
+     *
+     * @param Container $di
+     */
+    public function __construct(Container $di)
+    {
+        $this->di = $di;
+        $this->obLevel = $di->get('obLevel');
+    }
 
     /**
      * @param Request $request
@@ -60,7 +76,7 @@ final class ErrorCtrl extends BaseCtrl
 
             return $response->withStatus($statusCode);
         } catch (Throwable $e) {
-            return (new FatalErrorCtrl())->handleError($request, $response, $e);
+            return (new FatalErrorCtrl($this->di))->handleError($request, $response, $e);
         }
     }
 }
