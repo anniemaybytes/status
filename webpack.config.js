@@ -52,7 +52,7 @@ module.exports = {
       },
       {
         test: /[\/\\]node_modules[\/\\]@claviska[\/\\]jquery-dropdown[\/\\]jquery.dropdown\.js$/,
-        use: 'imports-loader?this=>window',
+        use: 'imports-loader?wrapper=window',
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
