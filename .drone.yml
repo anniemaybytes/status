@@ -6,12 +6,14 @@ type: docker
 steps:
     -   name: composer
         image: thecodingmachine/php:7.4-v3-cli
+        pull: always
         commands:
             - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
         image: node:12-alpine
+        pull: always
         commands:
             - yarn --frozen-lockfile --non-interactive --no-bin-links --ignore-optional
         depends_on: [ clone ]
@@ -63,12 +65,14 @@ type: docker
 steps:
     -   name: composer
         image: thecodingmachine/php:7.4-v3-cli
+        pull: always
         commands:
             - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
         image: node:12-alpine
+        pull: always
         environment:
             NODE_ENV: production
         commands:
