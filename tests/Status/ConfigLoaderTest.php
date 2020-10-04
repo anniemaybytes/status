@@ -47,8 +47,8 @@ test=true',
             ]
         );
         $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
-        $this->assertArrayHasKey('site.test', $c);
-        $this->assertEquals(true, $c['site.test']);
+        self::assertArrayHasKey('site.test', $c);
+        self::assertEquals(true, $c['site.test']);
     }
 
     /**
@@ -66,7 +66,7 @@ location = /static/',
             ]
         );
         $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'static.location' => '/static/'
             ],
@@ -99,7 +99,7 @@ ns[google] = 8.8.8.8',
             ]
         );
         $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'mode' => 'development',
                 'logs_dir' => '/code/logs',
