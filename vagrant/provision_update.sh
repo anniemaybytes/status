@@ -36,6 +36,7 @@ systemctl start cron
 echo
 echo Installing node dependencies
 cd /code
+npm i -g yarn
 su vagrant -s /bin/bash -c 'yarn install --no-bin-links --frozen-lockfile'
 
 echo
