@@ -9,6 +9,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 // https://github.com/webpack/loader-utils/issues/121
 const hashDigestLength = 10;
 
+// noinspection JSUnusedGlobalSymbols
 module.exports = {
   mode: 'none',
   watchOptions: {

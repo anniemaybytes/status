@@ -28,23 +28,23 @@ systemctl stop webpack
 systemctl stop cron
 
 echo
-echo Starting daemons...
-systemctl start nginx
-systemctl start php7.4-fpm
-systemctl start cron
+echo Updating composer from lock file...
+cd /code
+composer self-update
+su -s /bin/bash vagrant -c 'composer install'
 
 echo
-echo Installing node dependencies
+echo Installing node dependencies...
 cd /code
 npm i -g yarn
 su vagrant -s /bin/bash -c 'yarn install --no-bin-links --frozen-lockfile'
 
 echo
-echo Starting webpack watcher
+echo Starting webpack watcher...
 systemctl start webpack
 
 echo
-echo Updating composer from lock file
-cd /code
-composer self-update
-su -s /bin/bash vagrant -c 'composer install'
+echo Starting daemons...
+systemctl start nginx
+systemctl start php7.4-fpm
+systemctl start cron
