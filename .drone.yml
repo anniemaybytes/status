@@ -9,7 +9,7 @@ steps:
         pull: always
         commands:
             - composer validate --ansi --no-check-all --no-check-publish
-            - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
+            - sudo composer install -n --no-progress --ansi --ignore-platform-reqs --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
         image: node:12-alpine
@@ -68,7 +68,7 @@ steps:
         pull: always
         commands:
             - composer validate --ansi --no-check-all --no-check-publish
-            - sudo composer install --no-progress --ansi --no-suggest --ignore-platform-reqs --prefer-dist
+            - sudo composer install -n --no-progress --ansi --ignore-platform-reqs --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
         image: node:12-alpine

@@ -72,9 +72,7 @@ su -s /bin/bash vagrant -c 'composer install'
 
 echo
 echo Installing node dependencies
-if ! hash yarn 2>/dev/null; then
-    npm install -g yarn
-fi
+npm i -g yarn
 su vagrant -s /bin/bash -c 'yarn install --no-bin-links --frozen-lockfile'
 
 echo
