@@ -12,9 +12,8 @@ set_error_handler(
     ERROR_REPORTING
 );
 
-/** @phpstan-ignore-next-line */
 set_exception_handler(
-    static function (Throwable $e) {
+    static function (Throwable $e): void {
         error_log((string)$e);
         die('Sorry, something went horribly wrong / PR Environment Exception: ' . get_class($e));
     }
