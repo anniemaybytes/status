@@ -51,20 +51,16 @@ final class Dispatcher implements SingletonInterface
     }
 
     /**
-     * @param mixed $key
+     * @param string|null $key
      *
      * @return mixed
      */
-    public static function config($key)
+    public static function config(?string $key = null)
     {
-        return self::getInstance()->config[$key];
-    }
+        if ($key) {
+            return self::getInstance()->config[$key];
+        }
 
-    /**
-     * @return array
-     */
-    public static function getConfig(): array
-    {
         return self::getInstance()->config;
     }
 

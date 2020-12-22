@@ -3,21 +3,22 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 // https://github.com/webpack-contrib/copy-webpack-plugin/issues/349
 // https://github.com/webpack/loader-utils/issues/121
 const hashDigestLength = 10;
 
-// noinspection JSUnusedGlobalSymbols
+// noinspection JSUnresolvedVariable
 module.exports = {
-  mode: 'none',
+  mode: 'production',
+  context: path.resolve(__dirname, 'assets'),
   watchOptions: {
     ignored: ['node_modules/**', 'vendor/**'],
     poll: 1000,
   },
   entry: {
-    bundle: ['./assets/js/index.js'],
+    bundle: ['./js/index.js'],
   },
   devtool: 'source-map',
   output: {
@@ -32,6 +33,9 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '',
+            },
           },
           {
             loader: 'css-loader',
@@ -68,11 +72,9 @@ module.exports = {
     ],
   },
   plugins: [
-    new ManifestPlugin({
-      map: (file) => {
-        file.name = file.name.replace(new RegExp(`(\\.[a-f0-9]{${hashDigestLength}})(\\..*)$`), '$2');
-        return file;
-      },
+    new WebpackManifestPlugin({
+      publicPath: '',
+      removeKeyHash: new RegExp(`(\\.[a-f0-9]{${hashDigestLength}})(\\..*)`),
     }),
     new CleanWebpackPlugin(),
     new webpack.ProvidePlugin({
@@ -83,17 +85,17 @@ module.exports = {
       filename: '[name].[contenthash].css',
     }),
     new CopyPlugin({
-      patterns: [{ from: 'assets/common', to: `common/[name].[contenthash:${hashDigestLength}].[ext]` }],
+      patterns: [{ from: 'common', to: `common/[name].[contenthash:${hashDigestLength}].[ext]` }],
     }),
   ],
   optimization: {
-    moduleIds: 'hashed',
     splitChunks: {
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendor',
           chunks: 'all',
+          enforce: true,
         },
       },
     },

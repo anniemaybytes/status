@@ -15,7 +15,7 @@ apt-mark hold linux-image-amd64 # bug: vboxsf component are not updated
 echo
 echo Installing required base components...
 apt-get update
-apt-get -y install apt-transport-https dirmngr
+apt-get -y install apt-transport-https dirmngr curl
 
 echo
 echo Adding repositories...
@@ -35,7 +35,7 @@ apt-get -y -o Dpkg::Options::="--force-confnew" upgrade
 echo
 echo Installing packages...
 apt-get -y -o Dpkg::Options::="--force-confold" install php-xdebug php7.4 php7.4-xml php7.4-fpm php7.4-cli php7.4-curl \
-    php7.4-apcu php7.4-json php7.4-mbstring pv git unzip zip curl htop iotop nodejs nginx
+    php7.4-apcu php7.4-json php7.4-mbstring pv git unzip zip htop iotop nodejs nginx
 
 echo
 echo Setting up packages...

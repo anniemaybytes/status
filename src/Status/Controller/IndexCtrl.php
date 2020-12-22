@@ -218,7 +218,7 @@ final class IndexCtrl extends BaseCtrl
             $this->cache->doSet('irc_status', 0, $this->cacheFor);
             return 0;
         }
-        $file = @fsockopen($nsRecord, 80, $errno, $errstr, $this->ircTimeout);
+        $file = @fsockopen($nsRecord, 7000, $errno, $errstr, $this->ircTimeout);
         if (!$file) {
             $status = 0;
         } else {
