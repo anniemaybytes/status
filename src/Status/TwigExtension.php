@@ -15,24 +15,13 @@ use Twig\TwigFunction;
  */
 final class TwigExtension extends AbstractExtension
 {
-    /**
-     * @var Utilities\View
-     */
-    private Utilities\View $view_functions;
+    private Utilities\View $viewFunctions;
 
-    /**
-     * TwigExtension constructor.
-     *
-     * @param Utilities\View $view_functions
-     */
-    public function __construct(Utilities\View $view_functions)
+    public function __construct(Utilities\View $viewFunctions)
     {
-        $this->view_functions = $view_functions;
+        $this->viewFunctions = $viewFunctions;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'status';
@@ -45,7 +34,7 @@ final class TwigExtension extends AbstractExtension
      */
     public function getFunctions(): array
     {
-        $fn = $this->view_functions;
+        $fn = $this->viewFunctions;
 
         // map function names in twig to function names implemented in
         // the view functions utility

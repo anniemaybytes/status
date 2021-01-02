@@ -15,31 +15,13 @@ use Tracy\Debugger;
  */
 final class Apc implements IKeyStore
 {
-    /**
-     * @var string $keyPrefix
-     */
     private string $keyPrefix;
 
-    /**
-     * @var bool $clearOnGet
-     */
     private bool $clearOnGet = false;
 
-    /**
-     * @var array $cacheHits
-     */
     private array $cacheHits = [];
-
-    /**
-     * @var float $time
-     */
     private float $time = 0;
 
-    /**
-     * Apc constructor.
-     *
-     * @param string $keyPrefix
-     */
     public function __construct(string $keyPrefix)
     {
         $this->keyPrefix = $keyPrefix;
@@ -59,8 +41,7 @@ final class Apc implements IKeyStore
         );
     }
 
-    /** {@inheritDoc} */
-    public function doGet(string $key)
+    public function doGet(string $key): mixed
     {
         $start = $this->startCall();
         $keyOld = $key;
@@ -87,30 +68,23 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
     private function exists(string $key): bool
     {
         return apcu_exists($key);
     }
 
-    /** {@inheritDoc} */
-    public function doSet(string $key, $value, int $expiry = 3600): bool
+    public function doSet(string $key, mixed $value, int $time = 3600): bool
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
 
-        $res = apcu_add($key, $value, $expiry);
+        $res = apcu_add($key, $value, $time);
 
         $this->endCall($start);
 
         return $res;
     }
 
-    /** {@inheritDoc} */
     public function doDelete(string $key): bool
     {
         $start = $this->startCall();
@@ -127,20 +101,17 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    /** {@inheritDoc} */
     public function getCacheHits(): array
     {
         return $this->cacheHits;
     }
 
-    /** {@inheritDoc} */
     public function getExecutionTime(): float
     {
         return $this->time;
     }
 
-    /** {@inheritDoc} */
-    public function doIncrement(string $key, int $n = 1, $initial = null, int $expiry = 0)
+    public function doIncrement(string $key, int $n = 1, mixed $initial = null, int $expiry = 0): bool|int
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
@@ -165,23 +136,16 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    /**
-     * @return float
-     */
     private function startCall(): float
     {
         return microtime(true);
     }
 
-    /**
-     * @param float $start
-     */
     private function endCall(float $start): void
     {
         $this->time += (microtime(true) - $start) * 1000;
     }
 
-    /** {@inheritDoc} */
     public function doTouch(string $key, int $expiry = 10800): bool
     {
         $start = $this->startCall();
@@ -205,7 +169,6 @@ final class Apc implements IKeyStore
         apcu_clear_cache();
     }
 
-    /** {@inheritDoc} */
     public function getAllKeys(): array
     {
         $keys = [];
@@ -215,15 +178,11 @@ final class Apc implements IKeyStore
         return $keys;
     }
 
-    /** {@inheritDoc} */
     public function setClearOnGet(bool $val): void
     {
         $this->clearOnGet = $val;
     }
 
-    /**
-     * @return array
-     */
     public function getStats(): array
     {
         return apcu_cache_info(true) ?? [];

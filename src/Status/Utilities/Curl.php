@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Status\Utilities;
 
+use CurlHandle;
+
 use function curl_close;
 use function curl_error;
 use function curl_exec;
@@ -19,16 +21,8 @@ use function curl_setopt_array;
  */
 final class Curl
 {
-    /**
-     * @var null|resource $curl
-     */
-    private $curl;
+    private CurlHandle $curl;
 
-    /**
-     * Curl constructor.
-     *
-     * @param string|null $url
-     */
     public function __construct(?string $url = null)
     {
         if ($url === null) {
@@ -43,48 +37,26 @@ final class Curl
         curl_close($this->curl);
     }
 
-    /**
-     * @param int $option
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    public function setopt(int $option, $value): bool
+    public function setopt(int $option, mixed $value): bool
     {
         return curl_setopt($this->curl, $option, $value);
     }
 
-    /**
-     * @param int $option
-     *
-     * @return mixed
-     */
-    public function getInfo(int $option)
+    public function getInfo(int $option): mixed
     {
         return curl_getinfo($this->curl, $option);
     }
 
-    /**
-     * @param array $options
-     *
-     * @return bool
-     */
     public function setoptArray(array $options): bool
     {
         return curl_setopt_array($this->curl, $options);
     }
 
-    /**
-     * @return bool|string
-     */
-    public function exec()
+    public function exec(): bool|string
     {
         return curl_exec($this->curl);
     }
 
-    /**
-     * @return string
-     */
     public function error(): string
     {
         return curl_error($this->curl);

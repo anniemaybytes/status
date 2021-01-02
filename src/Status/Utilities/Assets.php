@@ -14,24 +14,13 @@ use Status\Exception\FileNotFoundException;
  */
 final class Assets
 {
-    /**
-     * @var string
-     */
+    /** @var string $publicPath */
     private string $publicPath;
 
-    /**
-     * @var string
-     */
     private string $manifestFile;
-
-    /**
-     * @var array
-     */
     private array $compiledAssets = [];
 
     /**
-     * Assets constructor.
-     *
      * @param array $config
      *
      * @throws FileNotFoundException

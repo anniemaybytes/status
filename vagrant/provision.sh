@@ -34,13 +34,14 @@ apt-get -y -o Dpkg::Options::="--force-confnew" upgrade
 
 echo
 echo Installing packages...
-apt-get -y -o Dpkg::Options::="--force-confold" install php-xdebug php7.4 php7.4-xml php7.4-fpm php7.4-cli php7.4-curl \
-    php7.4-apcu php7.4-json php7.4-mbstring pv git unzip zip htop iotop nodejs nginx
+apt-get -y -o Dpkg::Options::="--force-confold" install php8.0 php8.0-xdebug php8.0-apcu php8.0-xml php8.0-fpm \
+    php8.0-cli php8.0-curl php8.0-mbstring pv git unzip zip htop iotop nodejs nginx
 
 echo
 echo Setting up packages...
-rm -f /etc/php/7.4/cli/conf.d/20-xdebug.ini
-rm -f /etc/nginx/sites-enabled/default
+rm -f /etc/php/8.0/cli/conf.d/20-xdebug.ini
+rm -rf /etc/nginx/{sites,mods}-enabled
+rm -rf /etc/nginx/{sites,mods}-available
 rm -rf /etc/nginx/conf.d
 cd /vagrantroot/configs
 cp -av * /
@@ -55,13 +56,13 @@ echo
 echo Configuring daemons...
 systemctl daemon-reload
 systemctl disable nginx
-systemctl disable php7.4-fpm
+systemctl disable php8.0-fpm
 systemctl disable webpack
 
 echo
 echo Stopping daemons...
 systemctl stop nginx
-systemctl stop php7.4-fpm
+systemctl stop php8.0-fpm
 systemctl stop webpack
 systemctl stop cron
 
@@ -86,5 +87,5 @@ su -s /bin/bash vagrant -c 'mkdir -p /code/logs'
 echo
 echo Starting daemons...
 systemctl start nginx
-systemctl start php7.4-fpm
+systemctl start php8.0-fpm
 systemctl start cron

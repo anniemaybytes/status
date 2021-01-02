@@ -44,23 +44,11 @@ final class View
         return $this->assets->path($filename);
     }
 
-    /**
-     * @param string $name
-     * @param array $data
-     * @param array $queryParams
-     *
-     * @return string
-     */
     public function pathFor(string $name, array $data = [], array $queryParams = []): string
     {
         return $this->router->relativeUrlFor($name, $data, $queryParams);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return string
-     */
     public function baseUrl(Request $request): string
     {
         $uri = $request->getUri();
@@ -72,12 +60,7 @@ final class View
         return "$scheme://$authority";
     }
 
-    /**
-     * @param mixed $key
-     *
-     * @return mixed
-     */
-    public function config($key)
+    public function config(mixed $key): mixed
     {
         return $this->config[$key];
     }

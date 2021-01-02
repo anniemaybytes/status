@@ -69,7 +69,7 @@ array_push(
 if ($di->get('config')['mode'] === 'development') {
     Debugger::getBar()->addPanel(new ProfilerPanel());
     Debugger::getBar()->addPanel(new IncludedFiles());
-    Debugger::getBar()->addPanel(new XDebugHelper('status'));
+    Debugger::getBar()->addPanel(new XDebugHelper('yes'));
 }
 
 // add middleware

@@ -17,13 +17,13 @@ echo
 echo Configuring daemons...
 systemctl daemon-reload
 systemctl disable nginx
-systemctl disable php7.4-fpm
+systemctl disable php8.0-fpm
 systemctl disable webpack
 
 echo
 echo Stopping daemons...
 systemctl stop nginx
-systemctl stop php7.4-fpm
+systemctl stop php8.0-fpm
 systemctl stop webpack
 systemctl stop cron
 
@@ -50,5 +50,5 @@ systemctl start webpack
 echo
 echo Starting daemons...
 systemctl start nginx
-systemctl start php7.4-fpm
+systemctl start php8.0-fpm
 systemctl start cron

@@ -18,34 +18,17 @@ use Tracy\Debugger;
  */
 final class ErrorCtrl extends BaseCtrl
 {
-    /**
-     * @var int
-     */
+    /** @var int obLevel */
     private int $obLevel;
 
-    /**
-     * @var Container
-     */
     private Container $di;
 
-    /**
-     * ErrorCtrl constructor.
-     *
-     * @param Container $di
-     */
     public function __construct(Container $di)
     {
         $this->di = $di;
         $this->obLevel = $di->get('obLevel');
     }
 
-    /**
-     * @param Request $request
-     * @param Response $response
-     * @param Throwable $exception
-     *
-     * @return Response
-     */
     public function handleException(Request $request, Response $response, Throwable $exception): Response
     {
         try {

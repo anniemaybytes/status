@@ -13,25 +13,14 @@ use Exception;
  */
 final class FileNotFoundException extends Exception
 {
-    /**
-     * @var string
-     */
     protected string $what;
 
-    /**
-     * FileNotFoundException constructor.
-     *
-     * @param string $what
-     */
     public function __construct(string $what)
     {
         $this->what = $what;
         parent::__construct("File {$what} not found");
     }
 
-    /**
-     * @return string
-     */
     public function getWhat(): string
     {
         return $this->what;

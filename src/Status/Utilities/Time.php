@@ -26,7 +26,7 @@ final class Time
      *
      * @return DateTime
      */
-    public static function fromEpoch($str): DateTime
+    public static function fromEpoch(mixed $str): DateTime
     {
         return DateTime::createFromFormat('U', (string)(int)$str);
     }

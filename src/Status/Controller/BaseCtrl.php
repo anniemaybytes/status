@@ -31,7 +31,7 @@ abstract class BaseCtrl
      * @Inject
      * @var View
      */
-    protected View $view_functions;
+    protected View $viewFunctions;
 
     /**
      * The configuration array

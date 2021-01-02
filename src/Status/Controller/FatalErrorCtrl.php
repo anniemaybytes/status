@@ -17,16 +17,9 @@ use Tracy\Debugger;
  */
 final class FatalErrorCtrl
 {
-    /**
-     * @var int
-     */
+    /** @var int obLevel */
     private int $obLevel;
 
-    /**
-     * FatalErrorCtrl constructor.
-     *
-     * @param Container $di
-     */
     public function __construct(Container $di)
     {
         $this->obLevel = $di->get('obLevel');

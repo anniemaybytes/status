@@ -15,32 +15,12 @@ use Twig\Profiler\Profile;
  */
 final class TwigPanel implements IBarPanel
 {
-    /**
-     * @var Profile
-     */
     private Profile $data;
-
-    /**
-     * @var HtmlDumper
-     */
     private HtmlDumper $dumper;
 
-    /**
-     * @var string
-     */
     private string $icon;
-
-    /**
-     * @var string
-     */
     private string $ver;
 
-    /**
-     * TwigPanel constructor.
-     *
-     * @param Profile $data
-     * @param string $ver
-     */
     public function __construct(Profile $data, string $ver)
     {
         $this->data = $data;
@@ -48,9 +28,6 @@ final class TwigPanel implements IBarPanel
         $this->dumper = new HtmlDumper();
     }
 
-    /**
-     * @return string
-     */
     public function getTab(): string
     {
         $this->icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 532 178" style="width: 35px"><path ' .
@@ -106,9 +83,6 @@ final class TwigPanel implements IBarPanel
         </span>';
     }
 
-    /**
-     * @return string
-     */
     public function getPanel(): string
     {
         return '<h1>' . $this->icon . ' Twig ' . $this->ver . '</h1>

@@ -16,34 +16,13 @@ use Status\Utilities\Curl;
  */
 final class IndexCtrl extends BaseCtrl
 {
-    /**
-     * @var int $siteTimeout
-     */
     private int $siteTimeout = 3;
-
-    /**
-     * @var int $trackerTimeout
-     */
     private int $trackerTimeout = 3;
-
-    /**
-     * @var int $ircTimeout
-     */
     private int $ircTimeout = 2;
-
-    /**
-     * @var int $meiTimeout
-     */
     private int $meiTimeout = 2;
 
-    /**
-     * @var int $cacheFor
-     */
     private int $cacheFor = 15;
 
-    /**
-     * @return int
-     */
     private function checkSite(): int
     {
         $curl = new Curl('https://animebytes.tv');
@@ -93,9 +72,6 @@ final class IndexCtrl extends BaseCtrl
         return 0;
     }
 
-    /**
-     * @return int
-     */
     private function checkMei(): int
     {
         $curl = new Curl('https://mei.animebytes.tv/images/error.jpg');
@@ -132,12 +108,7 @@ final class IndexCtrl extends BaseCtrl
         return 0;
     }
 
-    /**
-     * @param string $ip
-     *
-     * @return int
-     * @noinspection CurlSslServerSpoofingInspection
-     */
+    /** @noinspection CurlSslServerSpoofingInspection */
     private function checkTrackerSingular(string $ip): int
     {
         $curl = new Curl("https://$ip/check");
@@ -158,15 +129,12 @@ final class IndexCtrl extends BaseCtrl
         unset($curl);
 
         if ($httpCode >= 200 && $httpCode < 300 && is_string($content)) {
-            $val = false === strpos($content, 'unavailable');
+            $val = !str_contains($content, 'unavailable');
             return (int)$val;
         }
         return 0;
     }
 
-    /**
-     * @return array
-     */
     private function checkTracker(): array
     {
         $nsRecords = $this->config['tracker.ns'];
