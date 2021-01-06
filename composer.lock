@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aec3df2078921c736818fabbfc4c1689",
+    "content-hash": "8b36d07e60954d47f70e1b1e2676e281",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1499,16 +1499,16 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.8.0",
+            "version": "v2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "24af254df194635b4a80980ad885da7e8f0b90f0"
+                "reference": "37c238d08db44f2cd6f21f7d97e5cea11d631fae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/24af254df194635b4a80980ad885da7e8f0b90f0",
-                "reference": "24af254df194635b4a80980ad885da7e8f0b90f0",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/37c238d08db44f2cd6f21f7d97e5cea11d631fae",
+                "reference": "37c238d08db44f2cd6f21f7d97e5cea11d631fae",
                 "shasum": ""
             },
             "require": {
@@ -1567,22 +1567,22 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/tracy/issues",
-                "source": "https://github.com/nette/tracy/tree/v2.8.0"
+                "source": "https://github.com/nette/tracy/tree/v2.8.1"
             },
-            "time": "2020-12-16T23:28:40+00:00"
+            "time": "2021-01-01T22:21:23+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v3.1.1",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "b02fa41f3783a2616eccef7b92fbc2343ffed737"
+                "reference": "f795ca686d38530045859b0350b5352f7d63447d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b02fa41f3783a2616eccef7b92fbc2343ffed737",
-                "reference": "b02fa41f3783a2616eccef7b92fbc2343ffed737",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/f795ca686d38530045859b0350b5352f7d63447d",
+                "reference": "f795ca686d38530045859b0350b5352f7d63447d",
                 "shasum": ""
             },
             "require": {
@@ -1597,7 +1597,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -1633,7 +1633,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.1.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.2.1"
             },
             "funding": [
                 {
@@ -1645,7 +1645,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-27T19:28:23+00:00"
+            "time": "2021-01-05T15:40:36+00:00"
         }
     ],
     "packages-dev": [
