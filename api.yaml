@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+    title: Status
+    description: Simple status page
+    version: 1.0.0
+servers:
+    -   url: 'https://status.local:6443'
+        description: Vagrant
+paths:
+    /json:
+        get:
+            tags:
+                - status
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    site_status:
+                                        type: integer
+                                        example: 1
+                                        description: Status of site (1 - online, 0 - offline, 2 - maintenance)
+                                    tracker_status:
+                                        type: integer
+                                        example: 1
+                                        description: Status of tracker (1 - online, 0 - offline, 2 - partial outage)
+                                    tracker_details:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                status:
+                                                    type: integer
+                                                    example: 1
+                                                    description: Status of this tracker node (1 - online, 0 - offline)
+                                                ip:
+                                                    type: string
+                                                    example: "rin"
+                                                    description: name of this tracker node
+                                    irc_status:
+                                        type: integer
+                                        example: 1
+                                        description: Status of IRC (1 - online, 0 - offline)
+                                    mei_status:
+                                        type: integer
+                                        example: 1
+                                        description: Status of Mei (1 - online, 0 - offline)
+components:
+    schemas:
+        HttpResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                error:
+                    type: string
+            required:
+                - success
+            example:
+                success: false
+                error: Message describing error cause

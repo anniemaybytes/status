@@ -17,7 +17,6 @@ use Tracy\Debugger;
  */
 final class FatalErrorCtrl
 {
-    /** @var int obLevel */
     private int $obLevel;
 
     public function __construct(Container $di)

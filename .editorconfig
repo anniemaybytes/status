@@ -21,7 +21,7 @@ tab_width = 2
 indent_size = 2
 tab_width = 2
 
-[*.css]
+[{*.css, *.less}]
 indent_size = 2
 tab_width = 2
 

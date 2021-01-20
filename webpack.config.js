@@ -29,7 +29,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.(less|css)$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -48,6 +48,14 @@ module.exports = {
             loader: 'postcss-loader',
             options: {
               sourceMap: true,
+            },
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                strictMath: true,
+              },
             },
           },
         ],

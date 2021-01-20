@@ -18,7 +18,6 @@ use Tracy\Debugger;
  */
 final class ErrorCtrl extends BaseCtrl
 {
-    /** @var int obLevel */
     private int $obLevel;
 
     private Container $di;

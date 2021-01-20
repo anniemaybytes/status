@@ -30,6 +30,7 @@ final class Curl
         } else {
             $this->curl = curl_init($url);
         }
+        curl_setopt_array($this->curl, [CURLOPT_RETURNTRANSFER => true]);
     }
 
     public function __destruct()

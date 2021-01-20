@@ -17,19 +17,16 @@ final class View
 {
     /**
      * @Inject
-     * @var Assets
      */
     private Assets $assets;
 
     /**
      * @Inject("config")
-     * @var array
      */
     private array $config;
 
     /**
      * @Inject
-     * @var RouteParser
      */
     private RouteParser $router;
 

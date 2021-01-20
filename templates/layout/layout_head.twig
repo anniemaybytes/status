@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{% block full_title %}{{ config("site.site_name") }}{% endblock %}</title>
-      {% block meta %}
-          {% include "@layout/meta.twig" %}
-      {% endblock %}
+<head>
+    <title>{% block full_title %}{{ config("app.site_name") }}{% endblock %}</title>
+    {% block meta %}
+        {% include "@layout/meta.twig" %}
+    {% endblock %}
 
-      {% block styles %}
-          {% include "@layout/styles.twig" %}
-      {% endblock %}
+    {% block styles %}
+        {% include "@layout/styles.twig" %}
+    {% endblock %}
 
-      {% block scripts %}
-          {% include "@layout/scripts.twig" %}
+    {% block scripts %}
+        {% include "@layout/scripts.twig" %}
       {% endblock %}
     </head>
     <body{% if document is defined %} id="{{ document }}"{% endif %}>

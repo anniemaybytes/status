@@ -42,7 +42,8 @@
     "ext-apcu": "*",
     "ext-openssl": "*",
     "ext-dom": "*",
-    "ext-zend-opcache": "*"
+    "ext-zend-opcache": "*",
+    "j7mbo/twitter-api-php": "^1.0"
   },
   "autoload": {
     "psr-4": {

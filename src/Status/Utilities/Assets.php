@@ -14,7 +14,6 @@ use Status\Exception\FileNotFoundException;
  */
 final class Assets
 {
-    /** @var string $publicPath */
     private string $publicPath;
 
     private string $manifestFile;

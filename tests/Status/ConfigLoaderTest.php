@@ -41,14 +41,16 @@ class ConfigLoaderTest extends PHPUnit\Framework\TestCase
         vfs\vfsStream::create(
             [
                 'config' => [
-                    'private.ini' => '[site]
-test=true',
+                    'private.ini' => '
+[app]
+test = true
+',
                 ]
             ]
         );
         $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
-        self::assertArrayHasKey('site.test', $c);
-        self::assertEquals(true, $c['site.test']);
+        self::assertArrayHasKey('app.test', $c);
+        self::assertEquals(true, $c['app.test']);
     }
 
     /**
@@ -60,14 +62,25 @@ test=true',
         vfs\vfsStream::create(
             [
                 'config' => [
-                    'private.ini' => '[static]
-location = /static/',
+                    'private.ini' => '
+mode = development
+logs_dir = /code/logs
+
+[app]
+site_name = AnimeBytes Status
+
+[static]
+location = /static/
+',
                 ]
             ]
         );
         $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
         self::assertEquals(
             [
+                'mode' => 'development',
+                'logs_dir' => '/code/logs',
+                'app.site_name' => 'AnimeBytes Status',
                 'static.location' => '/static/'
             ],
             $c
@@ -83,31 +96,21 @@ location = /static/',
         vfs\vfsStream::create(
             [
                 'config' => [
-                    'private.ini' => 'mode = development
-logs_dir = /code/logs
-
-[site]
-site_name = AnimeBytes Status
-
-[templates]
-cache_path = /tmp/twig-cache
-
+                    'private.ini' => '
 [tracker]
-ns[cloudflare] = 1.1.1.1
-ns[google] = 8.8.8.8',
+domain = tracker.animebytes.local:34000
+ns[localhost] = 10.0.0.1
+',
                 ]
             ]
         );
         $c = ConfigLoader::load(vfs\vfsStream::url('configLoaderTest/config/'));
         self::assertEquals(
             [
-                'mode' => 'development',
-                'logs_dir' => '/code/logs',
-                'site.site_name' => 'AnimeBytes Status',
-                'templates.cache_path' => '/tmp/twig-cache',
+
+                'tracker.domain' => 'tracker.animebytes.local:34000',
                 'tracker.ns' => [
-                    'cloudflare' => '1.1.1.1',
-                    'google' => '8.8.8.8',
+                    'localhost' => '10.0.0.1',
                 ],
             ],
             $c

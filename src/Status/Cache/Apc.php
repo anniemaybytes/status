@@ -55,12 +55,9 @@ final class Apc implements IKeyStore
 
         if ($this->exists($key)) {
             $res = apcu_fetch($key);
+            $this->cacheHits[$key] = $res;
         } else {
             $res = false;
-        }
-
-        if ($res) {
-            $this->cacheHits[$key] = $res;
         }
 
         $this->endCall($start);
