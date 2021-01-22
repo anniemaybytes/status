@@ -49,7 +49,7 @@ Debugger::$reservedMemorySize = 5000000; // 5 megabytes because we increase dept
 // enable tracy
 Debugger::enable(
     $di->get('config')['mode'] === 'development' ? Debugger::DEVELOPMENT : Debugger::PRODUCTION,
-    $di->get('config')['logs_dir']
+    $di->get('config')['logs_dir'] ?? (BASE_ROOT . '/logs')
 );
 if ($di->get('config')['mode'] !== 'development') {
     // tracy resets error_reporting to E_ALL when it's enabled, silence it on production please

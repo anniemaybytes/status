@@ -26,7 +26,7 @@ final class Assets
      */
     public function __construct(array $config)
     {
-        $this->publicPath = $config['static.location'];
+        $this->publicPath = $config['static.location'] ?? '/static/';
         $this->manifestFile = BASE_ROOT . '/public/static/manifest.json';
         $this->loadCompiledAssets();
     }

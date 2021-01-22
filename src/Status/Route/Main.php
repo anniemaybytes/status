@@ -20,7 +20,9 @@ final class Main extends Base
 
         $app->group('', function (RouteCollectorProxy $group) {
             $group->get('/', IndexCtrl::class . ':index')->setName('index');
-            $group->get('/json', IndexCtrl::class . ':indexJson')->setName('index:json');
+            $group->group('/api', function (RouteCollectorProxy $group) {
+                $group->get('/status', IndexCtrl::class . ':json')->setName('api:status');
+            });
         });
     }
     /** @formatter:on */

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block full_title %}{{ config("app.site_name") }}{% endblock %}</title>
+    <title>{% block full_title %}{{ config("app.site_name")|default('AnimeBytes') }} Status{% endblock %}</title>
     {% block meta %}
         {% include "@layout/meta.twig" %}
     {% endblock %}

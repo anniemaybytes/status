@@ -59,6 +59,6 @@ final class View
 
     public function config(mixed $key): mixed
     {
-        return $this->config[$key];
+        return $this->config[$key] ?? null;
     }
 }

@@ -2,12 +2,12 @@ openapi: 3.0.3
 info:
     title: Status
     description: Simple status page
-    version: 1.0.0
+    version: 2.0.0
 servers:
-    -   url: 'https://status.local:6443'
+    -   url: 'https://status.animebytes.local:6443'
         description: Vagrant
 paths:
-    /json:
+    /api/status:
         get:
             tags:
                 - status
@@ -19,35 +19,54 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    site_status:
-                                        type: integer
-                                        example: 1
-                                        description: Status of site (1 - online, 0 - offline, 2 - maintenance)
-                                    tracker_status:
-                                        type: integer
-                                        example: 1
-                                        description: Status of tracker (1 - online, 0 - offline, 2 - partial outage)
-                                    tracker_details:
-                                        type: array
-                                        items:
-                                            type: object
-                                            properties:
-                                                status:
-                                                    type: integer
-                                                    example: 1
-                                                    description: Status of this tracker node (1 - online, 0 - offline)
-                                                ip:
-                                                    type: string
-                                                    example: "rin"
-                                                    description: name of this tracker node
-                                    irc_status:
-                                        type: integer
-                                        example: 1
-                                        description: Status of IRC (1 - online, 0 - offline)
-                                    mei_status:
-                                        type: integer
-                                        example: 1
-                                        description: Status of Mei (1 - online, 0 - offline)
+                                    success:
+                                        type: boolean
+                                        description: Whether action was succesful
+                                        example: true
+                                    status:
+                                        type: object
+                                        properties:
+                                            site:
+                                                type: object
+                                                properties:
+                                                    status:
+                                                        type: integer
+                                                        example: 1
+                                                        description: Status of site (1 - online, 0 - offline, 2 - maintenance)
+                                            tracker:
+                                                type: object
+                                                properties:
+                                                    status:
+                                                        type: integer
+                                                        example: 1
+                                                        description: Status of tracker (1 - online, 0 - offline, 2 - partial outage)
+                                                    details:
+                                                        type: array
+                                                        items:
+                                                            type: object
+                                                            properties:
+                                                                status:
+                                                                    type: integer
+                                                                    example: 1
+                                                                    description: Status of this tracker node (1 - online, 0 - offline)
+                                                                ip:
+                                                                    type: string
+                                                                    example: "rin"
+                                                                    description: Name of this tracker node
+                                            irc:
+                                                type: object
+                                                properties:
+                                                    status:
+                                                        type: integer
+                                                        example: 1
+                                                        description: Status of IRC (1 - online, 0 - offline)
+                                            mei:
+                                                type: object
+                                                properties:
+                                                    status:
+                                                        type: integer
+                                                        example: 1
+                                                        description: Status of Mei (1 - online, 0 - offline)
 components:
     schemas:
         HttpResponse:

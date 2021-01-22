@@ -23,7 +23,7 @@ final class IndexCtrl extends BaseCtrl
 {
     private function checkTracker(): array
     {
-        $nsRecords = $this->config['tracker.ns'];
+        $nsRecords = $this->config['tracker.ns'] ?? ['localhost' => '10.0.0.1'];
 
         $working = false;
         $error = false;
@@ -31,7 +31,7 @@ final class IndexCtrl extends BaseCtrl
         foreach ($nsRecords as $nsName => $nsRecord) {
             $status = TrackerSingular::get(
                 $this->cache,
-                ['ns' => $nsRecord, 'domain' => $this->config['tracker.domain']]
+                ['ns' => $nsRecord, 'domain' => $this->config['tracker.domain'] ?? 'tracker.animebytes.local']
             );
             if ($status) {
                 $working = true;
@@ -57,12 +57,19 @@ final class IndexCtrl extends BaseCtrl
     private function getStatus(): array
     {
         $tr = $this->checkTracker();
-        $data['tracker_status'] = $tr['status'];
-        $data['tracker_details'] = $tr['details'];
-
-        $data['site_status'] = Site::get($this->cache, $this->config['site.domain']);
-        $data['irc_status'] = Irc::get($this->cache, $this->config['irc.domain']);
-        $data['mei_status'] = Mei::get($this->cache, $this->config['mei.domain']);
+        $data['tracker'] = [
+            'status' => $tr['status'],
+            'details' => $tr['details']
+        ];
+        $data['site'] = [
+            'status' => Site::get($this->cache, $this->config['site.domain'] ?? 'animebytes.local:9443')
+        ];
+        $data['irc'] = [
+            'status' => Irc::get($this->cache, $this->config['irc.domain'] ?? 'irc.animebytes.local')
+        ];
+        $data['mei'] = [
+            'status' => Mei::get($this->cache, $this->config['mei.domain'] ?? 'mei.animebytes.local:8443')
+        ];
 
         return $data;
     }
@@ -72,7 +79,7 @@ final class IndexCtrl extends BaseCtrl
         $data = $this->getStatus();
         $data['server_request'] = $request;
 
-        if ($this->config['twitter.enabled']) {
+        if ($this->config['twitter.enabled'] ?? false) {
             try {
                 $feeds = Tweets::get($this->cache, $this->config);
                 if (count($feeds)) {
@@ -86,8 +93,8 @@ final class IndexCtrl extends BaseCtrl
         return $this->view->render($response, 'index.twig', $data);
     }
 
-    public function indexJson(Request $request, Response $response, array $args): Response
+    public function json(Request $request, Response $response, array $args): Response
     {
-        return $response->withJson($this->getStatus(), 200, JSON_NUMERIC_CHECK);
+        return $response->withJson(['success' => true, 'status' => $this->getStatus()], 200, JSON_NUMERIC_CHECK);
     }
 }

@@ -23,7 +23,7 @@ final class Irc extends Base
 
     protected static function fetchValue(mixed $param): int
     {
-        $nsRecord = dns_get_record($param, DNS_A)[0]['ip'];
+        $nsRecord = dns_get_record($param, DNS_A)[0]['ip'] ?? null;
         if (!is_string($nsRecord)) {
             return 0;
         }

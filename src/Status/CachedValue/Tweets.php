@@ -36,14 +36,14 @@ final class Tweets extends Base
     protected static function fetchValue(mixed $param): array
     {
         $settings = [
-            'oauth_access_token' => $param['twitter.oauth_token'],
-            'oauth_access_token_secret' => $param['twitter.oauth_secret'],
-            'consumer_key' => $param['twitter.consumer_key'],
-            'consumer_secret' => $param['twitter.consumer_secret']
+            'oauth_access_token' => $param['twitter.oauth_token'] ?? '',
+            'oauth_access_token_secret' => $param['twitter.oauth_secret'] ?? '',
+            'consumer_key' => $param['twitter.consumer_key'] ?? '',
+            'consumer_secret' => $param['twitter.consumer_secret'] ?? ''
         ];
         $options = [
-            'user_id' => $param['twitter.uid'],
-            'count' => $param['twitter.count'],
+            'user_id' => $param['twitter.uid'] ?? 783214,
+            'count' => $param['twitter.count'] ?? 10,
             'tweet_mode' => 'extended',
             'trim_user' => true,
             'exclude_replies' => true,

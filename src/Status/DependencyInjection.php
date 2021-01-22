@@ -46,10 +46,9 @@ final class DependencyInjection
                 IKeyStore::class => DI\autowire(Apc::class)->constructorParameter('keyPrefix', ''),
                 Twig::class => function (Container $di) {
                     $dir = BASE_ROOT . '/templates';
-
                     $dirs = [$dir];
-                    $dh = opendir($dir);
 
+                    $dh = opendir($dir);
                     if (!$dh) {
                         throw new RuntimeException('Unable to open templates path');
                     }
@@ -62,7 +61,7 @@ final class DependencyInjection
                     }
 
                     $config = [
-                        'cache' => $di->get('config')['templates.cache_path'],
+                        'cache' => $di->get('config')['templates.cache_path'] ?? '/tmp/twig-cache',
                         'strict_variables' => true,
                     ];
 

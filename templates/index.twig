@@ -6,36 +6,39 @@
         <li>
             <h2>
                 <span>site </span>
-                <span class="status {% if site_status == 1 %}normal{% elseif site_status == 2 %}issues{% else %}down{% endif %}">{% if site_status == 1 %}normal{% elseif site_status == 2 %}maintenance{% else %}down{% endif %}</span>
+                <span
+                    class="status {% if site.status == 1 %}normal{% elseif site.status == 2 %}issues{% else %}down{% endif %}">{% if site.status == 1 %}normal{% elseif site.status == 2 %}maintenance{% else %}down{% endif %}</span>
             </h2>
         </li>
         <li>
             <h2>
                 <span>tracker<a href="#" class="details" data-jq-dropdown="#tracker-details">↓</a> </span>
-                <span class="status {% if tracker_status == 1 %}normal{% elseif tracker_status == 2 %}issues{% else %}down{% endif %}">{% if tracker_status == 1 %}normal{% elseif tracker_status == 2 %}issues{% else %}down{% endif %}</span>
+                <span
+                    class="status {% if tracker.status == 1 %}normal{% elseif tracker.status == 2 %}issues{% else %}down{% endif %}">{% if tracker.status == 1 %}normal{% elseif tracker.status == 2 %}issues{% else %}down{% endif %}</span>
             </h2>
         </li>
         <li>
             <h2>
                 <span>irc </span>
                 <span
-                    class="status {% if irc_status == 1 %}normal{% elseif irc_status == 2 %}issues{% else %}down{% endif %}">{% if irc_status == 1 %}normal{% elseif irc_status == 2 %}issues{% else %}down{% endif %}</span>
+                    class="status {% if irc.status == 1 %}normal{% elseif irc.status == 2 %}issues{% else %}down{% endif %}">{% if irc.status == 1 %}normal{% elseif irc.status == 2 %}issues{% else %}down{% endif %}</span>
             </h2>
         </li>
         <li>
             <h2>
                 <span>mei </span>
                 <span
-                    class="status {% if mei_status == 1 %}normal{% elseif mei_status == 2 %}issues{% else %}down{% endif %}">{% if mei_status == 1 %}normal{% elseif mei_status == 2 %}issues{% else %}down{% endif %}</span>
+                    class="status {% if mei.status == 1 %}normal{% elseif mei.status == 2 %}issues{% else %}down{% endif %}">{% if mei.status == 1 %}normal{% elseif mei.status == 2 %}issues{% else %}down{% endif %}</span>
             </h2>
         </li>
     </ul>
-    {% if config('twitter.enabled') and twitter_feed is defined %}
+    {% if config('twitter.enabled')|default(false) and twitter_feed is defined %}
         <hr>
         <div id="feed">
             <div class="header">
-                <h2>Feeds</h2> by <a href="https://twitter.com/{{ config('twitter.name') }}" target="_blank"
-                                     rel="noopener noreferrer">@{{ config('twitter.name') }}</a>
+                <h2>Feeds</h2> by <a href="https://twitter.com/{{ config('twitter.name')|default('Twitter') }}"
+                                     target="_blank"
+                                     rel="noopener noreferrer">@{{ config('twitter.name')|default('Twitter') }}</a>
             </div>
             <div class="content">
                 <table>
@@ -53,7 +56,7 @@
     {% endif %}
     <div id="tracker-details" class="jq-dropdown jq-dropdown-tip">
         <ul class="jq-dropdown-menu">
-            {% for server in tracker_details %}
+            {% for server in tracker.details %}
                 <li>{{ server.ip }} - {% if server.status == 1 %}normal{% else %}down{% endif %}</li>
             {% endfor %}
         </ul>
