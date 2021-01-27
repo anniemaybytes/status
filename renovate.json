@@ -11,7 +11,7 @@
     ]
   },
   "stabilityDays": 1,
-  "semanticCommits": false,
+  "semanticCommits": "disabled",
   "ignoreDeps": [
     "roave/security-advisories",
     "thecodingmachine/php"
@@ -31,6 +31,7 @@
     {
       "depTypeList": [
         "require-dev",
+        "dependencies",
         "devDependencies"
       ],
       "extends": [
