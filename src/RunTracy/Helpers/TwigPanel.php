@@ -11,6 +11,7 @@ use Twig\Profiler\Profile;
 /**
  * Class TwigPanel
  *
+ * @author 1f7.wizard@gmail.com
  * @package RunTracy\Helpers
  */
 final class TwigPanel implements IBarPanel
