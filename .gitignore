@@ -1,32 +1,38 @@
 # dev stuff (IDE configs etc)
-.idea/
-composer.phar
 nbproject/*
+gen/*
+.idea/*
 .vagrant/*
 .buildpath/*
 .project/*
 .settings/*
-desktop.ini
+.buildpath
+.project
 .phplint-cache
 .phpcs-cache
-gen/
+desktop.ini
+composer.phar
 
 # dynamic vendor stuff
-/vendor/*
+vendor/*
 node_modules/*
 
 # general extensions of files we dont want
+*.sql.gz
+*.sql
 *.log
 
-# project stuff
-config/private.ini
-routes.cache.php
-CompiledContainer.php
-logs/*
-public/static/*
+# project dirs
+/logs/*
+/public/static/*
+
+# project files
+/config/private.ini
+
+# dynamic generated stuff
+/routes.cache.php
+/CompiledContainer.php
 
 # these files might exist on production and we dont really want them
 /*.sh
 scripts/
-.htaccess
-.well-known/

@@ -11,6 +11,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo Configuring system...
 DPKG_MAINTSCRIPT_NAME=postinst DPKG_MAINTSCRIPT_PACKAGE=grub-pc upgrade-from-grub-legacy # bug: system assumes /dev/vda but that is not necessarily valid anymore
 apt-mark hold linux-image-amd64 # bug: vboxsf component are not updated
+apt-mark hold grub-pc # bug: attempt to run grub-pc updater in noninteractive mode will fail
 
 echo
 echo Installing required base components...
