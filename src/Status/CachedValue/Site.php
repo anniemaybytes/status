@@ -43,23 +43,30 @@ final class Site extends Base
         $httpCode = $curl->getInfo(CURLINFO_HTTP_CODE);
         unset($curl);
 
-        if (is_string($content)) {
-            $doc = new DOMDocument();
-            if (!@$doc->loadHTML($content)) { // unable to parse output, assume site is down
+        if ($httpCode >= 200 && $httpCode < 300) {
+            if (is_string($content)) {
+                $doc = new DOMDocument();
+                if (!@$doc->loadHTML($content)) {
+                    // unable to parse html output, assume site is down
+                    return 0;
+                }
+
+                $nodes = $doc->getElementsByTagName('title');
+                $title = $nodes->item(0)?->nodeValue;
+                if ($title === 'Down for Maintenance') {
+                    // we're in maintenance mode
+                    return 2;
+                }
+            } else {
+                // there is no content, site is down
                 return 0;
             }
 
-            $nodes = $doc->getElementsByTagName('title');
-            $title = $nodes->item(0)->nodeValue;
-            if ($title === 'Down for Maintenance') {
-                return 2;
-            }
-        }
-
-        if ($httpCode >= 200 && $httpCode < 300) {
+            // looks like everything is fine, we're up
             return 1;
         }
 
+        // non-success http status, site is down
         return 0;
     }
 }

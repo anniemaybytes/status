@@ -5,7 +5,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
-// https://github.com/webpack-contrib/copy-webpack-plugin/issues/349
 // https://github.com/webpack/loader-utils/issues/121
 const hashDigestLength = 10;
 
@@ -93,7 +92,7 @@ module.exports = {
       filename: '[name].[contenthash].css',
     }),
     new CopyPlugin({
-      patterns: [{ from: 'common', to: `common/[name].[contenthash:${hashDigestLength}].[ext]` }],
+      patterns: [{ from: 'common', to: `common/[name].[contenthash][ext]` }],
     }),
   ],
   optimization: {
