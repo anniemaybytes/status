@@ -18,7 +18,7 @@ final class FileNotFoundException extends Exception
     public function __construct(string $what)
     {
         $this->what = $what;
-        parent::__construct("File {$what} not found");
+        parent::__construct("File $what not found");
     }
 
     public function getWhat(): string

@@ -1,0 +1,30 @@
+{
+  "block-all-mixed-content": true,
+  "upgrade-insecure-requests": true,
+  "report-only": false,
+  "base-uri": {
+    "self": true
+  },
+  "default-src": [],
+  "frame-src": [],
+  "worker-src": [],
+  "connect-src": [],
+  "font-src": {
+    "self": true
+  },
+  "form-action": [],
+  "img-src": {
+    "self": true
+  },
+  "media-src": [],
+  "object-src": [],
+  "plugin-types": [],
+  "script-src": {
+    "self": true,
+    "report-sample": true
+  },
+  "style-src": {
+    "self": true
+  },
+  "frame-ancestors": []
+}

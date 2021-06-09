@@ -82,11 +82,11 @@ class AdvancedProfiler extends SimpleProfiler
     /**
      * @param string|null $labelOrFormat
      * @param mixed $args
-     * @param mixed $opt
+     * @param mixed|null $opt
      *
      * @return bool|Profile
      */
-    public static function finish(?string $labelOrFormat = null, mixed $args = null, $opt = null): Profile|bool
+    public static function finish(?string $labelOrFormat = null, mixed $args = null, mixed $opt = null): Profile|bool
     {
         if (self::$enabled) {
             if ($labelOrFormat === null) {

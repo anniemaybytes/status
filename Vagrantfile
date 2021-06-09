@@ -6,13 +6,14 @@ ENV["LC_ALL"] = "en_US.UTF-8"
 Vagrant.configure(2) do |config|
   # box
   config.vm.box = "debian/contrib-buster64"
-  config.vm.box_version = ">= 10.7.0"
+  config.vm.box_version = "10.7.0"
   
   # custom
   config.vm.graceful_halt_timeout = 30
 
   # network
-  config.vm.network "forwarded_port", guest: 443, host_ip: "127.0.0.1", host: 6443
+  config.vm.network "forwarded_port", id: "ssh", guest: 22, host_ip: "127.0.0.1", host: 6022
+  config.vm.network "forwarded_port", id: "nginx", guest: 443, host_ip: "127.0.0.1", host: 6443
 
   # synced folders
   config.vm.synced_folder "./", "/code",

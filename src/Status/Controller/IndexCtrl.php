@@ -25,8 +25,7 @@ final class IndexCtrl extends BaseCtrl
     {
         $nsRecords = $this->config['tracker.ns'] ?? ['localhost' => '10.0.0.1'];
 
-        $working = false;
-        $error = false;
+        $working = 0;
         $details = [];
         foreach ($nsRecords as $nsName => $nsRecord) {
             $status = TrackerSingular::get(
@@ -34,24 +33,19 @@ final class IndexCtrl extends BaseCtrl
                 ['ns' => $nsRecord, 'domain' => $this->config['tracker.domain'] ?? 'tracker.animebytes.local']
             );
             if ($status) {
-                $working = true;
-            } else {
-                $error = true;
+                $working++;
             }
             $details[] = ['status' => $status, 'ip' => $nsName];
         }
 
-        if ($working && $error) {
-            return ['status' => 2, 'details' => $details];
+        if ($working === count($nsRecords)) {
+            return ['status' => 1, 'details' => $details]; // all good
         }
-        if ($working && !$error) {
-            return ['status' => 1, 'details' => $details];
-        }
-        if (!$working && $error) {
-            return ['status' => 0, 'details' => $details];
+        if ($working > 0 && $working < count($nsRecords)) {
+            return ['status' => 2, 'details' => $details]; // issues
         }
 
-        return ['status' => 0, 'details' => $details];
+        return ['status' => 0, 'details' => $details]; // not working
     }
 
     private function getStatus(): array

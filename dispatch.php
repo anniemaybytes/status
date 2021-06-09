@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-define('BASE_ROOT', __DIR__);
-define('ERROR_REPORTING', E_ALL & ~(E_STRICT | E_NOTICE | E_DEPRECATED));
+const BASE_ROOT = __DIR__;
+const ERROR_REPORTING = E_ALL & ~(E_STRICT | E_NOTICE | E_DEPRECATED);
 require_once BASE_ROOT . '/vendor/autoload.php'; // set up autoloading
 
 use DI\Container;
@@ -19,6 +19,7 @@ use Slim\Middleware\OutputBufferingMiddleware;
 use Slim\Psr7\Factory\StreamFactory;
 use Status\Controller\ErrorCtrl;
 use Status\Dispatcher;
+use Status\Middleware;
 use Tracy\Debugger;
 
 date_default_timezone_set('UTC');
@@ -85,9 +86,12 @@ $app->addBodyParsingMiddleware(); // parses xml and json body
 $app->add(new OutputBufferingMiddleware(new StreamFactory(), OutputBufferingMiddleware::APPEND));
 
 // 'after' middleware (calls next middleware with modified body)
+$app->add(new Middleware\SecurityHeaders($di));
+
+// adds content-length but only on production, this should be last middleware to be executed
 if ($di->get('config')['mode'] !== 'development') {
     $contentLengthMiddleware = new ContentLengthMiddleware();
-    $app->add($contentLengthMiddleware); // adds content-length but only on production
+    $app->add($contentLengthMiddleware);
 }
 $app->addRoutingMiddleware();
 

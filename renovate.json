@@ -1,6 +1,7 @@
 {
   "extends": [
-    "config:base"
+    "config:base",
+    "docker:disableMajor"
   ],
   "labels": [
     "kind/deps"
@@ -29,7 +30,7 @@
   },
   "packageRules": [
     {
-      "depTypeList": [
+      "matchDepTypes": [
         "require-dev",
         "dependencies",
         "devDependencies"
