@@ -42,11 +42,6 @@ final class CacheTracyBarPanel implements IBarPanel
         $this->provider = $name;
     }
 
-    /**
-     * Renders HTML code for custom tab.
-     *
-     * @return string
-     */
     public function getTab(): string
     {
         if (!$this->hits) {
@@ -71,11 +66,6 @@ final class CacheTracyBarPanel implements IBarPanel
         return $html . ' / ' . number_format($this->hits['time'], 2, '.', ' ') . ' ms';
     }
 
-    /**
-     * Renders HTML code for custom panel.
-     *
-     * @return string
-     */
     public function getPanel(): string
     {
         if (!$this->hits) {

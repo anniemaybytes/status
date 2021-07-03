@@ -12,6 +12,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RunTracy\Helpers\Profiler\Profiler;
+use Tracy\Debugger;
 
 /**
  * Class ContentSecurityPolicy
@@ -33,13 +34,6 @@ final class SecurityHeaders implements MiddlewareInterface
         $this->di = $di;
     }
 
-    /**
-     * @param Request $request
-     * @param RequestHandlerInterface $handler
-     *
-     * @return Response
-     * @throws Exception
-     */
     public function process(Request $request, RequestHandlerInterface $handler): Response
     {
         $response = $handler->handle($request);
@@ -51,19 +45,11 @@ final class SecurityHeaders implements MiddlewareInterface
         return $response;
     }
 
-    /**
-     * @param Container $di
-     * @param Request $request
-     * @param Response $response
-     *
-     * @return Response
-     * @throws Exception
-     */
     public static function applyHeaders(Container $di, Request $request, Response $response): Response
     {
         $uri = $request->getUri();
 
-        /**
+        /*
          *  -------------------------------------------------------
          * |        Cross-Origin Resource Sharing                 |
          * -------------------------------------------------------
@@ -74,7 +60,7 @@ final class SecurityHeaders implements MiddlewareInterface
             }
         }
 
-        /**
+        /*
          *  -------------------------------------------------------
          * |             Content Security Policy                  |
          * -------------------------------------------------------
@@ -85,17 +71,21 @@ final class SecurityHeaders implements MiddlewareInterface
             }
         }
 
-        $csp = CSPBuilder::fromFile('../config/csp.json');
+        try {
+            $csp = CSPBuilder::fromFile('../config/csp.json');
 
-        if ($di->get('config')['mode'] === 'development') {
-            $csp->setAllowUnsafeInline('style-src', true);
-            $csp->setAllowUnsafeInline('script-src', true);
-            $csp->setDataAllowed('img-src', true);
-        }
+            if ($di->get('config')['mode'] === 'development') {
+                $csp->setAllowUnsafeInline('style-src', true);
+                $csp->setAllowUnsafeInline('script-src', true);
+                $csp->setDataAllowed('img-src', true);
+            }
 
-        $headers = $csp->getHeaderArray();
-        foreach ($headers as $key => $value) {
-            $response = $response->withHeader($key, $value);
+            $headers = $csp->getHeaderArray();
+            foreach ($headers as $key => $value) {
+                $response = $response->withHeader($key, $value);
+            }
+        } catch (Exception $e) {
+            Debugger::log($e, Debugger::WARNING);
         }
 
         return $response;

@@ -20,8 +20,6 @@ final class Assets
     private array $compiledAssets = [];
 
     /**
-     * @param array $config
-     *
      * @throws FileNotFoundException
      */
     public function __construct(array $config)
@@ -48,9 +46,6 @@ final class Assets
     }
 
     /**
-     * @param string $filename
-     *
-     * @return string
      * @throws FileNotFoundException
      */
     public function path(string $filename): string

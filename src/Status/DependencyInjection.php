@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Status;
 
 use DI;
-use Exception;
 use Psr\Container\ContainerInterface as Container;
 use RuntimeException;
 use RunTracy\Helpers\TwigPanel;
@@ -24,12 +23,6 @@ use Twig\Profiler\Profile as TwigProfile;
  */
 final class DependencyInjection
 {
-    /**
-     * @param array $config
-     *
-     * @return Container
-     * @throws Exception
-     */
     public static function setup(array $config): Container
     {
         $builder = new DI\ContainerBuilder();
@@ -84,6 +77,7 @@ final class DependencyInjection
                 }
             ]
         );
+        /** @noinspection PhpUnhandledExceptionInspection */
         $di = $builder->build();
 
         // dynamic definitions

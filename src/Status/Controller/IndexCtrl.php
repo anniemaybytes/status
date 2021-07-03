@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Status\Controller;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Status\CachedValue\Irc;
@@ -12,6 +11,7 @@ use Status\CachedValue\Mei;
 use Status\CachedValue\Site;
 use Status\CachedValue\TrackerSingular;
 use Status\CachedValue\Tweets;
+use Status\Exception\TwitterException;
 use Tracy\Debugger;
 
 /**
@@ -79,7 +79,7 @@ final class IndexCtrl extends BaseCtrl
                 if (count($feeds)) {
                     $data['twitter_feed'] = $feeds;
                 }
-            } catch (Exception $e) {
+            } /** @noinspection PhpRedundantCatchClauseInspection */ catch (TwitterException $e) {
                 Debugger::log($e, Debugger::WARNING);
             }
         }

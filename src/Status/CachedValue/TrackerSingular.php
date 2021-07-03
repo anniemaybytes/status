@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Status\CachedValue;
 
-use Exception;
 use Status\Utilities\Curl;
 
 /**
@@ -19,14 +18,9 @@ final class TrackerSingular extends Base
         return 'tracker/' . $param['ns'];
     }
 
-    /**
-     * @param mixed $param
-     *
-     * @return int
-     * @throws Exception
-     */
     protected static function getCacheDuration(mixed $param): int
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         return 60 + random_int(0, 30);
     }
 

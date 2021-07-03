@@ -14,16 +14,21 @@ use Status\Controller\IndexCtrl;
  */
 final class Main extends Base
 {
-    protected function addRoutes(): void /** @formatter:off */
+    protected function addRoutes(): void
     {
         $app = $this->app;
 
-        $app->group('', function (RouteCollectorProxy $group) {
-            $group->get('/', IndexCtrl::class . ':index')->setName('index');
-            $group->group('/api', function (RouteCollectorProxy $group) {
-                $group->get('/status', IndexCtrl::class . ':json')->setName('api:status');
-            });
-        });
+        $app->group(
+            '',
+            function (RouteCollectorProxy $group) {
+                $group->get('/', IndexCtrl::class . ':index')->setName('index');
+                $group->group(
+                    '/api',
+                    function (RouteCollectorProxy $group) {
+                        $group->get('/status', IndexCtrl::class . ':json')->setName('api:status');
+                    }
+                );
+            }
+        );
     }
-    /** @formatter:on */
 }

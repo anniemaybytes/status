@@ -27,11 +27,7 @@ final class Tweets extends Base
     }
 
     /**
-     * @param mixed $param
-     *
-     * @return array
-     * @throws JsonException
-     * @throws Exception
+     * @throws TwitterException
      */
     protected static function fetchValue(mixed $param): array
     {
@@ -51,18 +47,25 @@ final class Tweets extends Base
         ];
 
         $twitter = new TwitterAPIExchange($settings);
-        $feeds = json_decode(
-            $twitter
-                ->setGetfield('?' . http_build_query($options))
-                ->buildOauth('https://api.twitter.com/1.1/statuses/user_timeline.json', 'GET')
-                ->performRequest(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
-        if (isset($feeds['errors'])) {
-            throw new TwitterException(json_encode($feeds['errors'], JSON_THROW_ON_ERROR));
+        try {
+            $feeds = json_decode(
+                $twitter
+                    ->setGetfield('?' . http_build_query($options))
+                    ->buildOauth('https://api.twitter.com/1.1/statuses/user_timeline.json', 'GET')
+                    ->performRequest(),
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+        } catch (Exception | JsonException $e) {
+            throw new TwitterException("Unhandled exception catched", 0, $e->getPrevious());
         }
+
+        if (isset($feeds['errors'])) {
+            /** @noinspection JsonEncodingApiUsageInspection */
+            throw new TwitterException(json_encode($feeds['errors'], JSON_PARTIAL_OUTPUT_ON_ERROR));
+        }
+
         return $feeds;
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Status;
 
-use Exception;
 use PetrKnap\Php\Singleton\SingletonInterface;
 use PetrKnap\Php\Singleton\SingletonTrait;
 use Psr\Container\ContainerInterface as Container;
@@ -66,9 +65,6 @@ final class Dispatcher implements SingletonInterface
         $this->config = $config;
     }
 
-    /**
-     * @throws Exception
-     */
     private function initDependencyInjection(): void
     {
         Profiler::start('initDependencyInjection');
@@ -101,9 +97,6 @@ final class Dispatcher implements SingletonInterface
         $this->app = $app;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function __construct()
     {
         $this->initConfig();

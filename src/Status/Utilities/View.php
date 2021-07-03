@@ -15,25 +15,16 @@ use Status\Exception\FileNotFoundException;
  */
 final class View
 {
-    /**
-     * @Inject
-     */
+    /** @Inject */
     private Assets $assets;
 
-    /**
-     * @Inject("config")
-     */
+    /** @Inject("config") */
     private array $config;
 
-    /**
-     * @Inject
-     */
+    /** @Inject */
     private RouteParser $router;
 
     /**
-     * @param string $filename
-     *
-     * @return string
      * @throws FileNotFoundException
      */
     public function assetUrl(string $filename): string

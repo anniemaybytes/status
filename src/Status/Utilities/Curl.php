@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Status\Utilities;
 
 use CurlHandle;
+use Status\Dispatcher;
 
 use function curl_close;
 use function curl_error;
@@ -21,10 +22,14 @@ use function curl_setopt_array;
  */
 final class Curl
 {
-    private CurlHandle $curl;
+    private array $config;
+
+    private ?CurlHandle $curl;
 
     public function __construct(?string $url = null)
     {
+        $this->config = Dispatcher::config();
+
         if ($url === null) {
             $this->curl = curl_init();
         } else {
@@ -53,8 +58,12 @@ final class Curl
         return curl_setopt_array($this->curl, $options);
     }
 
-    public function exec(): bool|string
+    public function exec(bool $proxyOverride = false): bool|string
     {
+        if (!$proxyOverride) {
+            $this->setopt(CURLOPT_PROXY, ($this->config['proxy'] ?? null));
+        }
+
         return curl_exec($this->curl);
     }
 

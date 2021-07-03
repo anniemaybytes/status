@@ -28,12 +28,6 @@ final class FatalErrorCtrl
      * Render very simple error page in case of fatal PHP error
      * More detailed code that may depend on DI wrapped inside try blocks, each their own so that failure of one will not cause
      * previous ones to lose data.
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param Throwable $error
-     *
-     * @return Response
      */
     public function handleError(Request $request, Response $response, Throwable $error): Response
     {

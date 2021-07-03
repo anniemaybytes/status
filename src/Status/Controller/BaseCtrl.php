@@ -15,19 +15,13 @@ use Status\Utilities\View;
  */
 abstract class BaseCtrl
 {
-    /**
-     * @Inject
-     */
+    /** @Inject */
     protected IKeyStore $cache;
 
-    /**
-     * @Inject
-     */
+    /** @Inject */
     protected Twig $view;
 
-    /**
-     * @Inject
-     */
+    /** @Inject */
     protected View $viewFunctions;
 
     /**
