@@ -9,15 +9,15 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 
 echo
+echo Copying over configs...
+cd /vagrantroot/configs
+cp -avu * /
+
+echo
 echo Updating packages...
 apt-get update
 apt-get -qq -y -o Dpkg::Options::="--force-confold" --only-upgrade install php8.0* nodejs
 apt-get -y autoremove && apt-get -y autoclean
-
-echo
-echo Copying over configs...
-cd /vagrantroot/configs
-cp -avu * /
 
 echo
 echo Configuring daemons...
