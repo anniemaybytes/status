@@ -15,7 +15,7 @@ cp -avu * /
 
 echo
 echo Updating packages...
-apt-get update
+apt-get update --allow-releaseinfo-change
 apt-get -qq -y -o Dpkg::Options::="--force-confold" --only-upgrade install php8.0* nodejs
 apt-get -y autoremove && apt-get -y autoclean
 
@@ -36,12 +36,8 @@ systemctl stop cron
 echo
 echo Updating composer from lock file...
 cd /code
-if composer --version -n | grep "1\."; then
-    composer self-update -n --2 # update to composer v2
-else
-    composer self-update -n
-fi
-su -s /bin/bash vagrant -c 'composer install'
+COMPOSER_ALLOW_SUPERUSER=1 composer self-update -n
+su vagrant -s /bin/bash -c 'composer install'
 
 echo
 echo Installing node dependencies...

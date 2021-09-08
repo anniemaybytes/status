@@ -1,19 +1,16 @@
 const webpack = require('webpack');
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
-// https://github.com/webpack/loader-utils/issues/121
 const hashDigestLength = 10;
 
-// noinspection JSUnresolvedVariable
 module.exports = {
   mode: 'production',
   context: path.resolve(__dirname, 'assets'),
   watchOptions: {
-    ignored: ['node_modules/**', 'vendor/**'],
+    ignored: ['**/node_modules/**', '**/vendor/**', '**/gen/**', '**/*.php'],
     poll: 1000,
   },
   entry: {
@@ -62,16 +59,10 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              outputPath: 'common',
-              name: `[name].[contenthash:hex:${hashDigestLength}].[ext]`,
-              emitFile: false,
-            },
-          },
-        ],
+        type: 'asset/resource',
+        generator: {
+          filename: `common/[name].[contenthash:${hashDigestLength}][ext]`,
+        },
       },
     ],
   },
@@ -87,9 +78,6 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
-    }),
-    new CopyPlugin({
-      patterns: [{ from: 'common', to: `common/[name].[contenthash][ext]` }],
     }),
   ],
   optimization: {

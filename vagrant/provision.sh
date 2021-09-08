@@ -9,38 +9,25 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 
 echo Configuring system...
-DPKG_MAINTSCRIPT_NAME=postinst DPKG_MAINTSCRIPT_PACKAGE=grub-pc upgrade-from-grub-legacy # bug: system assumes /dev/vda but that is not necessarily valid anymore
-apt-mark hold linux-image-amd64 # bug: vboxsf component are not updated
-apt-mark hold grub-pc # bug: attempt to run grub-pc updater in noninteractive mode will fail
+apt-mark hold linux-image-amd64 grub-pc # do not bloat image with new kernel
+rm -rf /var/log/journal && systemctl restart systemd-journald
 
 echo
-echo Installing required base components...
-apt-get update
-apt-get -qq -y install apt-transport-https dirmngr curl
+echo Updating base system...
+apt-get update --allow-releaseinfo-change
+apt-get -qq -y -o Dpkg::Options::="--force-confnew" dist-upgrade
+apt-get -y autoremove && apt-get -y autoclean
 
 echo
 echo Adding repositories...
 cd /vagrantroot/configs/etc/apt
 cp -avu * /etc/apt/
-curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
-curl -sSL https://packages.sury.org/php/apt.gpg | apt-key add -
-
-echo
-echo Updating apt cache...
-apt-get update
-
-echo
-echo Updating currently installed packages...
-apt-get -qq -y -o Dpkg::Options::="--force-confnew" upgrade
-
-echo
-echo Cleaning up stale packages and files...
-apt-get -y autoremove && apt-get -y autoclean
 
 echo
 echo Installing packages...
+apt-get update
 apt-get -qq -y -o Dpkg::Options::="--force-confold" install php8.0 php8.0-xdebug php8.0-apcu php8.0-xml php8.0-fpm \
-    php8.0-cli php8.0-curl php8.0-mbstring pv git unzip zip htop iotop nodejs nginx
+    php8.0-cli php8.0-curl php8.0-mbstring pv curl git unzip zip htop iotop nodejs nginx
 
 echo
 echo Setting up packages...
@@ -74,7 +61,7 @@ systemctl stop cron
 echo
 echo Installing composer packages from lock file...
 cd /code
-su -s /bin/bash vagrant -c 'composer install'
+su vagrant -s /bin/bash -c 'composer install'
 
 echo
 echo Installing node dependencies
@@ -87,7 +74,7 @@ systemctl start webpack
 
 echo
 echo Creating required directories
-su -s /bin/bash vagrant -c 'mkdir -p /code/logs'
+su vagrant -s /bin/bash -c 'mkdir -p /code/logs'
 
 echo
 echo Starting daemons...
