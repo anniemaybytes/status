@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Status\Utilities;
 
+use ArrayAccess;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use RuntimeException;
 use Slim\Routing\RouteParser;
 use Status\Exception\FileNotFoundException;
 
@@ -19,17 +21,14 @@ final class View
     private Assets $assets;
 
     /** @Inject("config") */
-    private array $config;
+    private ArrayAccess $config;
 
     /** @Inject */
     private RouteParser $router;
 
-    /**
-     * @throws FileNotFoundException
-     */
-    public function assetUrl(string $filename): string
+    public function config(mixed $key): mixed
     {
-        return $this->assets->path($filename);
+        return $this->config[$key];
     }
 
     public function pathFor(string $name, array $data = [], array $queryParams = []): string
@@ -48,8 +47,12 @@ final class View
         return "$scheme://$authority";
     }
 
-    public function config(mixed $key): mixed
+    public function assetPath(string $filename): string
     {
-        return $this->config[$key] ?? null;
+        try {
+            return $this->assets->path($filename);
+        } catch (FileNotFoundException $e) {
+            throw new RuntimeException('Unable to construct path for given asset', 0, $e);
+        }
     }
 }

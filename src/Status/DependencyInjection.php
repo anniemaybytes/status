@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status;
 
+use ArrayAccess;
 use DI;
 use Psr\Container\ContainerInterface as Container;
 use RuntimeException;
@@ -23,7 +24,7 @@ use Twig\Profiler\Profile as TwigProfile;
  */
 final class DependencyInjection
 {
-    public static function setup(array $config): Container
+    public static function setup(ArrayAccess $config): Container
     {
         $builder = new DI\ContainerBuilder();
         $builder->useAnnotations(true);
@@ -54,7 +55,7 @@ final class DependencyInjection
                     }
 
                     $config = [
-                        'cache' => $di->get('config')['templates.cache_path'] ?? '/tmp/twig-cache',
+                        'cache' => $di->get('config')['templates.cache_path'],
                         'strict_variables' => true,
                     ];
 

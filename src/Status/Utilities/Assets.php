@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\Utilities;
 
+use ArrayAccess;
 use RuntimeException;
 use Status\Exception\FileNotFoundException;
 
@@ -19,23 +20,17 @@ final class Assets
     private string $manifestFile;
     private array $compiledAssets = [];
 
-    /**
-     * @throws FileNotFoundException
-     */
-    public function __construct(array $config)
+    public function __construct(ArrayAccess $config)
     {
-        $this->publicPath = $config['static.location'] ?? '/static/';
+        $this->publicPath = $config['static.location'];
         $this->manifestFile = BASE_ROOT . '/public/static/manifest.json';
         $this->loadCompiledAssets();
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     private function loadCompiledAssets(): void
     {
         if (!file_exists($this->manifestFile)) {
-            throw new FileNotFoundException($this->manifestFile);
+            throw new RuntimeException('Unable to locate manifest file');
         }
 
         /** @noinspection JsonEncodingApiUsageInspection */
@@ -45,9 +40,7 @@ final class Assets
         }
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
+    /** @throws FileNotFoundException */
     public function path(string $filename): string
     {
         if (array_key_exists($filename, $this->compiledAssets)) {

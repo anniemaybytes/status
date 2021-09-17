@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\Controller;
 
+use ArrayAccess;
 use Slim\Views\Twig;
 use Status\Cache\IKeyStore;
 use Status\Utilities\View;
@@ -29,5 +30,5 @@ abstract class BaseCtrl
      *
      * @Inject("config")
      */
-    protected array $config;
+    protected ArrayAccess $config;
 }

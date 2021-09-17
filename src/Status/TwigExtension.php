@@ -24,7 +24,7 @@ final class TwigExtension extends AbstractExtension
 
     public function getName(): string
     {
-        return 'status';
+        return 'slim';
     }
 
     /**
@@ -39,10 +39,10 @@ final class TwigExtension extends AbstractExtension
         // map function names in twig to function names implemented in
         // the view functions utility
         $functionMappings = [
-            'baseurl' => 'baseUrl',
             'config' => 'config',
-            'url' => 'pathFor',
-            'asset_url' => 'assetUrl',
+            'path' => 'pathFor',
+            'base_url' => 'baseUrl',
+            'asset' => 'assetPath',
         ];
 
         $functions = [];
