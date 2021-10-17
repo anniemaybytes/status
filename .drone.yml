@@ -11,7 +11,7 @@ steps:
             COMPOSER_ALLOW_SUPERUSER: 1
         commands:
             - composer validate --ansi --no-check-all --no-check-publish
-            - sudo composer install --no-progress --ansi --ignore-platform-reqs --prefer-dist
+            - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
         image: node:14-alpine3.13
@@ -72,7 +72,6 @@ steps:
             COMPOSER_ALLOW_SUPERUSER: 1
         commands:
             - composer validate --ansi --no-check-all --no-check-publish
-            - composer check-platform-reqs --ansi
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
