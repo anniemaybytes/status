@@ -12,6 +12,7 @@ echo
 echo Copying over configs...
 cd /vagrantroot/configs
 cp -avu * /
+update-grub
 
 echo
 echo Updating packages...

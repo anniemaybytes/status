@@ -38,6 +38,13 @@
       "extends": [
         "schedule:weekends"
       ]
+    },
+    {
+      "matchPackageNames": [
+        "stylelint",
+        "stylelint-config-standard"
+      ],
+      "groupName": "stylelint monorepo"
     }
   ]
 }

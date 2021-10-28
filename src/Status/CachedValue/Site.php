@@ -53,7 +53,7 @@ final class Site extends Base
 
                 $nodes = $doc->getElementsByTagName('title');
                 $title = $nodes->item(0)?->nodeValue;
-                if ($title === 'Down for Maintenance') {
+                if (stripos($title, 'maintenance') !== false) {
                     // we're in maintenance mode
                     return 2;
                 }

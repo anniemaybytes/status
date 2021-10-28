@@ -37,6 +37,7 @@ rm -rf /etc/nginx/{sites,mods}-available
 rm -rf /etc/nginx/conf.d
 cd /vagrantroot/configs
 cp -av * /
+update-grub
 
 echo
 echo Installing composer as /usr/local/bin/composer...
