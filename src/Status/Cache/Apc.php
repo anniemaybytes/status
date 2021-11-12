@@ -41,14 +41,17 @@ final class Apc implements IKeyStore
         );
     }
 
-    public function doGet(string $key): mixed
+    // === CACHE ===
+
+    /** @inheritDoc */
+    public function get(string $key): mixed
     {
         $start = $this->startCall();
         $keyOld = $key;
         $key = $this->keyPrefix . $key;
 
         if ($this->clearOnGet) {
-            $this->doDelete($keyOld);
+            $this->delete($keyOld);
             $this->endCall($start);
             return false;
         }
@@ -65,12 +68,7 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    private function exists(string $key): bool
-    {
-        return apcu_exists($key);
-    }
-
-    public function doSet(string $key, mixed $value, int $time = 3600): bool
+    public function set(string $key, mixed $value, int $time = 3600): bool
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
@@ -82,7 +80,7 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    public function doDelete(string $key): bool
+    public function delete(string $key): bool
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
@@ -98,17 +96,7 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    public function getCacheHits(): array
-    {
-        return $this->cacheHits;
-    }
-
-    public function getExecutionTime(): float
-    {
-        return $this->time;
-    }
-
-    public function doIncrement(string $key, int $n = 1, mixed $initial = null, int $expiry = 0): bool|int
+    public function increment(string $key, int $n = 1, mixed $initial = null, int $expiry = 0): bool|int
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
@@ -133,17 +121,7 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    private function startCall(): float
-    {
-        return microtime(true);
-    }
-
-    private function endCall(float $start): void
-    {
-        $this->time += (microtime(true) - $start) * 1000;
-    }
-
-    public function doTouch(string $key, int $expiry = 10800): bool
+    public function touch(string $key, int $expiry = 10800): bool
     {
         $start = $this->startCall();
         $key = $this->keyPrefix . $key;
@@ -161,10 +139,17 @@ final class Apc implements IKeyStore
         return $res;
     }
 
-    public function doFlush(): void
+    public function flush(): void
     {
         apcu_clear_cache();
     }
+
+    public function setClearOnGet(bool $val): void
+    {
+        $this->clearOnGet = $val;
+    }
+
+    // === STATISTICS ===
 
     public function getAllKeys(): array
     {
@@ -175,13 +160,35 @@ final class Apc implements IKeyStore
         return $keys;
     }
 
-    public function setClearOnGet(bool $val): void
-    {
-        $this->clearOnGet = $val;
-    }
-
     public function getStats(): array
     {
-        return apcu_cache_info(true) ?? [];
+        return apcu_cache_info(true) ?: [];
+    }
+
+    public function getCacheHits(): array
+    {
+        return $this->cacheHits;
+    }
+
+    public function getExecutionTime(): float
+    {
+        return $this->time;
+    }
+
+    // === HELPER ===
+
+    private function exists(string $key): bool
+    {
+        return apcu_exists($key);
+    }
+
+    private function startCall(): float
+    {
+        return microtime(true);
+    }
+
+    private function endCall(float $start): void
+    {
+        $this->time += (microtime(true) - $start) * 1000;
     }
 }

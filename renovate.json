@@ -41,10 +41,18 @@
     },
     {
       "matchPackageNames": [
-        "stylelint",
-        "stylelint-config-standard"
+        "stylelint"
+      ],
+      "matchPackagePrefixes": [
+        "stylelint-config-"
       ],
       "groupName": "stylelint monorepo"
+    },
+    {
+      "matchPackagePrefixes": [
+        "phpstan/"
+      ],
+      "groupName": "phpstan monorepo"
     }
   ]
 }

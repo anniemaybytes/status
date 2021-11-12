@@ -12,6 +12,9 @@ parameters:
     ignoreErrors:
         - '#Call to an undefined method Psr\\Container\\ContainerInterface::set#'
         - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface::withJson#'
-        - '#Method Status\\Config\\Config::offset(Exists|Get|Set|Unset)\(\) has (no return|parameter \$.+ with no) typehint specified#'
-includes:
-    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+        - '#Method Status\\Config\\Config::offset(Exists|Get|Set|Unset)\(\) has (no return|parameter \$.+ with no) type specified#'
+services:
+	-
+		class: Status\PHPStan\PropertiesExtension
+		tags:
+			- phpstan.properties.readWriteExtension
