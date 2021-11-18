@@ -13,12 +13,6 @@ apt-mark hold linux-image-amd64 grub-pc # do not bloat image with new kernel
 rm -rf /var/log/journal && systemctl restart systemd-journald
 
 echo
-echo Updating base system...
-apt-get update --allow-releaseinfo-change
-apt-get -qq -y -o Dpkg::Options::="--force-confnew" dist-upgrade
-apt-get -y autoremove && apt-get -y autoclean
-
-echo
 echo Adding repositories...
 cd /vagrantroot/configs/etc/apt
 cp -avu * /etc/apt/
