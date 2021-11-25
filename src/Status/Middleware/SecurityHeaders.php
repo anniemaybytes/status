@@ -38,9 +38,9 @@ final class SecurityHeaders implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        Profiler::start('cspMiddleware');
+        Profiler::start(__CLASS__ . '::' . __METHOD__);
         $response = self::applyHeaders($this->di, $request, $response);
-        Profiler::finish('cspMiddleware');
+        Profiler::finish(__CLASS__ . '::' . __METHOD__);
 
         return $response;
     }
