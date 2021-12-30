@@ -27,8 +27,8 @@ find /etc/apt/sources.list.d -name "*.list" -type f -exec \
     -o Dir::Etc::sourceparts="-" \
     -o APT::Get::List-Cleanup="0" \
     dist-upgrade \; # https://github.com/oerdnj/deb.sury.org/issues/1682
-apt-get -qq -y -o Dpkg::Options::="--force-confnew" install php8.0 php8.0-xdebug php8.0-apcu php8.0-xml php8.0-fpm \
-    php8.0-cli php8.0-curl php8.0-mbstring pv curl git unzip zip htop iotop nodejs nginx
+apt-get -qq -y -o Dpkg::Options::="--force-confnew" install php8.1 php8.1-xdebug php8.1-apcu php8.1-xml php8.1-fpm \
+    php8.1-cli php8.1-curl php8.1-mbstring pv curl git unzip zip htop iotop nodejs nginx
 
 echo
 echo Setting up packages...
@@ -38,6 +38,16 @@ rm -rf /etc/nginx/{sites,mods}-available
 rm -rf /etc/nginx/conf.d
 cd /vagrantroot/configs
 cp -av * /
+
+echo
+echo Reconfiguring microarchitecture mitigations...
+cat << EOF > /etc/default/grub
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames=0 biosdevname=0 mitigations=off"
+GRUB_CMDLINE_LINUX="consoleblank=0"
+EOF
 update-grub
 
 echo
@@ -50,13 +60,13 @@ echo
 echo Configuring daemons...
 systemctl daemon-reload
 systemctl disable nginx
-systemctl disable php8.0-fpm
+systemctl disable php8.1-fpm
 systemctl disable webpack
 
 echo
 echo Stopping daemons...
 systemctl stop nginx
-systemctl stop php8.0-fpm
+systemctl stop php8.1-fpm
 systemctl stop webpack
 systemctl stop cron
 
@@ -81,5 +91,5 @@ su vagrant -s /bin/bash -c 'mkdir -p /code/logs'
 echo
 echo Starting daemons...
 systemctl start nginx
-systemctl start php8.0-fpm
+systemctl start php8.1-fpm
 systemctl start cron
