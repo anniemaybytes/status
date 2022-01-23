@@ -32,7 +32,7 @@ apt-get -qq -y -o Dpkg::Options::="--force-confnew" install php8.1 php8.1-xdebug
 
 echo
 echo Setting up packages...
-rm -f /etc/php/8.0/cli/conf.d/20-xdebug.ini
+rm -f /etc/php/8.1/cli/conf.d/20-xdebug.ini
 rm -rf /etc/nginx/{sites,mods}-enabled
 rm -rf /etc/nginx/{sites,mods}-available
 rm -rf /etc/nginx/conf.d
