@@ -20,7 +20,7 @@
     "php": "~8.1",
     "slim/slim": "4.9.0",
     "slim/twig-view": "3.3.0",
-    "twig/twig": "3.3.7",
+    "twig/twig": "3.3.8",
     "tracy/tracy": "2.9.0",
     "php-di/php-di": "6.3.5",
     "slim/psr7": "1.5",
@@ -45,7 +45,7 @@
   "require-dev": {
     "roave/security-advisories": "dev-latest",
     "phpstan/extension-installer": "1.1.0",
-    "phpstan/phpstan": "1.4.3",
+    "phpstan/phpstan": "1.4.6",
     "phpstan/phpstan-deprecation-rules": "1.0.0",
     "phpstan/phpstan-phpunit": "1.0.0",
     "overtrue/phplint": "4.1.0",
