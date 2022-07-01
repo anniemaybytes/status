@@ -58,7 +58,7 @@ final class Tweets extends Base
                 JSON_THROW_ON_ERROR
             );
         } catch (Exception | JsonException $e) {
-            throw new TwitterException("Unhandled exception catched", 0, $e->getPrevious());
+            throw new TwitterException("Unhandled exception catched", 0, $e);
         }
 
         if (isset($feeds['errors'])) {
