@@ -27,7 +27,7 @@ final class TrackerSingular extends Base
     /** @noinspection CurlSslServerSpoofingInspection */
     protected static function fetchValue(mixed $param): int
     {
-        $curl = new Curl("https://{$param['ns']}/check");
+        $curl = new Curl("https://{$param['ns']}/alive");
         $curl->setoptArray(
             [
                 CURLOPT_HTTPHEADER => ["Host: {$param['domain']}", 'Connection: Close'],

@@ -53,6 +53,12 @@
         "phpstan/"
       ],
       "groupName": "phpstan monorepo"
+    },
+    {
+      "matchPackageNames": [
+        "overtrue/phplint"
+      ],
+      "allowedVersions": "<6.0.0"
     }
   ]
 }

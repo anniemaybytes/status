@@ -79,7 +79,7 @@ final class CacheTracyBarPanel implements IBarPanel
         if (count($this->hits['hits']) > 0) {
             $html .= Debugger::dump($this->hits['hits'], true);
         } else {
-            $html .= '<p style="font-size:1.2em;font-weigt:bold;padding:10px">No cache hits</p>';
+            $html .= '<p style="font-size:1.2em;font-weight:bold;padding:10px">No cache hits</p>';
         }
 
         return $html . '</div>';
