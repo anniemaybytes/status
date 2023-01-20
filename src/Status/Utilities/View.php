@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Status\Utilities;
 
 use ArrayAccess;
+use DI\Attribute\Inject;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use RuntimeException;
 use Slim\Routing\RouteParser;
@@ -17,13 +18,13 @@ use Status\Exception\FileNotFoundException;
  */
 final class View
 {
-    /** @Inject */
+    #[Inject]
     private Assets $assets;
 
-    /** @Inject("config") */
+    #[Inject("config")]
     private ArrayAccess $config;
 
-    /** @Inject */
+    #[Inject]
     private RouteParser $router;
 
     public function config(mixed $key): mixed
