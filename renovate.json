@@ -1,7 +1,8 @@
 {
   "extends": [
     "config:base",
-    "docker:disableMajor"
+    "docker:disableMajor",
+    ":automergeLinters"
   ],
   "labels": [
     "kind/deps"
@@ -19,6 +20,7 @@
   ],
   "lockFileMaintenance": {
     "enabled": true,
+    "automerge": true,
     "schedule": [
       "before 3am on friday"
     ]
@@ -40,25 +42,30 @@
       ]
     },
     {
-      "matchPackageNames": [
-        "stylelint"
-      ],
-      "matchPackagePrefixes": [
-        "stylelint-config-"
-      ],
-      "groupName": "stylelint monorepo"
-    },
-    {
       "matchPackagePrefixes": [
         "phpstan/"
       ],
+      "automerge": true,
       "groupName": "phpstan monorepo"
     },
     {
       "matchPackageNames": [
         "overtrue/phplint"
       ],
+      "automerge": true,
       "allowedVersions": "<6.0.0"
+    },
+    {
+      "matchPackageNames": [
+        "squizlabs/php_codesniffer"
+      ],
+      "automerge": true
+    },
+    {
+      "matchPackageNames": [
+        "phpunit/phpunit"
+      ],
+      "automerge": true
     }
   ]
 }
