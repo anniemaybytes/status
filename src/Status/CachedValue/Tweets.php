@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Status\CachedValue;
 
-use Exception;
-use JsonException;
 use Status\Exception\TwitterException;
-use TwitterAPIExchange;
+use Status\Utilities\Twitter;
 
 /**
  * Class Tweets
@@ -18,7 +16,7 @@ final class Tweets extends Base
 {
     protected static function getCacheKey(mixed $param): string
     {
-        return 'tweets/' . $param['twitter.uid'];
+        return 'tweets/' . $param['twitter.user'];
     }
 
     protected static function getCacheDuration(mixed $param): int
@@ -26,46 +24,10 @@ final class Tweets extends Base
         return 300;
     }
 
-    /**
-     * @throws TwitterException
-     */
+    /** @throws TwitterException */
     protected static function fetchValue(mixed $param): array
     {
-        $settings = [
-            'oauth_access_token' => $param['twitter.oauth_token'],
-            'oauth_access_token_secret' => $param['twitter.oauth_secret'],
-            'consumer_key' => $param['twitter.consumer_key'],
-            'consumer_secret' => $param['twitter.consumer_secret'],
-        ];
-        $options = [
-            'user_id' => $param['twitter.uid'],
-            'count' => $param['twitter.count'],
-            'tweet_mode' => 'extended',
-            'trim_user' => true,
-            'exclude_replies' => true,
-            'include_rts' => true,
-        ];
-
-        $twitter = new TwitterAPIExchange($settings);
-        try {
-            $feeds = json_decode(
-                $twitter
-                    ->setGetfield('?' . http_build_query($options))
-                    ->buildOauth('https://api.twitter.com/1.1/statuses/user_timeline.json', 'GET')
-                    ->performRequest(),
-                true,
-                512,
-                JSON_THROW_ON_ERROR
-            );
-        } catch (Exception | JsonException $e) {
-            throw new TwitterException("Unhandled exception catched", 0, $e);
-        }
-
-        if (isset($feeds['errors'])) {
-            /** @noinspection JsonEncodingApiUsageInspection */
-            throw new TwitterException(json_encode($feeds['errors'], JSON_PARTIAL_OUTPUT_ON_ERROR));
-        }
-
-        return $feeds;
+        $twitter = new Twitter();
+        return $twitter->getTimeline($twitter->getUserIdByName($param['twitter.user']), $param['twitter.count']);
     }
 }

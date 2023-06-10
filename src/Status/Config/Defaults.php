@@ -33,11 +33,6 @@ final class Defaults
 
         'twitter.enabled' => false,
         'twitter.count' => 10,
-        'twitter.uid' => UndefinedValue::class,
-        'twitter.name' => UndefinedValue::class,
-        'twitter.oauth_token' => UndefinedValue::class,
-        'twitter.oauth_secret' => UndefinedValue::class,
-        'twitter.consumer_key' => UndefinedValue::class,
-        'twitter.consumer_secret' => UndefinedValue::class,
+        'twitter.user' => UndefinedValue::class,
     ];
 }

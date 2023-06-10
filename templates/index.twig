@@ -36,13 +36,14 @@
         <hr>
         <div id="feed">
             <div class="header">
-                <h2>Feeds</h2> by <a href="https://twitter.com/{{ config('twitter.name')|default('Twitter') }}"
-                                     target="_blank"
-                                     rel="noopener noreferrer">@{{ config('twitter.name')|default('Twitter') }}</a>
+                <h2>Feeds</h2> by <a
+                    href="https://twitter.com/{{ twitter_feed.user.screen_name|default('TwitterDev') }}"
+                    target="_blank"
+                    rel="noopener noreferrer">@{{ twitter_feed.user.screen_name|default('TwitterDev') }}</a>
             </div>
             <div class="content">
                 <table>
-                    {% for tweet in twitter_feed %}
+                    {% for tweet in twitter_feed.tweets %}
                         <tr>
                             <td>
                                 <div class="feed-text">{{ tweet.full_text|nl2br }}</div>
