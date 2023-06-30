@@ -16,7 +16,7 @@ final class Tweets extends Base
 {
     protected static function getCacheKey(mixed $param): string
     {
-        return 'tweets/' . $param['twitter.user'];
+        return 'tweets/' . $param;
     }
 
     protected static function getCacheDuration(mixed $param): int
@@ -27,7 +27,6 @@ final class Tweets extends Base
     /** @throws TwitterException */
     protected static function fetchValue(mixed $param): array
     {
-        $twitter = new Twitter();
-        return $twitter->getTimeline($twitter->getUserIdByName($param['twitter.user']), $param['twitter.count']);
+        return Twitter::getTimeline($param);
     }
 }

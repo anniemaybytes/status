@@ -73,7 +73,7 @@ final class IndexCtrl extends BaseCtrl
 
         if ($this->config['twitter.enabled']) {
             try {
-                $feeds = Tweets::get($this->cache, $this->config);
+                $feeds = Tweets::get($this->cache, $this->config['twitter.username']);
                 if (count($feeds)) {
                     $data['twitter_feed'] = $feeds;
                 }

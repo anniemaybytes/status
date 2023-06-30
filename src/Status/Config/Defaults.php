@@ -32,7 +32,6 @@ final class Defaults
         'tracker.ns' => [],
 
         'twitter.enabled' => false,
-        'twitter.count' => 10,
-        'twitter.user' => UndefinedValue::class,
+        'twitter.username' => UndefinedValue::class,
     ];
 }

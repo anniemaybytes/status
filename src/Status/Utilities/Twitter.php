@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\Utilities;
 
+use DOMDocument;
 use JsonException;
 use Status\Exception\TwitterException;
 
@@ -14,119 +15,16 @@ use Status\Exception\TwitterException;
  */
 final class Twitter
 {
-    private const BEARER = 'AAAAAAAAAAAAAAAAAAAAAPYXBAAAAAAACLXUNDekMxqa8h%2F40K4moUkGsoc%3DTYfbDKbT3jJPCEVnMYqilB28NHfOPqkca3qaAxGfsyKCs0wRbw';
-
-    private ?string $guestToken = null;
-
-    /** @throws TwitterException */
-    public function getUserIdByName(string $username): int
-    {
-        /** @noinspection JsonEncodingApiUsageInspection */
-        $vars = urlencode(json_encode(['screen_name' => $username, 'withHighlightedLabel' => true]));
-
-        $curl = new Curl("https://api.twitter.com/graphql/4S2ihIKfF3xhp-ENxvUAfQ/UserByScreenName?variables=$vars");
-        $curl->setoptArray(
-            [
-                CURLOPT_USERAGENT => 'status (cURL) like Twitterbot/1.0',
-                CURLOPT_HTTPHEADER => [
-                    'Authorization: Bearer ' . self::BEARER,
-                    'X-Guest-Token: ' . $this->guestToken()
-                ],
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_VERBOSE => false,
-                CURLOPT_TIMEOUT => 3,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                CURLOPT_SSL_VERIFYHOST => 2
-            ]
-        );
-
-        if (!$content = $curl->exec()) {
-            if (!$err = $curl->error()) {
-                throw new TwitterException(
-                    "Received empty response from remote API with HTTP code {$curl->getInfo(CURLINFO_HTTP_CODE)}"
-                );
-            }
-            throw new TwitterException("Failed to query remote API: $err");
-        }
-        unset($curl);
-
-        try {
-            $user = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            throw new TwitterException("Failed to read API response as JSON object", 0, $e);
-        }
-
-        if (isset($user['errors'])) {
-            /** @noinspection JsonEncodingApiUsageInspection */
-            throw new TwitterException(json_encode($user['errors'], JSON_PARTIAL_OUTPUT_ON_ERROR));
-        }
-
-        return (int)$user['data']['user']['rest_id'];
-    }
-
-    /** @throws TwitterException */
-    private function guestToken(): string
-    {
-        if ($this->guestToken) {
-            return $this->guestToken; // keep using current token
-        }
-
-        $curl = new Curl('https://api.twitter.com/1.1/guest/activate.json');
-        $curl->setoptArray(
-            [
-                CURLOPT_USERAGENT => 'status (cURL) like Twitterbot/1.0',
-                CURLOPT_HTTPHEADER => [
-                    'Authorization: Bearer ' . self::BEARER
-                ],
-                CURLOPT_POST => true,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_VERBOSE => false,
-                CURLOPT_TIMEOUT => 3,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                CURLOPT_SSL_VERIFYHOST => 2
-            ]
-        );
-
-        if (!$content = $curl->exec()) {
-            if (!$err = $curl->error()) {
-                throw new TwitterException(
-                    "Received empty response from remote API with HTTP code {$curl->getInfo(CURLINFO_HTTP_CODE)}"
-                );
-            }
-            throw new TwitterException("Failed to query remote API: $err");
-        }
-        unset($curl);
-
-        try {
-            $response = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            throw new TwitterException("Failed to read API response as JSON object", 0, $e);
-        }
-
-        if (isset($response['errors'])) {
-            /** @noinspection JsonEncodingApiUsageInspection */
-            throw new TwitterException(json_encode($response['errors'], JSON_PARTIAL_OUTPUT_ON_ERROR));
-        }
-
-        return $response["guest_token"];
-    }
-
     /**
      * @return array{user: array, tweets: array}
      * @throws TwitterException
      */
-    public function getTimeline(int $uid, int $count): array
+    public static function getTimeline(string $username): array
     {
-        $curl = new Curl("https://api.twitter.com/2/timeline/profile/$uid.json?tweet_mode=extended&count=$count");
+        $curl = new Curl("https://syndication.twitter.com/srv/timeline-profile/screen-name/$username");
         $curl->setoptArray(
             [
                 CURLOPT_USERAGENT => 'status (cURL) like Twitterbot/1.0',
-                CURLOPT_HTTPHEADER => [
-                    'Authorization: Bearer ' . self::BEARER,
-                    'X-Guest-Token: ' . $this->guestToken()
-                ],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_VERBOSE => false,
                 CURLOPT_TIMEOUT => 3,
@@ -139,28 +37,44 @@ final class Twitter
         if (!$content = $curl->exec()) {
             if (!$err = $curl->error()) {
                 throw new TwitterException(
-                    "Received empty response from remote API with HTTP code {$curl->getInfo(CURLINFO_HTTP_CODE)}"
+                    "Received empty response from remote endpoint with HTTP code {$curl->getInfo(CURLINFO_HTTP_CODE)}"
                 );
             }
-            throw new TwitterException("Failed to query remote API: $err");
+            throw new TwitterException("Failed to query remote endpoint: $err");
         }
         unset($curl);
 
+        $doc = new DOMDocument();
+        if (!@$doc->loadHTML($content)) {
+            throw new TwitterException("Failed to load remote response as DOMDocument");
+        }
+
+        if (!$data = $doc->getElementById('__NEXT_DATA__')) {
+            throw new TwitterException("Failed to locate __NEXT_DATA__ element in remote DOMDocument");
+        }
+
         try {
-            $feeds = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+            $feeds = json_decode($data->textContent, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            throw new TwitterException("Failed to read API response as JSON object", 0, $e);
+            throw new TwitterException("Failed to read __NEXT_DATA__ element as JSON object", 0, $e);
         }
 
-        if (isset($feeds['errors'])) {
-            /** @noinspection JsonEncodingApiUsageInspection */
-            throw new TwitterException(json_encode($feeds['errors'], JSON_PARTIAL_OUTPUT_ON_ERROR));
+        if (!$props = @$feeds['props']['pageProps']) {
+            throw new TwitterException("JSON object does not contain expected properties");
         }
 
-        krsort($feeds['globalObjects']['tweets'], SORT_NUMERIC); // sort tweets by their id
+        $tweets = [];
+        foreach (@$props['timeline']['entries'] ?? [] as $entry) {
+            if (@$entry['type'] !== 'tweet') {
+                continue;
+            }
+            $tweets[$entry['sort_index']] = $entry['content']['tweet'];
+        }
+
+        krsort($tweets, SORT_NUMERIC); // sort tweets by their id
         return [
-            'user' => $feeds['globalObjects']['users'][$uid],
-            'tweets' => $feeds['globalObjects']['tweets']
+            'user' => $props['headerProps'] ?? ['screenName' => $username],
+            'tweets' => $tweets
         ];
     }
 }
