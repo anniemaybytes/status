@@ -46,6 +46,17 @@ h2 span {
     text-align: center;
 }
 
+#page-container {
+    display: flex;
+    min-height: calc(100vh - 2.5em /* footer height */);
+    flex-direction: column;
+    margin: 0 1em;
+}
+
+#content-wrap {
+    flex: 1;
+}
+
 #logo {
     background: url("../common/logo.svg");
     width: 128px;
@@ -55,7 +66,6 @@ h2 span {
 }
 
 #status {
-    position: relative;
     width: 600px;
     margin: 30px auto;
 
@@ -69,8 +79,14 @@ h2 span {
         clear: both;
     }
 
-    h2 .status {
-        font-weight: bold;
+    h2 span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.status {
+            font-weight: bold;
+        }
     }
 
     li {
@@ -95,9 +111,8 @@ h2 span {
     }
 
     .details {
-        font-family: Consolas, "Courier New", Arial, sans-serif;
         font-size: 0.8em;
-        border-radius: 4px;
+        padding: 0 0.2em;
     }
 }
 
@@ -106,7 +121,7 @@ h2 span {
     border-radius: 5px;
     padding: 0.5em;
     margin: 30px auto;
-    width: 620px;
+    max-width: 620px;
     font-size: 0.8em;
     text-align: initial;
 
@@ -123,6 +138,7 @@ h2 span {
 
     table {
         border-collapse: collapse;
+        width: 100%;
     }
 
     tr {
@@ -150,21 +166,21 @@ h2 span {
         padding-top: 0.5em;
     }
 
+    .feed-empty {
+        font-size: 14px;
+        text-align: center;
+    }
+
     .header {
         margin-bottom: 0.5em;
     }
 }
 
-#tracker-details {
-    width: 195px;
-}
-
 #footer {
-    position: sticky;
-    margin: 0 1em;
-    bottom: 1em;
-    text-align: left;
+    width: 100%;
+    height: 2.5em;
     font-size: 14px;
+    text-align: left;
 }
 
 @media only screen and (max-width: 599px) {
@@ -186,11 +202,5 @@ h2 span {
 @media only screen and (max-width: 999px) {
     #footer {
         text-align: center;
-    }
-}
-
-@media only screen and (max-width: 1365px) {
-    #footer {
-        position: relative;
     }
 }

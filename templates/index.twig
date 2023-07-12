@@ -7,28 +7,39 @@
             <h2>
                 <span>site </span>
                 <span
-                    class="status {% if site.status == 1 %}normal{% elseif site.status == 2 %}issues{% else %}down{% endif %}">{% if site.status == 1 %}normal{% elseif site.status == 2 %}maintenance{% else %}down{% endif %}</span>
+                    class="status {% if site.status == 1 %}normal{% elseif site.status == 2 %}issues{% else %}down{% endif %}">
+                    {% if site.status == 1 %}normal{% elseif site.status == 2 %}maintenance{% else %}down{% endif %}
+                </span>
             </h2>
         </li>
         <li>
             <h2>
-                <span>tracker<a href="#" class="details" data-jq-dropdown="#tracker-details">↓</a> </span>
+                <span>
+                    tracker
+                    <a href="#" class="details" data-jq-dropdown="#tracker-details" data-horizontal-offset="8">↓</a>
+                </span>
                 <span
-                    class="status {% if tracker.status == 1 %}normal{% elseif tracker.status == 2 %}issues{% else %}down{% endif %}">{% if tracker.status == 1 %}normal{% elseif tracker.status == 2 %}issues{% else %}down{% endif %}</span>
+                    class="status {% if tracker.status == 1 %}normal{% elseif tracker.status == 2 %}issues{% else %}down{% endif %}">
+                    {% if tracker.status == 1 %}normal{% elseif tracker.status == 2 %}issues{% else %}down{% endif %}
+                </span>
             </h2>
         </li>
         <li>
             <h2>
-                <span>irc </span>
+                <span>irc</span>
                 <span
-                    class="status {% if irc.status == 1 %}normal{% elseif irc.status == 2 %}issues{% else %}down{% endif %}">{% if irc.status == 1 %}normal{% elseif irc.status == 2 %}issues{% else %}down{% endif %}</span>
+                    class="status {% if irc.status == 1 %}normal{% elseif irc.status == 2 %}issues{% else %}down{% endif %}">
+                    {% if irc.status == 1 %}normal{% elseif irc.status == 2 %}issues{% else %}down{% endif %}
+                </span>
             </h2>
         </li>
         <li>
             <h2>
-                <span>mei </span>
+                <span>mei</span>
                 <span
-                    class="status {% if mei.status == 1 %}normal{% elseif mei.status == 2 %}issues{% else %}down{% endif %}">{% if mei.status == 1 %}normal{% elseif mei.status == 2 %}issues{% else %}down{% endif %}</span>
+                    class="status {% if mei.status == 1 %}normal{% elseif mei.status == 2 %}issues{% else %}down{% endif %}">
+                    {% if mei.status == 1 %}normal{% elseif mei.status == 2 %}issues{% else %}down{% endif %}
+                </span>
             </h2>
         </li>
     </ul>
@@ -43,19 +54,29 @@
             </div>
             <div class="content">
                 <table>
-                    {% for tweet in twitter_feed.tweets %}
+                    {% if twitter_feed.tweets|length > 0 %}
+                        {% for tweet in twitter_feed.tweets %}
+                            <tr>
+                                <td>
+                                    <div class="feed-text">{{ tweet.full_text|nl2br }}</div>
+                                    <div class="feed-time">@ {{ tweet.created_at }}</div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
                         <tr>
                             <td>
-                                <div class="feed-text">{{ tweet.full_text|nl2br }}</div>
-                                <div class="feed-time">@ {{ tweet.created_at }}</div>
+                                <div class="feed-empty">
+                                    Nothing to see here - yet
+                                </div>
                             </td>
                         </tr>
-                    {% endfor %}
+                    {% endif %}
                 </table>
             </div>
         </div>
     {% endif %}
-    <div id="tracker-details" class="jq-dropdown jq-dropdown-tip">
+    <div id="tracker-details" class="jq-dropdown jq-dropdown-tip jq-dropdown-anchor-right">
         <ul class="jq-dropdown-menu">
             {% for server in tracker.details %}
                 <li>{{ server.ip }} - {% if server.status == 1 %}normal{% else %}down{% endif %}</li>

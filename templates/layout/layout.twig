@@ -1,4 +1,8 @@
 {% include "@layout/base/head.twig" %}
+<div id="page-container">
+    <div id="content-wrap">
         {% block the_page %}
         {% endblock %}
-{% include "@layout/base/foot.twig" %}
+    </div>
+    {% include "@layout/base/foot.twig" %}
+</div>
