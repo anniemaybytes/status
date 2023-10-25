@@ -18,7 +18,7 @@ use function curl_setopt_array;
 /**
  * Class Curl
  *
- * @package Mei\Utilities
+ * @package Status\Utilities
  */
 final class Curl
 {
