@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Status\Utilities;
 
-use ArrayAccess;
 use CurlHandle;
 use Status\Dispatcher;
 
@@ -19,24 +18,26 @@ use function curl_setopt_array;
 /**
  * Class Curl
  *
- * @package Status\Utilities
+ * @package Mei\Utilities
  */
 final class Curl
 {
-    private ArrayAccess $config;
+    public const DEFAULT_USER_AGENT = 'status (cURL) like Twitterbot/1.0';
 
     private ?CurlHandle $curl;
 
     public function __construct(?string $url = null)
     {
-        $this->config = Dispatcher::config();
+        $this->curl = curl_init($url);
 
-        if ($url === null) {
-            $this->curl = curl_init();
-        } else {
-            $this->curl = curl_init($url);
-        }
-        curl_setopt_array($this->curl, [CURLOPT_RETURNTRANSFER => true]);
+        curl_setopt_array(
+            $this->curl,
+            [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_USERAGENT => self::DEFAULT_USER_AGENT,
+                CURLOPT_PROXY => Dispatcher::config('proxy')
+            ]
+        );
     }
 
     public function __destruct()
@@ -59,12 +60,8 @@ final class Curl
         return curl_setopt_array($this->curl, $options);
     }
 
-    public function exec(bool $proxyOverride = false): bool|string
+    public function exec(): bool|string
     {
-        if (!$proxyOverride) {
-            $this->setopt(CURLOPT_PROXY, $this->config['proxy']);
-        }
-
         return curl_exec($this->curl);
     }
 

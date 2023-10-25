@@ -29,7 +29,6 @@ final class Site extends Base
         $curl = new Curl("https://$param");
         $curl->setoptArray(
             [
-                CURLOPT_USERAGENT => 'status (cURL) like Twitterbot/1.0',
                 CURLOPT_HTTPHEADER => ["Host: $param", 'Connection: Close'],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_VERBOSE => false,

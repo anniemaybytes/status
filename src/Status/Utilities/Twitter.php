@@ -24,7 +24,6 @@ final class Twitter
         $curl = new Curl("https://syndication.twitter.com/srv/timeline-profile/screen-name/$username");
         $curl->setoptArray(
             [
-                CURLOPT_USERAGENT => 'status (cURL) like Twitterbot/1.0',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_VERBOSE => false,
                 CURLOPT_TIMEOUT => 3,
