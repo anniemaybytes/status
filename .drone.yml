@@ -14,23 +14,23 @@ steps:
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
-        image: node:16-alpine
+        image: node:18-alpine
         pull: always
         commands:
             - yarn --frozen-lockfile --non-interactive --no-bin-links --ignore-optional
         depends_on: [ clone ]
     -   name: stylelint
-        image: node:16-alpine
+        image: node:18-alpine
         commands:
             - yarn lint:stylelint
         depends_on: [ yarn ]
     -   name: eslint
-        image: node:16-alpine
+        image: node:18-alpine
         commands:
             - yarn lint:eslint
         depends_on: [ yarn ]
     -   name: prettier
-        image: node:16-alpine
+        image: node:18-alpine
         commands:
             - yarn lint:prettier
         depends_on: [ yarn ]
@@ -75,7 +75,7 @@ steps:
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
-        image: node:16-alpine
+        image: node:18-alpine
         pull: always
         environment:
             NODE_ENV: production
@@ -88,7 +88,7 @@ steps:
             - composer phpunit
         depends_on: [ composer ]
     -   name: webpack
-        image: node:16-alpine
+        image: node:18-alpine
         environment:
             NODE_ENV: production
         commands:
