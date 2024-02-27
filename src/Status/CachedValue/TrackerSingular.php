@@ -44,8 +44,7 @@ final class TrackerSingular extends Base
         unset($curl);
 
         if ($httpCode >= 200 && $httpCode < 300 && is_string($content)) {
-            $val = !str_contains($content, 'unavailable');
-            return (int)$val;
+            return (int)!str_contains($content, 'unavailable');
         }
         return 0;
     }

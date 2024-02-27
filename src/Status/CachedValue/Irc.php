@@ -23,12 +23,12 @@ final class Irc extends Base
 
     protected static function fetchValue(mixed $param): int
     {
-        $nsRecord = @dns_get_record($param, DNS_A)[0]['ip'] ?? null;
-        if (!is_string($nsRecord)) {
+        $addr = @dns_get_record($param, DNS_A)[0]['ip'] ?? null;
+        if (!is_string($addr)) {
             return 0;
         }
-        $file = @fsockopen($nsRecord, 7000, $errno, $errstr, 3);
-        if (!$file) {
+
+        if (!$file = @fsockopen($addr, 7000, $errno, $errstr, 3)) {
             $status = 0;
         } else {
             fclose($file);

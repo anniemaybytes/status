@@ -25,7 +25,7 @@ final class Mei extends Base
 
     protected static function fetchValue(mixed $param): int
     {
-        $curl = new Curl("https://$param/images/error.jpg");
+        $curl = new Curl("https://$param/alive");
         $curl->setoptArray(
             [
                 CURLOPT_HTTPHEADER => ["Host: $param", 'Connection: Close'],
@@ -39,19 +39,10 @@ final class Mei extends Base
                 CURLOPT_NOBODY => true,
             ]
         );
-        $body = $curl->exec();
-        if (!$body || $curl->error()) { // if there's no body (including headers) or there was error then its down
-            unset($curl);
-            return 0;
-        }
+        $content = $curl->exec();
         $httpCode = $curl->getInfo(CURLINFO_HTTP_CODE);
         unset($curl);
 
-        preg_match("/\r?\n(?:Location|URI): *(.*?) *\r?\n/im", $body, $headers);
-        if ($httpCode === 302 && $headers[1] === '/error.jpg') {
-            return 1;
-        }
-
-        return 0;
+        return (int)($httpCode === 200 && is_string($content));
     }
 }
