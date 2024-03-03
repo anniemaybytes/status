@@ -9,6 +9,7 @@ use DI;
 use Psr\Container\ContainerInterface as Container;
 use RuntimeException;
 use RunTracy\Helpers\TwigPanel;
+use Slim\HttpCache\CacheProvider;
 use Slim\Views\Twig;
 use Status\Cache\Apc;
 use Status\Cache\IKeyStore;
@@ -36,6 +37,7 @@ final class DependencyInjection
                 // utilities
                 Utilities\Assets::class => DI\autowire()->constructorParameter('config', DI\get('config')),
                 Utilities\View::class => DI\autowire(),
+                CacheProvider::class => DI\autowire(),
                 // runtime
                 IKeyStore::class => DI\autowire(Apc::class)->constructorParameter('keyPrefix', ''),
                 Twig::class => function (Container $di) {
@@ -83,7 +85,7 @@ final class DependencyInjection
 
         // dynamic definitions
         $di->set('config', $config);
-        $di->set('obLevel', ob_get_level());
+        $di->set('ob_level', ob_get_level());
 
         return $di;
     }

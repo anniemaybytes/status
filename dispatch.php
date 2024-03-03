@@ -64,7 +64,8 @@ $app->addBodyParsingMiddleware();
 if (!$isDev) {
     $app->add(new ContentLengthMiddleware());
 }
-$app->add(new Middleware\SecurityHeaders($di));
+$app->add(new Middleware\ContentSecurityPolicy($di));
+$app->add(new Middleware\Cache($di));
 $app->addRoutingMiddleware();
 // ---
 if (!$isDev) {

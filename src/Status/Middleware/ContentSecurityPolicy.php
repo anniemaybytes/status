@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\Middleware;
 
+use ArrayAccess;
 use Exception;
 use ParagonIE\CSPBuilder\CSPBuilder;
 use Psr\Container\ContainerInterface as Container;
@@ -19,14 +20,8 @@ use Tracy\Debugger;
  *
  * @package Status\Middleware
  */
-final class SecurityHeaders implements MiddlewareInterface
+final class ContentSecurityPolicy implements MiddlewareInterface
 {
-    protected static array $corsAllowList = [
-        '/api',
-    ];
-    protected static array $cspOverrideList = [
-        '/api',
-    ];
     private Container $di;
 
     public function __construct(Container $di)
@@ -39,42 +34,18 @@ final class SecurityHeaders implements MiddlewareInterface
         $response = $handler->handle($request);
 
         Profiler::start(__CLASS__ . '::' . __METHOD__);
-        $response = self::applyHeaders($this->di, $request, $response);
+        $response = self::applyHeaders($this->di->get('config'), $request, $response);
         Profiler::finish(__CLASS__ . '::' . __METHOD__);
 
         return $response;
     }
 
-    public static function applyHeaders(Container $di, Request $request, Response $response): Response
+    public static function applyHeaders(ArrayAccess $config, Request $request, Response $response): Response
     {
-        $uri = $request->getUri();
-
-        /*
-         *  -------------------------------------------------------
-         * |        Cross-Origin Resource Sharing                 |
-         * -------------------------------------------------------
-         */
-        foreach (self::$corsAllowList as $path) {
-            if (str_starts_with($uri->getPath(), $path)) {
-                $response = $response->withHeader('Access-Control-Allow-Origin', '*');
-            }
-        }
-
-        /*
-         *  -------------------------------------------------------
-         * |             Content Security Policy                  |
-         * -------------------------------------------------------
-         */
-        foreach (self::$cspOverrideList as $path) {
-            if (str_starts_with($uri->getPath(), $path)) {
-                return $response;
-            }
-        }
-
         try {
             $csp = CSPBuilder::fromFile('../config/csp.json');
 
-            if ($di->get('config')['mode'] === 'development') {
+            if ($config['mode'] === 'development') {
                 $csp->setAllowUnsafeInline('style-src', true);
                 $csp->setAllowUnsafeInline('script-src', true);
                 $csp->setDataAllowed('img-src', true);

@@ -27,7 +27,7 @@
     "webpack-manifest-plugin": "5.0.0"
   },
   "devDependencies": {
-    "eslint": "8.56.0",
+    "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "postcss-less": "6.0.0",
     "prettier": "3.2.5",
