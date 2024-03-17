@@ -14,7 +14,7 @@
   "dependencies": {
     "@claviska/jquery-dropdown": "2.0.3",
     "css-loader": "6.10.0",
-    "cssnano": "6.0.5",
+    "cssnano": "6.1.0",
     "imports-loader": "5.0.0",
     "jquery": "3.7.1",
     "less": "4.2.0",

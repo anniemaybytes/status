@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Status;
 
 use ArrayAccess;
-use PetrKnap\Php\Singleton\SingletonInterface;
-use PetrKnap\Php\Singleton\SingletonTrait;
 use Psr\Container\ContainerInterface as Container;
 use Psr\Http\Message\ResponseFactoryInterface;
 use RuntimeException;
 use RunTracy\Helpers\Profiler\Profiler;
+use Singleton\SingletonInterface;
+use Singleton\SingletonTrait;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteParser;
