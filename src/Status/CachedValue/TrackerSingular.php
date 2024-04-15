@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\CachedValue;
 
+use Status\Enum\Status;
 use Status\Utilities\Curl;
 
 /**
@@ -44,8 +45,9 @@ final class TrackerSingular extends Base
         unset($curl);
 
         if ($httpCode >= 200 && $httpCode < 300 && is_string($content)) {
-            return (int)!str_contains($content, 'unavailable');
+            return Status::from((int)!str_contains($content, 'unavailable'))->value;
         }
-        return 0;
+
+        return Status::DOWN->value;
     }
 }

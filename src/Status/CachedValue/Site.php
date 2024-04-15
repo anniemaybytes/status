@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Status\CachedValue;
 
 use DOMDocument;
+use Status\Enum\Status;
 use Status\Utilities\Curl;
 
 /**
@@ -46,26 +47,21 @@ final class Site extends Base
             if (is_string($content)) {
                 $doc = new DOMDocument();
                 if (!@$doc->loadHTML($content)) {
-                    // unable to parse html output, assume site is down
-                    return 0;
+                    return Status::DOWN->value;
                 }
 
                 $nodes = $doc->getElementsByTagName('title');
                 $title = $nodes->item(0)?->nodeValue;
                 if (stripos($title, 'maintenance') !== false) {
-                    // we're in maintenance mode
-                    return 2;
+                    return Status::ISSUES->value;
                 }
             } else {
-                // there is no content, site is down
-                return 0;
+                return Status::DOWN->value;
             }
 
-            // looks like everything is fine, we're up
-            return 1;
+            return Status::NORMAL->value;
         }
 
-        // non-success http status, site is down
-        return 0;
+        return Status::DOWN->value;
     }
 }

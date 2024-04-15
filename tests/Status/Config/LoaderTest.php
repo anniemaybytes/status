@@ -32,8 +32,7 @@ class LoaderTest extends PHPUnit\Framework\TestCase
      */
     public function test_check_load_file(): void
     {
-        $f = Loader::load($this->root->url() . '/load.ini');
-        $c = Loader::parse($f);
+        $c = Loader::parse(Loader::load($this->root->url() . '/load.ini'));
         self::assertArrayHasKey('mode', $c);
         self::assertEquals('development', $c['mode']);
     }
@@ -43,16 +42,14 @@ class LoaderTest extends PHPUnit\Framework\TestCase
      */
     public function test_parses_simple_ini(): void
     {
-        $f = Loader::load($this->root->url() . '/simple.ini');
-        $c = Loader::parse($f);
         self::assertEquals(
             [
                 'mode' => 'development',
                 'logs_dir' => '/code/logs',
-                'app.site_name' => 'AnimeBytes Status',
+                'app.site_name' => 'AnimeBytes',
                 'static.location' => '/static/'
             ],
-            $c
+            Loader::parse(Loader::load($this->root->url() . '/simple.ini'))
         );
     }
 
@@ -61,8 +58,6 @@ class LoaderTest extends PHPUnit\Framework\TestCase
      */
     public function test_parses_complex_ini(): void
     {
-        $f = Loader::load($this->root->url() . '/complex.ini');
-        $c = Loader::parse($f);
         self::assertEquals(
             [
 
@@ -71,7 +66,7 @@ class LoaderTest extends PHPUnit\Framework\TestCase
                     'localhost' => '10.0.0.1',
                 ],
             ],
-            $c
+            Loader::parse(Loader::load($this->root->url() . '/complex.ini'))
         );
     }
 }

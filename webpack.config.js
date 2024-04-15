@@ -8,10 +8,10 @@ module.exports = {
   context: path.resolve(__dirname, 'assets'),
   watchOptions: {
     ignored: ['**/node_modules/**', '**/vendor/**', '**/gen/**', '**/*.php'],
-    poll: 1000,
+    poll: 1000
   },
   entry: {
-    bundle: ['./js/index.js'],
+    bundle: ['./js/index.js']
   },
   devtool: 'source-map',
   output: {
@@ -19,7 +19,7 @@ module.exports = {
     publicPath: '',
     filename: '[name].[chunkhash].js',
     hashFunction: 'xxhash64',
-    clean: true,
+    clean: true
   },
   module: {
     rules: [
@@ -27,53 +27,53 @@ module.exports = {
         test: /\.(less|css)$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader
           },
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              sourceMap: true,
-            },
+              sourceMap: true
+            }
           },
           {
             loader: 'postcss-loader',
             options: {
-              sourceMap: true,
-            },
+              sourceMap: true
+            }
           },
           {
             loader: 'less-loader',
             options: {
               lessOptions: {
-                strictMath: true,
-              },
-            },
-          },
-        ],
+                strictMath: true
+              }
+            }
+          }
+        ]
       },
       {
-        test: /[\/\\]node_modules[\/\\]@claviska[\/\\]jquery-dropdown[\/\\]jquery.dropdown\.js$/,
-        use: 'imports-loader?wrapper=window',
+        test: /[\\/]node_modules[/\\]@claviska[\\/]jquery-dropdown[\\/]jquery.dropdown\.js$/,
+        use: 'imports-loader?wrapper=window'
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
         type: 'asset/resource',
         generator: {
-          filename: `common/[name].[contenthash][ext]`,
-        },
-      },
-    ],
+          filename: `common/[name].[contenthash][ext]`
+        }
+      }
+    ]
   },
   plugins: [
     new WebpackManifestPlugin({}),
     new ProvidePlugin({
       $: 'jquery',
-      jQuery: 'jquery',
+      jQuery: 'jquery'
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
-    }),
+      filename: '[name].[contenthash].css'
+    })
   ],
   optimization: {
     splitChunks: {
@@ -82,9 +82,9 @@ module.exports = {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendor',
           chunks: 'all',
-          enforce: true,
-        },
-      },
-    },
-  },
+          enforce: true
+        }
+      }
+    }
+  }
 };

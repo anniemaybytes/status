@@ -5,7 +5,7 @@ type: docker
 
 steps:
     -   name: composer
-        image: thecodingmachine/php:8.2-v4-cli
+        image: thecodingmachine/php:8.3-v4-cli
         pull: always
         environment:
             COMPOSER_ALLOW_SUPERUSER: 1
@@ -14,42 +14,42 @@ steps:
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
-        image: node:18-alpine
+        image: node:20-alpine
         pull: always
         commands:
             - yarn --frozen-lockfile --non-interactive --no-bin-links --ignore-optional
         depends_on: [ clone ]
     -   name: stylelint
-        image: node:18-alpine
+        image: node:20-alpine
         commands:
             - yarn lint:stylelint
         depends_on: [ yarn ]
     -   name: eslint
-        image: node:18-alpine
+        image: node:20-alpine
         commands:
             - yarn lint:eslint
         depends_on: [ yarn ]
     -   name: prettier
-        image: node:18-alpine
+        image: node:20-alpine
         commands:
             - yarn lint:prettier
         depends_on: [ yarn ]
     -   name: phplint
-        image: thecodingmachine/php:8.2-v4-cli
+        image: thecodingmachine/php:8.3-v4-cli
         environment:
             PHP_INI_ERROR_REPORTING: E_ALL & ~(E_STRICT | E_NOTICE | E_WARNING | E_DEPRECATED)
         commands:
             - composer phplint
         depends_on: [ composer ]
     -   name: phpcs
-        image: thecodingmachine/php:8.2-v4-cli
+        image: thecodingmachine/php:8.3-v4-cli
         environment:
             PHP_INI_ERROR_REPORTING: E_ALL & ~(E_STRICT | E_NOTICE | E_WARNING | E_DEPRECATED)
         commands:
             - composer phpcs
         depends_on: [ composer ]
     -   name: phpstan
-        image: thecodingmachine/php:8.2-v4-cli
+        image: thecodingmachine/php:8.3-v4-cli
         commands:
             - composer phpstan
         depends_on: [ composer ]
@@ -59,6 +59,7 @@ trigger:
         - refs/heads/master
         - refs/pull/**
         - refs/tags/**
+
 ---
 kind: pipeline
 name: tests
@@ -66,7 +67,7 @@ type: docker
 
 steps:
     -   name: composer
-        image: thecodingmachine/php:8.2-v4-cli
+        image: thecodingmachine/php:8.3-v4-cli
         pull: always
         environment:
             COMPOSER_ALLOW_SUPERUSER: 1
@@ -75,7 +76,7 @@ steps:
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
     -   name: yarn
-        image: node:18-alpine
+        image: node:20-alpine
         pull: always
         environment:
             NODE_ENV: production
@@ -83,12 +84,12 @@ steps:
             - yarn --frozen-lockfile --non-interactive --no-bin-links --production
         depends_on: [ clone ]
     -   name: phpunit
-        image: thecodingmachine/php:8.2-v4-cli
+        image: thecodingmachine/php:8.3-v4-cli
         commands:
             - composer phpunit
         depends_on: [ composer ]
     -   name: webpack
-        image: node:18-alpine
+        image: node:20-alpine
         environment:
             NODE_ENV: production
         commands:

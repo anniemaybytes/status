@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Status\CachedValue;
 
+use Status\Enum\Status;
+
 /**
  * Class Irc
  *
@@ -23,18 +25,16 @@ final class Irc extends Base
 
     protected static function fetchValue(mixed $param): int
     {
-        $addr = @dns_get_record($param, DNS_A)[0]['ip'] ?? null;
+        $addr = @dns_get_record($param['domain'], DNS_A)[0]['ip'] ?? null;
         if (!is_string($addr)) {
-            return 0;
+            return Status::DOWN->value;
         }
 
-        if (!$file = @fsockopen($addr, 7000, $errno, $errstr, 3)) {
-            $status = 0;
-        } else {
-            fclose($file);
-            $status = 1;
+        if (!$file = @fsockopen($addr, $param['port'], $errno, $errstr, 3)) {
+            return Status::DOWN->value;
         }
 
-        return $status;
+        fclose($file);
+        return Status::NORMAL->value;
     }
 }

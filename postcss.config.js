@@ -6,10 +6,10 @@ module.exports = {
         {
           mergeRules: true,
           discardComments: {
-            removeAll: true,
-          },
-        },
-      ],
-    }),
-  ],
+            removeAll: true
+          }
+        }
+      ]
+    })
+  ]
 };

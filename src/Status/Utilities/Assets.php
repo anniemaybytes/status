@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Status\Utilities;
 
 use ArrayAccess;
+use JsonException;
 use RuntimeException;
 use Status\Exception\FileNotFoundException;
 
@@ -33,10 +34,15 @@ final class Assets
             throw new RuntimeException('Unable to locate manifest file');
         }
 
-        /** @noinspection JsonEncodingApiUsageInspection */
-        $this->compiledAssets = json_decode(file_get_contents($this->manifestFile), true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new RuntimeException('Failed to parse manifest file');
+        try {
+            $this->compiledAssets = json_decode(
+                file_get_contents($this->manifestFile),
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+        } catch (JsonException $e) {
+            throw new RuntimeException('Failed to parse manifest file', 0, $e);
         }
     }
 

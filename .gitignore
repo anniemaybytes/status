@@ -18,8 +18,8 @@ vendor/*
 node_modules/*
 
 # general extensions of files we dont want
-*.sql.gz
 *.sql
+*.sql.gz
 *.log
 
 # project dirs
@@ -35,4 +35,4 @@ node_modules/*
 
 # these files might exist on production and we dont really want them
 /*.sh
-scripts/
+/scripts/*

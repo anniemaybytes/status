@@ -27,12 +27,12 @@ find /etc/apt/sources.list.d -name "*.list" -type f -exec \
     -o Dir::Etc::sourceparts="-" \
     -o APT::Get::List-Cleanup="0" \
     dist-upgrade \; # https://github.com/oerdnj/deb.sury.org/issues/1682
-apt-get -qq -y -o Dpkg::Options::="--force-confnew" install php8.2 php8.2-xdebug php8.2-apcu php8.2-xml php8.2-fpm \
-    php8.2-cli php8.2-curl php8.2-mbstring pv curl git unzip zip htop iotop nodejs nginx
+apt-get -qq -y -o Dpkg::Options::="--force-confnew" install php8.3 php8.3-xdebug php8.3-apcu php8.3-xml php8.3-fpm \
+    php8.3-cli php8.3-curl php8.3-mbstring pv curl git unzip zip htop iotop nodejs nginx
 
 echo
 echo Setting up packages...
-rm -f /etc/php/8.2/cli/conf.d/20-xdebug.ini
+rm -f /etc/php/8.3/cli/conf.d/20-xdebug.ini
 rm -rf /etc/nginx/{sites,mods}-enabled
 rm -rf /etc/nginx/{sites,mods}-available
 rm -rf /etc/nginx/conf.d
@@ -51,6 +51,15 @@ EOF
 update-grub
 
 echo
+echo Configuring virtual hosts...
+mkdir -p /etc/hosts.d/ && mv /etc/hosts /etc/hosts.d/10-native
+echo "$(ip route show default | awk '/default/ {print $3}') animebytes.local " > /etc/hosts.d/99-tentacles
+echo "$(ip route show default | awk '/default/ {print $3}') mei.animebytes.local " > /etc/hosts.d/99-mei
+echo "$(ip route show default | awk '/default/ {print $3}') irc.animebytes.local " > /etc/hosts.d/99-irc
+echo "$(ip route show default | awk '/default/ {print $3}') tracker.animebytes.local " > /etc/hosts.d/99-tracker
+cat /etc/hosts.d/* > /etc/hosts
+
+echo
 echo Installing composer as /usr/local/bin/composer...
 cd /tmp
 curl -s https://getcomposer.org/installer | php
@@ -60,13 +69,13 @@ echo
 echo Configuring daemons...
 systemctl daemon-reload
 systemctl disable nginx
-systemctl disable php8.2-fpm
+systemctl disable php8.3-fpm
 systemctl disable webpack
 
 echo
 echo Stopping daemons...
 systemctl stop nginx
-systemctl stop php8.2-fpm
+systemctl stop php8.3-fpm
 systemctl stop webpack
 systemctl stop cron
 
@@ -91,5 +100,5 @@ su vagrant -s /bin/bash -c 'mkdir -p /code/logs'
 echo
 echo Starting daemons...
 systemctl start nginx
-systemctl start php8.2-fpm
+systemctl start php8.3-fpm
 systemctl start cron

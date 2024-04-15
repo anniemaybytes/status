@@ -11,7 +11,7 @@ namespace Status\Config;
  */
 final class Defaults
 {
-    public const CONFIG = [
+    public const array CONFIG = [
         'mode' => 'production', // ensure we fail safely and dont expose sensitive data
         'logs_dir' => UndefinedValue::class,
         'proxy' => false,
@@ -22,11 +22,12 @@ final class Defaults
 
         'templates.cache_path' => UndefinedValue::class,
 
-        'site.domain' => UndefinedValue::class,
+        'site.canonical' => UndefinedValue::class,
 
-        'mei.domain' => UndefinedValue::class,
+        'mei.canonical' => UndefinedValue::class,
 
         'irc.domain' => UndefinedValue::class,
+        'irc.port' => UndefinedValue::class,
 
         'tracker.domain' => UndefinedValue::class,
         'tracker.ns' => [],

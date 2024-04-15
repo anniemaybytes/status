@@ -1,80 +1,38 @@
 {
-  "private": true,
   "license": "Unlicense",
   "engines": {
-    "node": ">=18.12.0"
+    "node": ">=20.9.0"
   },
   "scripts": {
-    "lint:eslint": "node ./node_modules/eslint/bin/eslint.js --ext js assets",
-    "lint:prettier": "node ./node_modules/prettier/bin/prettier.cjs --check 'assets/**/*.js' --check 'webpack.config.js' --check 'postcss.config.js'",
+    "lint:eslint": "node ./node_modules/eslint/bin/eslint.js assets/js/**/*.js *.config.js",
+    "lint:prettier": "node ./node_modules/prettier/bin/prettier.cjs --check 'assets/**/*.js' --check '*.config.js'",
     "lint:stylelint": "node ./node_modules/stylelint/bin/stylelint.mjs --color 'assets/**/*.css' 'assets/**/*.less'",
-    "format": "node ./node_modules/prettier/bin/prettier.cjs --write 'assets/**/*.js' --write 'webpack.config.js' --write 'postcss.config.js'",
+    "format": "node ./node_modules/prettier/bin/prettier.cjs --write 'assets/**/*.js' --write '*.config.js'",
     "webpack": "node ./node_modules/webpack/bin/webpack.js --color"
   },
   "dependencies": {
     "@claviska/jquery-dropdown": "2.0.3",
-    "css-loader": "6.10.0",
-    "cssnano": "6.1.0",
+    "css-loader": "7.1.1",
+    "cssnano": "6.1.2",
     "imports-loader": "5.0.0",
     "jquery": "3.7.1",
     "less": "4.2.0",
     "less-loader": "12.2.0",
     "mini-css-extract-plugin": "2.8.1",
-    "postcss": "8.4.35",
+    "postcss": "8.4.38",
     "postcss-loader": "8.1.1",
-    "webpack": "5.90.3",
+    "webpack": "5.91.0",
     "webpack-cli": "5.1.4",
     "webpack-manifest-plugin": "5.0.0"
   },
   "devDependencies": {
-    "eslint": "8.57.0",
+    "eslint": "9.0.0",
+    "@eslint/js": "9.0.0",
     "eslint-config-prettier": "9.1.0",
     "postcss-less": "6.0.0",
     "prettier": "3.2.5",
-    "stylelint": "16.2.1",
-    "stylelint-config-standard": "36.0.0"
-  },
-  "prettier": {
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true,
-    "printWidth": 150,
-    "endOfLine": "auto"
-  },
-  "eslintConfig": {
-    "extends": [
-      "eslint:recommended",
-      "prettier"
-    ],
-    "env": {
-      "browser": true,
-      "node": false,
-      "jquery": true,
-      "es6": true
-    },
-    "parserOptions": {
-      "sourceType": "module"
-    },
-    "rules": {
-      "no-console": "error",
-      "max-len": [
-        "error",
-        {
-          "code": 200
-        }
-      ]
-    }
-  },
-  "stylelint": {
-    "extends": "stylelint-config-standard",
-    "rules": {
-      "media-feature-range-notation": "prefix"
-    },
-    "overrides": [
-      {
-        "files": "**/*.less",
-        "customSyntax": "postcss-less"
-      }
-    ]
+    "stylelint": "16.3.1",
+    "stylelint-config-standard": "36.0.0",
+    "globals": "15.0.0"
   }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\CachedValue;
 
+use Status\Enum\Status;
 use Status\Utilities\Curl;
 
 /**
@@ -43,6 +44,6 @@ final class Mei extends Base
         $httpCode = $curl->getInfo(CURLINFO_HTTP_CODE);
         unset($curl);
 
-        return (int)($httpCode === 200 && is_string($content));
+        return Status::from((int)($httpCode === 200 && is_string($content)))->value;
     }
 }
