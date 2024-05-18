@@ -16,7 +16,7 @@ use Status\Environment\SAPI;
 /**
  * Class Dispatcher
  *
- * @package Tentacles
+ * @package Status
  */
 final class Dispatcher implements SingletonInterface
 {
