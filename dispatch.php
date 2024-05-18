@@ -13,6 +13,7 @@ use RunTracy\Helpers\Profiler\Profiler;
 use RunTracy\Helpers\ProfilerPanel;
 use RunTracy\Helpers\XDebugHelper;
 use Slim\Middleware\ContentLengthMiddleware;
+use Status\Application;
 use Status\Controller\ErrorCtrl;
 use Status\Dispatcher;
 use Status\Middleware;
@@ -21,9 +22,8 @@ use Tracy\Debugger;
 date_default_timezone_set('UTC');
 putenv('RES_OPTIONS=retrans:1 retry:1 timeout:1 attempts:1');
 
-$app = Dispatcher::app();
-/** @var Psr\Container\ContainerInterface $di */
-$di = $app->getContainer();
+$di = Dispatcher::di();
+$app = Application::setup($di);
 
 $isDev = $di->get('config')['mode'] === 'development';
 

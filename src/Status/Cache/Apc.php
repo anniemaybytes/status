@@ -15,18 +15,15 @@ use Tracy\Debugger;
  */
 final class Apc implements IKeyStore
 {
-    private string $keyPrefix;
-
     private bool $clearOnGet = false;
 
     private array $cacheHits = [];
     private float $time = 0;
 
-    public function __construct(string $keyPrefix)
+    public function __construct()
     {
-        $this->keyPrefix = $keyPrefix;
-
         $bar = new CacheTracyBarPanel($this);
+
         Debugger::getBar()->addPanel($bar);
         Debugger::getBlueScreen()->addPanel(
             static function (?Throwable $e) use ($bar) {
@@ -47,11 +44,9 @@ final class Apc implements IKeyStore
     public function get(string $key): mixed
     {
         $start = $this->startCall();
-        $keyOld = $key;
-        $key = $this->keyPrefix . $key;
 
         if ($this->clearOnGet) {
-            $this->delete($keyOld);
+            $this->delete($key);
             $this->endCall($start);
             return false;
         }
@@ -71,10 +66,7 @@ final class Apc implements IKeyStore
     public function set(string $key, mixed $value, int $time = 3600): bool
     {
         $start = $this->startCall();
-        $key = $this->keyPrefix . $key;
-
         $res = apcu_add($key, $value, $time);
-
         $this->endCall($start);
 
         return $res;
@@ -83,10 +75,8 @@ final class Apc implements IKeyStore
     public function delete(string $key): bool
     {
         $start = $this->startCall();
-        $key = $this->keyPrefix . $key;
 
         $res = apcu_delete($key);
-
         if ($res) {
             $this->cacheHits[$key] = $res;
         }
@@ -99,7 +89,6 @@ final class Apc implements IKeyStore
     public function increment(string $key, int $n = 1, mixed $initial = null, int $expiry = 0): bool|int
     {
         $start = $this->startCall();
-        $key = $this->keyPrefix . $key;
 
         if ($this->clearOnGet) {
             $this->endCall($start);
@@ -124,7 +113,6 @@ final class Apc implements IKeyStore
     public function touch(string $key, int $expiry = 10800): bool
     {
         $start = $this->startCall();
-        $key = $this->keyPrefix . $key;
 
         if ($this->exists($key)) {
             $value = apcu_fetch($key);

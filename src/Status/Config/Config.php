@@ -42,11 +42,23 @@ final class Config implements ArrayAccess
 
     public function offsetGet(mixed $offset): mixed
     {
-        if (!isset($this->config[$offset])) {
-            throw new RuntimeException("$offset is not a valid configuration property");
+        if (!isset($this->config[$offset], Defaults::CONFIG[$offset])) {
+            throw new RuntimeException("Property '$offset' is not valid in configuration scope");
         }
+
         if ($this->config[$offset] === UndefinedValue::class) {
-            throw new RuntimeException("Config property $offset is uninitialized");
+            throw new RuntimeException("Config property '$offset' is uninitialized");
+        }
+
+        if (
+            isset(AllowedValues::CONFIG[$offset]) &&
+            !in_array($this->config[$offset], AllowedValues::CONFIG[$offset], true)
+        ) {
+            throw new RuntimeException(
+                "Config property '$offset' has wrong value " . var_export($this->config[$offset], true) .
+                ' - must be one of: ' .
+                implode(', ', array_map(static fn($imp) => var_export($imp, true), AllowedValues::CONFIG[$offset]))
+            );
         }
 
         return $this->config[$offset];

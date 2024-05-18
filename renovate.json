@@ -2,7 +2,8 @@
   "extends": [
     "config:recommended",
     "docker:disableMajor",
-    ":automergeLinters"
+    ":automergeLinters",
+    ":automergeTesters"
   ],
   "labels": [
     "kind/deps"
@@ -38,27 +39,9 @@
       ]
     },
     {
-      "matchPackagePrefixes": [
-        "phpstan/"
-      ],
-      "automerge": true,
-      "groupName": "phpstan monorepo"
-    },
-    {
-      "matchPackageNames": [
-        "overtrue/phplint"
-      ],
-      "automerge": true
-    },
-    {
-      "matchPackageNames": [
-        "squizlabs/php_codesniffer"
-      ],
-      "automerge": true
-    },
-    {
-      "matchPackageNames": [
-        "phpunit/phpunit"
+      "matchPackagePatterns": [
+        "^phpstan/phpstan$",
+        "/phpstan-"
       ],
       "automerge": true
     }

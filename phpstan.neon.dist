@@ -7,9 +7,11 @@ parameters:
     bootstrapFiles:
         - phpstan.bootstrap.php
     inferPrivatePropertyTypeFromConstructor: true
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
+        -
+            identifier: missingType.iterableValue
+        -
+            identifier: missingType.generics
         - '#Call to an undefined method Psr\\Container\\ContainerInterface::set#'
         - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface::withJson#'
 services:
