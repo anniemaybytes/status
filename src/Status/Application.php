@@ -18,10 +18,14 @@ use Status\Route as R;
  */
 final class Application
 {
+    /**
+     * @param ContainerInterface $di
+     *
+     * @return App<ContainerInterface>
+     */
     public static function setup(ContainerInterface $di): App
     {
-        AppFactory::setContainer($di);
-        $app = AppFactory::create();
+        $app = AppFactory::create(container: $di);
 
         $di->set(ResponseFactoryInterface::class, $app->getResponseFactory());
         $di->set(RouteParser::class, $app->getRouteCollector()->getRouteParser());

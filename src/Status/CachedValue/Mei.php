@@ -30,20 +30,13 @@ final class Mei extends Base
         $curl->setoptArray(
             [
                 CURLOPT_HTTPHEADER => ["Host: $param", 'Connection: Close'],
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_VERBOSE => false,
-                CURLOPT_TIMEOUT => 3,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                CURLOPT_SSL_VERIFYHOST => 2,
                 CURLOPT_HEADER => true,
                 CURLOPT_NOBODY => true,
             ]
         );
         $content = $curl->exec();
-        $httpCode = $curl->getInfo(CURLINFO_HTTP_CODE);
-        unset($curl);
+        $rescode = $curl->getInfo(CURLINFO_HTTP_CODE);
 
-        return Status::from((int)($httpCode === 200 && is_string($content)))->value;
+        return Status::from((int)($rescode === 200 && is_string($content)))->value;
     }
 }

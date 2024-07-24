@@ -16,9 +16,7 @@ final class Main extends Base
 {
     protected function addRoutes(): void
     {
-        $app = $this->app;
-
-        $app->group(
+        $this->app->group(
             '',
             function (RouteCollectorProxy $group) {
                 $group->get('/', IndexCtrl::class . ':index')->setName('index');

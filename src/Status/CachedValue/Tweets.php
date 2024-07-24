@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\CachedValue;
 
+use Status\Exception\CurlException;
 use Status\Exception\TwitterException;
 use Status\Utilities\Twitter;
 
@@ -24,7 +25,7 @@ final class Tweets extends Base
         return 300;
     }
 
-    /** @throws TwitterException */
+    /** @throws TwitterException|CurlException */
     protected static function fetchValue(mixed $param): array
     {
         return Twitter::getTimeline($param);

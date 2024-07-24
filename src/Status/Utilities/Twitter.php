@@ -6,6 +6,7 @@ namespace Status\Utilities;
 
 use DOMDocument;
 use JsonException;
+use Status\Exception\CurlException;
 use Status\Exception\TwitterException;
 
 /**
@@ -17,31 +18,19 @@ final class Twitter
 {
     /**
      * @return array{user: array, tweets: array}
-     * @throws TwitterException
+     * @throws TwitterException|CurlException
      */
     public static function getTimeline(string $username): array
     {
         $curl = new Curl("https://syndication.twitter.com/srv/timeline-profile/screen-name/$username");
-        $curl->setoptArray(
-            [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_VERBOSE => false,
-                CURLOPT_TIMEOUT => 3,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                CURLOPT_SSL_VERIFYHOST => 2
-            ]
-        );
-
         if (!$content = $curl->exec()) {
             if (!$err = $curl->error()) {
-                throw new TwitterException(
-                    "Received empty response from remote endpoint with HTTP code {$curl->getInfo(CURLINFO_HTTP_CODE)}"
+                throw new CurlException(
+                    "Received empty response from Twitter with HTTP code {$curl->getInfo(CURLINFO_HTTP_CODE)}"
                 );
             }
-            throw new TwitterException("Failed to query remote endpoint: $err");
+            throw new CurlException("Failed to fetch data from Twitter: $err");
         }
-        unset($curl);
 
         $doc = new DOMDocument();
         if (!@$doc->loadHTML($content)) {

@@ -12,6 +12,7 @@ use Status\CachedValue\Site;
 use Status\CachedValue\TrackerSingular;
 use Status\CachedValue\Tweets;
 use Status\Enum\Status;
+use Status\Exception\CurlException;
 use Status\Exception\TwitterException;
 use Tracy\Debugger;
 
@@ -34,6 +35,8 @@ final class IndexCtrl extends BaseCtrl
                 }
             } /** @noinspection PhpRedundantCatchClauseInspection */ catch (TwitterException $e) {
                 Debugger::log($e, Debugger::WARNING);
+            } /** @noinspection PhpRedundantCatchClauseInspection */ catch (CurlException $e) {
+                Debugger::log($e->getMessage(), Debugger::WARNING);
             }
         }
 
