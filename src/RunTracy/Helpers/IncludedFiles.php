@@ -35,10 +35,7 @@ final class IncludedFiles implements IBarPanel
             '188.662H171.828c-9.618,0-17.415-7.797-17.415-17.415 c0-9.618,7.797-17.415,17.415-17.415h169.506c9.' .
             '618,0,17.415,7.797,17.415,17.415 C358.748,180.865,350.951,188.662,341.333,188.662z" ' .
             'fill="#006DF0"/></g></svg>';
-        return '
-        <span title="Included Files">
-            ' . $this->icon . '
-        </span>';
+        return '<span title="Included Files">' . $this->icon . '</span>';
     }
 
     public function getPanel(): string
@@ -51,11 +48,8 @@ final class IncludedFiles implements IBarPanel
             $ret .= sprintf($this->getBaseRow(), ++$num, $file);
         }
 
-        return '
-        <h1>' . $this->icon . ' &nbsp; Included Files: ' . $num . '</h1>
-        <div class="tracy-inner">
-            <table width="100%">' . $ret . '</table>
-        </div>';
+        return '<h1>' . $this->icon . ' &nbsp; Included Files: ' . $num . '</h1>
+            <div class="tracy-inner"><table style="width: 100%;">' . $ret . '</table></div>';
     }
 
     protected function getHeader(): string
