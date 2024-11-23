@@ -25,6 +25,7 @@ final class Site extends Base
         return 60;
     }
 
+    /** @return value-of<Status> */
     protected static function fetchValue(mixed $param): int
     {
         $curl = new Curl("https://$param");
@@ -42,7 +43,7 @@ final class Site extends Base
                 $nodes = $doc->getElementsByTagName('title');
                 $title = $nodes->item(0)?->nodeValue;
                 if (stripos($title, 'maintenance') !== false) {
-                    return Status::ISSUES->value;
+                    return Status::MAINTENANCE->value;
                 }
             } else {
                 return Status::DOWN->value;

@@ -14,6 +14,14 @@ parameters:
             identifier: missingType.generics
         - '#Call to an undefined method Psr\\Container\\ContainerInterface::set#'
         - '#Call to an undefined method Psr\\Http\\Message\\ResponseInterface::withJson#'
+        -
+            message: '#Status\\CachedValue\\\w+::fetchValue\(\)#'
+            identifier: return.unusedType
+            paths:
+                - src/Status/CachedValue/Irc.php
+                - src/Status/CachedValue/Mei.php
+                - src/Status/CachedValue/Site.php
+                - src/Status/CachedValue/TrackerSingular.php
 services:
 	-
 		class: Status\PHPStan\PropertiesExtension

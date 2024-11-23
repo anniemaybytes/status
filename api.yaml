@@ -17,67 +17,73 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    success:
-                                        type: boolean
-                                        description: Whether action was succesful
-                                        example: true
-                                    status:
-                                        type: object
+                                allOf:
+                                    -   $ref: "#/components/schemas/HttpResponse"
+                                    -   type: object
                                         properties:
-                                            site:
+                                            status:
                                                 type: object
                                                 properties:
-                                                    status:
-                                                        type: integer
-                                                        example: 1
-                                                        description: Status of site (1 - online, 0 - offline, 2 - maintenance)
-                                            tracker:
-                                                type: object
-                                                properties:
-                                                    status:
-                                                        type: integer
-                                                        example: 1
-                                                        description: Status of tracker (1 - online, 0 - offline, 2 - partial outage)
-                                                    details:
-                                                        type: array
-                                                        items:
-                                                            type: object
-                                                            properties:
-                                                                status:
-                                                                    type: integer
-                                                                    example: 1
-                                                                    description: Status of this tracker node (1 - online, 0 - offline)
-                                                                ip:
-                                                                    type: string
-                                                                    example: "rin"
-                                                                    description: Name of this tracker node
-                                            irc:
-                                                type: object
-                                                properties:
-                                                    status:
-                                                        type: integer
-                                                        example: 1
-                                                        description: Status of IRC (1 - online, 0 - offline)
-                                            mei:
-                                                type: object
-                                                properties:
-                                                    status:
-                                                        type: integer
-                                                        example: 1
-                                                        description: Status of Mei (1 - online, 0 - offline)
+                                                    site:
+                                                        type: object
+                                                        properties:
+                                                            status:
+                                                                $ref: "#/components/schemas/Status"
+                                                    tracker:
+                                                        type: object
+                                                        properties:
+                                                            status:
+                                                                $ref: "#/components/schemas/Status"
+                                                            details:
+                                                                type: array
+                                                                items:
+                                                                    type: object
+                                                                    properties:
+                                                                        status:
+                                                                            $ref: "#/components/schemas/Status"
+                                                                        alias:
+                                                                            type: string
+                                                                            description: Name of this tracker node
+                                                    irc:
+                                                        type: object
+                                                        properties:
+                                                            status:
+                                                                $ref: "#/components/schemas/Status"
+                                                    mei:
+                                                        type: object
+                                                        properties:
+                                                            status:
+                                                                $ref: "#/components/schemas/Status"
+                                example:
+                                    success: true
+                                    status:
+                                        site: 1
+                                        tracker:
+                                            status: 1
+                                            details:
+                                                -   alias: "rin"
+                                                    status: 1
+                                        irc: 1
+                                        mei: 1
 components:
     schemas:
+        Status:
+            type: integer
+            enum: [ 0, 1, 2, 3 ]
+            description: >
+                Status of this element:
+                  * `0` - down
+                  * `1` - up
+                  * `2` - issues
+                  * `3` - maintenance
         HttpResponse:
             type: object
             properties:
                 success:
                     type: boolean
+                    description: Whether action was succesful
                 error:
                     type: string
+                    description: Message describing error cause
             required:
                 - success
-            example:
-                success: false
-                error: Message describing error cause

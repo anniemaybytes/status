@@ -9,7 +9,9 @@ steps:
         pull: always
         environment:
             COMPOSER_ALLOW_SUPERUSER: 1
+            COMPOSER_NO_INTERACTION: 1
         commands:
+            - git config --global --add safe.directory $DRONE_WORKSPACE
             - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
@@ -71,7 +73,9 @@ steps:
         pull: always
         environment:
             COMPOSER_ALLOW_SUPERUSER: 1
+            COMPOSER_NO_INTERACTION: 1
         commands:
+            - git config --global --add safe.directory $DRONE_WORKSPACE
             - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]

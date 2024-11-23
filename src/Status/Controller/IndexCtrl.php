@@ -51,7 +51,7 @@ final class IndexCtrl extends BaseCtrl
     /**
      * @return array{
      *     site: array{status: int},
-     *     tracker: array{status: int, details: array<array{status: int, ip: string}>},
+     *     tracker: array{status: int, details: array<array{status: int, alias: string}>},
      *     irc: array{status: int},
      *     mei: array{status: int}
      *   }
@@ -74,7 +74,7 @@ final class IndexCtrl extends BaseCtrl
                         $working++;
                     }
 
-                    $details[] = ['status' => $status, 'ip' => $alias];
+                    $details[] = ['status' => $status, 'alias' => $alias];
                 }
 
                 if ($working === count($this->config['tracker.ns'])) {

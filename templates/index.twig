@@ -7,20 +7,19 @@
             <h2>
                 <span>site </span>
                 <span
-                    class="status {% if site.status == 1 %}normal{% elseif site.status == 2 %}issues{% else %}down{% endif %}">
-                    {% if site.status == 1 %}normal{% elseif site.status == 2 %}maintenance{% else %}down{% endif %}
+                    class="status state-{{ site.status }}">
+                    {% include '@components/status.twig' with {status: site.status} only %}
                 </span>
             </h2>
         </li>
         <li>
             <h2>
                 <span>
-                    tracker
-                    <a href="#" class="details" data-jq-dropdown="#tracker-details" data-horizontal-offset="8">↓</a>
+                    <a href="#" data-jq-dropdown="#tracker-details">tracker</a>
                 </span>
                 <span
-                    class="status {% if tracker.status == 1 %}normal{% elseif tracker.status == 2 %}issues{% else %}down{% endif %}">
-                    {% if tracker.status == 1 %}normal{% elseif tracker.status == 2 %}issues{% else %}down{% endif %}
+                    class="status state-{{ tracker.status }}">
+                    {% include '@components/status.twig' with {status: tracker.status} only %}
                 </span>
             </h2>
         </li>
@@ -28,8 +27,8 @@
             <h2>
                 <span>irc</span>
                 <span
-                    class="status {% if irc.status == 1 %}normal{% elseif irc.status == 2 %}issues{% else %}down{% endif %}">
-                    {% if irc.status == 1 %}normal{% elseif irc.status == 2 %}issues{% else %}down{% endif %}
+                    class="status state-{{ irc.status }}">
+                    {% include '@components/status.twig' with {status: irc.status} only %}
                 </span>
             </h2>
         </li>
@@ -37,8 +36,8 @@
             <h2>
                 <span>mei</span>
                 <span
-                    class="status {% if mei.status == 1 %}normal{% elseif mei.status == 2 %}issues{% else %}down{% endif %}">
-                    {% if mei.status == 1 %}normal{% elseif mei.status == 2 %}issues{% else %}down{% endif %}
+                    class="status state-{{ mei.status }}">
+                    {% include '@components/status.twig' with {status: mei.status} only %}
                 </span>
             </h2>
         </li>
@@ -66,9 +65,7 @@
                     {% else %}
                         <tr>
                             <td>
-                                <div class="feed-empty">
-                                    Nothing to see here - yet
-                                </div>
+                                <div class="feed-empty">Nothing to see here - yet</div>
                             </td>
                         </tr>
                     {% endif %}
@@ -76,10 +73,10 @@
             </div>
         </div>
     {% endif %}
-    <div id="tracker-details" class="jq-dropdown jq-dropdown-tip jq-dropdown-anchor-right">
+    <div id="tracker-details" class="jq-dropdown jq-dropdown-tip">
         <ul class="jq-dropdown-menu">
-            {% for server in tracker.details %}
-                <li>{{ server.ip }} - {% if server.status == 1 %}normal{% else %}down{% endif %}</li>
+            {% for node in tracker.details %}
+                <li>{{ node.alias }} - {% include '@components/status.twig' with {status: node.status} only %}</li>
             {% endfor %}
         </ul>
     </div>

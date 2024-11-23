@@ -1,0 +1,11 @@
+{%- if status == 0 %}
+    down
+{%- elseif status == 1 %}
+    normal
+{%- elseif status == 2 %}
+    issues
+{%- elseif status == 3 %}
+    maintenance
+{%- else %}
+    unknown
+{%- endif %}

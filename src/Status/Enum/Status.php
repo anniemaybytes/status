@@ -14,4 +14,5 @@ enum Status: int
     case DOWN = 0;
     case NORMAL = 1;
     case ISSUES = 2;
+    case MAINTENANCE = 3;
 }

@@ -13,13 +13,16 @@ use InvalidArgumentException;
  */
 abstract class IntParam extends Base
 {
-    protected static function validateParam(mixed $param): bool
+    /**
+     * @inheritDoc
+     * @throws InvalidArgumentException
+     */
+    protected static function validateParam(mixed $param): void
     {
         if (!is_int($param) && !ctype_digit((string)$param)) {
             throw new InvalidArgumentException(
-                'Paremeter given to IntParam CachedValue must be either integer or string consisting of numeric values'
+                'Paremeter must be either integer or string consisting of numeric values'
             );
         }
-        return true;
     }
 }

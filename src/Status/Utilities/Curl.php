@@ -24,7 +24,7 @@ final class Curl
 {
     public const string DEFAULT_USER_AGENT = 'status (cURL) like Twitterbot/1.0';
 
-    private ?CurlHandle $curl;
+    private CurlHandle $curl;
 
     public function __construct(?string $url = null)
     {

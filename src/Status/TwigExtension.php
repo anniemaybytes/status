@@ -34,11 +34,7 @@ final class TwigExtension extends AbstractExtension
      */
     public function getFunctions(): array
     {
-        $fn = $this->viewFunctions;
-
-        // map function names in twig to function names implemented in
-        // the view functions utility
-        $functionMappings = [
+        $mappings = [
             'config' => 'config',
             'path' => 'pathFor',
             'base_url' => 'baseUrl',
@@ -46,12 +42,14 @@ final class TwigExtension extends AbstractExtension
         ];
 
         $functions = [];
-        foreach ($functionMappings as $nameFrom => $nameTo) {
-            $callable = [$fn, $nameTo];
-            if (!is_callable($callable)) {
-                throw new BadFunctionCallException("Function $nameTo does not exist in view functions");
+        foreach ($mappings as $virtual => $method) {
+            $callable = [$this->viewFunctions, $method];
+            if (!is_callable($callable)) { // @phpstan-ignore function.alreadyNarrowedType
+                throw new BadFunctionCallException(
+                    "Function $method does not exist in " . get_class($this->viewFunctions)
+                );
             }
-            $functions[] = new TwigFunction($nameFrom, $callable);
+            $functions[] = new TwigFunction($virtual, $callable);
         }
 
         return $functions;

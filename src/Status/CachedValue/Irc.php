@@ -23,6 +23,7 @@ final class Irc extends Base
         return 180;
     }
 
+    /** @return value-of<Status> */
     protected static function fetchValue(mixed $param): int
     {
         $addr = @dns_get_record($param['domain'], DNS_A)[0]['ip'] ?? null;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Status\CachedValue;
 
+use Random\RandomException;
 use Status\Enum\Status;
 use Status\Utilities\Curl;
 
@@ -19,21 +20,21 @@ final class TrackerSingular extends Base
         return 'tracker/' . $param['ns'];
     }
 
+    /** @throws RandomException */
     protected static function getCacheDuration(mixed $param): int
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         return 60 + random_int(0, 30);
     }
 
-    /** @noinspection CurlSslServerSpoofingInspection */
+    /** @return value-of<Status> */
     protected static function fetchValue(mixed $param): int
     {
-        $curl = new Curl("https://{$param['ns']}/alive");
+        $curl = new Curl("https://{$param['domain']}/alive");
         $curl->setoptArray(
             [
                 CURLOPT_HTTPHEADER => ["Host: {$param['domain']}", 'Connection: Close'],
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                CURLOPT_SSL_VERIFYHOST => 0
+                CURLOPT_RESOLVE => ["{$param['domain']}:443:{$param['ns']}"],
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2
             ]
         );
         $content = $curl->exec();

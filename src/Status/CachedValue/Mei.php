@@ -24,6 +24,7 @@ final class Mei extends Base
         return 90;
     }
 
+    /** @return value-of<Status> */
     protected static function fetchValue(mixed $param): int
     {
         $curl = new Curl("https://$param/alive");
