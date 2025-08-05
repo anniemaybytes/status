@@ -33,8 +33,7 @@ final class TrackerSingular extends Base
         $curl->setoptArray(
             [
                 CURLOPT_HTTPHEADER => ["Host: {$param['domain']}", 'Connection: Close'],
-                CURLOPT_RESOLVE => ["{$param['domain']}:443:{$param['ns']}"],
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2
+                CURLOPT_RESOLVE => ["{$param['domain']}:443:{$param['ns']}"]
             ]
         );
         $content = $curl->exec();

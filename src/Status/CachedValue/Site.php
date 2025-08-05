@@ -29,7 +29,11 @@ final class Site extends Base
     protected static function fetchValue(mixed $param): int
     {
         $curl = new Curl("https://$param");
-        $curl->setopt(CURLOPT_HTTPHEADER, ["Host: $param", 'Connection: Close']);
+        $curl->setoptArray(
+            [
+                CURLOPT_HTTPHEADER => ["Host: $param", 'Connection: Close'],
+            ]
+        );
         $content = $curl->exec();
         $rescode = $curl->getInfo(CURLINFO_HTTP_CODE);
 

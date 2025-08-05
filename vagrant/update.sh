@@ -31,20 +31,20 @@ find /etc/apt/sources.list.d -name "*.list" -type f -exec \
     -o Dir::Etc::sourceparts="-" \
     -o APT::Get::List-Cleanup="0" \
     dist-upgrade \; # https://github.com/oerdnj/deb.sury.org/issues/1682
-apt-get -qq -y -o Dpkg::Options::="--force-confold" --only-upgrade install php8.3* nodejs
+apt-get -qq -y -o Dpkg::Options::="--force-confold" --only-upgrade install php8.4* nodejs
 apt-get -y autoremove && apt-get -y autoclean
 
 echo
 echo Configuring daemons...
 systemctl daemon-reload
 systemctl disable nginx
-systemctl disable php8.3-fpm
+systemctl disable php8.4-fpm
 systemctl disable webpack
 
 echo
 echo Stopping daemons...
 systemctl stop nginx
-systemctl stop php8.3-fpm
+systemctl stop php8.4-fpm
 systemctl stop webpack
 systemctl stop cron
 
@@ -67,5 +67,5 @@ systemctl start webpack
 echo
 echo Starting daemons...
 systemctl start nginx
-systemctl start php8.3-fpm
+systemctl start php8.4-fpm
 systemctl start cron

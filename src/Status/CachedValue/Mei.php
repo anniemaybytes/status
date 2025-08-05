@@ -31,8 +31,6 @@ final class Mei extends Base
         $curl->setoptArray(
             [
                 CURLOPT_HTTPHEADER => ["Host: $param", 'Connection: Close'],
-                CURLOPT_HEADER => true,
-                CURLOPT_NOBODY => true,
             ]
         );
         $content = $curl->exec();
