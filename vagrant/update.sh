@@ -57,8 +57,8 @@ su vagrant -s /bin/bash -c 'composer install'
 echo
 echo Installing node dependencies...
 cd /code
-npm i -g yarn
-su vagrant -s /bin/bash -c 'yarn install --no-bin-links --frozen-lockfile'
+corepack enable
+su vagrant -s /bin/bash -c 'pnpm install --frozen-lockfile'
 
 echo
 echo Starting webpack watcher...

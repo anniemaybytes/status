@@ -15,27 +15,28 @@ steps:
             - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
-    -   name: yarn
+    -   name: pnpm
         image: node:22-alpine
         pull: always
         commands:
-            - yarn --frozen-lockfile --non-interactive --no-bin-links --ignore-optional
+            - corepack enable
+            - pnpm install
         depends_on: [ clone ]
     -   name: stylelint
         image: node:22-alpine
         commands:
-            - yarn lint:stylelint
-        depends_on: [ yarn ]
+            - corepack pnpm lint:stylelint
+        depends_on: [ pnpm ]
     -   name: eslint
         image: node:22-alpine
         commands:
-            - yarn lint:eslint
-        depends_on: [ yarn ]
+            - corepack pnpm lint:eslint
+        depends_on: [ pnpm ]
     -   name: prettier
         image: node:22-alpine
         commands:
-            - yarn lint:prettier
-        depends_on: [ yarn ]
+            - corepack pnpm lint:prettier
+        depends_on: [ pnpm ]
     -   name: phplint
         image: thecodingmachine/php:8.4-v5-cli
         environment:
@@ -79,13 +80,14 @@ steps:
             - composer validate --ansi --no-check-all --no-check-publish
             - sudo composer install --no-progress --ansi --prefer-dist
         depends_on: [ clone ]
-    -   name: yarn
+    -   name: pnpm
         image: node:22-alpine
         pull: always
         environment:
             NODE_ENV: production
         commands:
-            - yarn --frozen-lockfile --non-interactive --no-bin-links --production
+            - corepack enable
+            - pnpm install --prod
         depends_on: [ clone ]
     -   name: phpunit
         image: thecodingmachine/php:8.4-v5-cli
@@ -97,8 +99,8 @@ steps:
         environment:
             NODE_ENV: production
         commands:
-            - node ./node_modules/webpack/bin/webpack.js --color
-        depends_on: [ yarn ]
+            - corepack pnpm webpack --color
+        depends_on: [ pnpm ]
 
 trigger:
     ref:

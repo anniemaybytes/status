@@ -1,0 +1,4 @@
+nodeLinker: hoisted
+preferSymlinkedExecutables: false
+strictPeerDependencies: true
+strictDepBuilds: true
