@@ -58,7 +58,7 @@ echo
 echo Installing node dependencies...
 cd /code
 corepack enable
-su vagrant -s /bin/bash -c 'pnpm install --frozen-lockfile'
+su vagrant -s /bin/bash -c 'rm -rf node_modules; pnpm install --frozen-lockfile'
 
 echo
 echo Starting webpack watcher...
