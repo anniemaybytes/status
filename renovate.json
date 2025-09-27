@@ -5,7 +5,8 @@
     "npm:unpublishSafe",
     "security:openssf-scorecard",
     ":automergeLinters",
-    ":automergeTesters"
+    ":automergeTesters",
+    ":automergeDigest"
   ],
   "ignorePresets": [
     "mergeConfidence:all-badges",
