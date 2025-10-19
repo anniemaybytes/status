@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Status\CachedValue;
 
-use InvalidArgumentException;
 use Status\Cache\IKeyStore;
 
 /**
@@ -54,10 +53,6 @@ abstract class Base
     /**
      * Validates that parameter provided to this CachedValue is of appropriate type.
      * This function does not return anything and should throw on error.
-     *
-     * @throws InvalidArgumentException
-     *
-     * @phpstan-ignore throws.unusedType (Used as documentation what extending methods should throw)
      */
     protected static function validateParam(mixed $param): void
     {
