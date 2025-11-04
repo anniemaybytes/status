@@ -7,7 +7,7 @@ Type=simple
 Restart=never
 User=vagrant
 WorkingDirectory=/code
-ExecStart=/usr/bin/node ./node_modules/webpack/bin/webpack.js --watch
+ExecStart=/usr/bin/pnpm exec webpack --watch
 
 [Install]
 WantedBy=multi-user.target

@@ -3,18 +3,18 @@
   "engines": {
     "node": ">=22.11.0"
   },
-  "packageManager": "pnpm@10.18.3+sha512.bbd16e6d7286fd7e01f6b3c0b3c932cda2965c06a908328f74663f10a9aea51f1129eea615134bf992831b009eabe167ecb7008b597f40ff9bc75946aadfb08d",
+  "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd",
   "scripts": {
-    "lint:eslint": "node ./node_modules/eslint/bin/eslint.js assets/js/**/*.js *.config.js",
-    "lint:prettier": "node ./node_modules/prettier/bin/prettier.cjs --check 'assets/**/*.js' --check '*.config.js'",
-    "lint:stylelint": "node ./node_modules/stylelint/bin/stylelint.mjs --color 'assets/**/*.css' 'assets/**/*.less'",
-    "format": "node ./node_modules/prettier/bin/prettier.cjs --write 'assets/**/*.js' --write '*.config.js'",
-    "webpack": "node ./node_modules/webpack/bin/webpack.js --color"
+    "lint:eslint": "eslint assets/js/**/*.js *.config.cjs",
+    "lint:prettier": "prettier --check 'assets/**/*.js' --check '*.config.cjs'",
+    "lint:stylelint": "stylelint --color 'assets/**/*.css' 'assets/**/*.less'",
+    "format": "prettier --write 'assets/**/*.js' --write '*.config.cjs'",
+    "webpack": "webpack --color"
   },
   "dependencies": {
     "@claviska/jquery-dropdown": "2.0.3",
     "css-loader": "7.1.2",
-    "cssnano": "7.1.1",
+    "cssnano": "7.1.2",
     "imports-loader": "5.0.0",
     "jquery": "3.7.1",
     "less": "4.4.2",
@@ -27,8 +27,8 @@
     "webpack-manifest-plugin": "5.0.1"
   },
   "devDependencies": {
-    "eslint": "9.37.0",
-    "@eslint/js": "9.37.0",
+    "eslint": "9.38.0",
+    "@eslint/js": "9.38.0",
     "eslint-config-prettier": "10.1.8",
     "postcss-less": "6.0.0",
     "prettier": "3.6.2",

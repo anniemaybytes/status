@@ -13,9 +13,6 @@ module.exports = [
       'max-len': ['error', { code: 200 }]
     },
     languageOptions: {
-      parserOptions: {
-        sourceType: 'module'
-      },
       globals: {
         ...globals.es2015
       }
@@ -34,14 +31,11 @@ module.exports = [
     }
   },
   {
-    files: ['*.config.js'],
+    files: ['*.config.cjs'],
     rules: {
       'no-console': 'off'
     },
     languageOptions: {
-      parserOptions: {
-        sourceType: 'commonjs'
-      },
       globals: {
         ...globals.node
       }

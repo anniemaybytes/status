@@ -69,4 +69,4 @@ jobs:
             -   name: Install dependencies
                 run: pnpm install --prod
             -   name: Generate assets
-                run: pnpm webpack --color
+                run: pnpm webpack
